@@ -42,7 +42,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "570",
+            "top": "705",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
@@ -76,33 +76,11 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1245",
+            "top": "1380",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
             "uuid": "29810595-dd4e-4ef4-b328-e75b7da21390"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Change Management Result",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "results": "<p>Pull Request <a href=\"{{vars.steps.Create_Pull_Request.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Create_Pull_Request.data['html_url']}}<\/a>&nbsp;is successfully created.<\/p>"
-                },
-                "operation": "Append",
-                "collection": "{{vars.input.records[0]['@id']}}",
-                "__recommend": [],
-                "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1515",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
-            "group": null,
-            "uuid": "2ea899c8-fb1a-48e5-bc9d-e7b380e24116"
         },
         {
             "@type": "WorkflowStep",
@@ -202,7 +180,7 @@
                 }
             },
             "status": null,
-            "top": "435",
+            "top": "570",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -241,7 +219,7 @@
                 }
             },
             "status": null,
-            "top": "705",
+            "top": "840",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
@@ -261,7 +239,7 @@
                 "workflowReference": "\/api\/3\/workflows\/b027eb6e-5bde-4eb2-9abb-6c3189851147"
             },
             "status": null,
-            "top": "840",
+            "top": "975",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -269,10 +247,26 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Extract Grid Issue Details",
+            "description": null,
+            "arguments": {
+                "issue_no": "{{(vars.input.records[0].split('\/')[-2]).split('_')[-1]}}",
+                "repo_name": "{{(vars.input.records[0].split('\/')[-2]).split('_')[0]}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "a3d1ca3e-a23f-4649-872b-03b34e67dc5d"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
                 "route": "9cdf70c1-24f4-406a-9622-1bc0bf56feca",
+                "title": "Submit Changes for Review",
                 "resources": [
                     "change_management"
                 ],
@@ -316,7 +310,7 @@
                 "json_issue": "{% set ij = {} %}{% for k,v in vars.steps.Refine_Issue_Table.json_issue[0].items() %}{% if k == \"pullRequest\" %}{% set url = \"<a href='\"+ vars.steps.Create_Pull_Request.data['html_url'] + \"' target='_blank'>\" +(vars.steps.Create_Pull_Request.data['html_url'].split('\/')[-1]) +\"<\/a>\" %}{% set _ = ij.update({k: url}) %}{% elif k == \"pRStatus\" %}{% set _ = ij.update({k: \"Open\" }) %}{% else %}{% set _ = ij.update({k: v}) %}{% endif %}{% endfor %}{{ij}}"
             },
             "status": null,
-            "top": "975",
+            "top": "1110",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -341,7 +335,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1110",
+            "top": "1245",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
@@ -358,7 +352,7 @@
                 "base_branch": "{{vars.steps.Get_Issue_and_Source_Control_Details.issue_details.baseBranch}}"
             },
             "status": null,
-            "top": "300",
+            "top": "435",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -390,7 +384,7 @@
                         {
                             "option": "OK",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/2ea899c8-fb1a-48e5-bc9d-e7b380e24116"
+                            "step_iri": "\/api\/3\/workflow_steps\/31950393-4c4f-4a35-a8a0-f1f28c1fc401"
                         }
                     ],
                     "duplicateOption": false
@@ -401,7 +395,7 @@
                 }
             },
             "status": null,
-            "top": "1380",
+            "top": "1515",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -412,14 +406,17 @@
             "name": "Get Issue and Source Control Details",
             "description": null,
             "arguments": {
-                "arguments": [],
+                "arguments": {
+                    "issue_no": "{{vars.issue_no}}",
+                    "repo_name": "{{vars.repo_name}}"
+                },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_input_record": true,
                 "workflowReference": "\/api\/3\/workflows\/8c04ee86-fa48-4ac7-8c4f-e4c771b64838"
             },
             "status": null,
-            "top": "165",
+            "top": "300",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -429,21 +426,30 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
+            "name": "Start -> Extract Grid Issue Details",
+            "targetStep": "\/api\/3\/workflow_steps\/a3d1ca3e-a23f-4649-872b-03b34e67dc5d",
+            "sourceStep": "\/api\/3\/workflow_steps\/b25c83e7-18a3-44e5-a9d3-37b6d411f9b9",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "2b779ab1-9834-4af2-a917-cdd6b965b6f9"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Extract Grid Issue Details -> Get Issue and Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/f13782fd-5743-44f3-9aed-c7e38e7a4157",
+            "sourceStep": "\/api\/3\/workflow_steps\/a3d1ca3e-a23f-4649-872b-03b34e67dc5d",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "52d4870a-8f7e-4ba0-aedd-427dae27620a"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Specify PR Title and Comments -> Create Pull Request",
             "targetStep": "\/api\/3\/workflow_steps\/12cfeeb4-830c-4dee-b0cb-2d82d2e92f85",
             "sourceStep": "\/api\/3\/workflow_steps\/524c224b-2d87-45ee-bd0e-d2dadaa07559",
             "label": "Submit",
             "isExecuted": false,
             "uuid": "806a458b-8b23-46dd-8bc9-26d0ecbb8dfb"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Get Issue and Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/f13782fd-5743-44f3-9aed-c7e38e7a4157",
-            "sourceStep": "\/api\/3\/workflow_steps\/b25c83e7-18a3-44e5-a9d3-37b6d411f9b9",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "1a9b7345-9d44-44ae-a850-c8ff48c27575"
         },
         {
             "@type": "WorkflowRoute",
@@ -519,21 +525,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Populate PR Details -> Update Change Management Result",
-            "targetStep": "\/api\/3\/workflow_steps\/2ea899c8-fb1a-48e5-bc9d-e7b380e24116",
+            "name": "Populate PR Details -> Add Reviewers",
+            "targetStep": "\/api\/3\/workflow_steps\/31950393-4c4f-4a35-a8a0-f1f28c1fc401",
             "sourceStep": "\/api\/3\/workflow_steps\/e2d15988-05eb-446d-b8e1-3739c0b5afb4",
             "label": "OK",
             "isExecuted": false,
-            "uuid": "3b170fd0-27c6-4faa-9176-7753f6549582"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Update Change Management Result -> Add Reviewers",
-            "targetStep": "\/api\/3\/workflow_steps\/31950393-4c4f-4a35-a8a0-f1f28c1fc401",
-            "sourceStep": "\/api\/3\/workflow_steps\/2ea899c8-fb1a-48e5-bc9d-e7b380e24116",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "b554e393-4de7-4961-abe0-59a477df6b7e"
+            "uuid": "7f3b6e92-b0cd-40c5-9e1a-dc18dfdae4ad"
         }
     ],
     "groups": [],

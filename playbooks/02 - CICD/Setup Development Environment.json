@@ -205,21 +205,6 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Configuration",
-            "description": null,
-            "arguments": {
-                "org_name": "{{vars.input.records[0].organizationName}}",
-                "repo_name": "{{vars.input.records[0].gitRepositoryURL.split('\/')[-1]}}"
-            },
-            "status": null,
-            "top": "30",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "d32760e3-e9a6-4935-8f27-1051530e534d"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "No Operation",
             "description": null,
             "arguments": {
@@ -351,30 +336,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Create Import Job -> Start Import Job Option Generation",
-            "targetStep": "\/api\/3\/workflow_steps\/ede73072-2649-456b-986c-4755da524853",
-            "sourceStep": "\/api\/3\/workflow_steps\/8a98770b-64c7-4031-a989-2ceffaa10623",
+            "name": "Repository Details -> Update Result",
+            "targetStep": "\/api\/3\/workflow_steps\/24817f53-9caa-4f57-8fee-064c62c00e2a",
+            "sourceStep": "\/api\/3\/workflow_steps\/bf99c5a9-1603-478b-b061-8a9a878bdbd5",
             "label": null,
             "isExecuted": false,
-            "uuid": "39764cb5-a3db-4b83-90b6-5c7ee7ecfc8e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Clone Repository -> Get Clone Repo Zip File",
-            "targetStep": "\/api\/3\/workflow_steps\/cb682b7c-fbc6-4e20-a6f9-72cf299cb4fa",
-            "sourceStep": "\/api\/3\/workflow_steps\/4c47d46e-891c-4d93-a9fa-cfcaa8b94f8d",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "47770825-7090-4988-914a-32c4075b1dc8"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Import Zip File -> Populate Pull Change Request Details",
-            "targetStep": "\/api\/3\/workflow_steps\/f7b1721f-5c87-4cb7-8c8c-9e8e95f394f2",
-            "sourceStep": "\/api\/3\/workflow_steps\/c738ed48-1da5-45f3-ba06-5886b1e748ac",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "5b8c1105-ff57-4d35-9218-0a7943de876d"
+            "uuid": "d74c75ce-5f42-40ba-a259-a6a56ce365a9"
         },
         {
             "@type": "WorkflowRoute",
@@ -384,15 +351,6 @@
             "label": null,
             "isExecuted": false,
             "uuid": "8204c984-8483-4f3e-af23-116d85f40810"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Update Result -> Clone Repository",
-            "targetStep": "\/api\/3\/workflow_steps\/4c47d46e-891c-4d93-a9fa-cfcaa8b94f8d",
-            "sourceStep": "\/api\/3\/workflow_steps\/24817f53-9caa-4f57-8fee-064c62c00e2a",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "8c0075dd-0be2-4553-828f-5a0fa3d6c40d"
         },
         {
             "@type": "WorkflowRoute",
@@ -414,6 +372,24 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Clone Repository -> Get Clone Repo Zip File",
+            "targetStep": "\/api\/3\/workflow_steps\/cb682b7c-fbc6-4e20-a6f9-72cf299cb4fa",
+            "sourceStep": "\/api\/3\/workflow_steps\/4c47d46e-891c-4d93-a9fa-cfcaa8b94f8d",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "47770825-7090-4988-914a-32c4075b1dc8"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Create Import Job -> Start Import Job Option Generation",
+            "targetStep": "\/api\/3\/workflow_steps\/ede73072-2649-456b-986c-4755da524853",
+            "sourceStep": "\/api\/3\/workflow_steps\/8a98770b-64c7-4031-a989-2ceffaa10623",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "39764cb5-a3db-4b83-90b6-5c7ee7ecfc8e"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Get Import Job -> Import Zip File",
             "targetStep": "\/api\/3\/workflow_steps\/c738ed48-1da5-45f3-ba06-5886b1e748ac",
             "sourceStep": "\/api\/3\/workflow_steps\/6dff8980-ad57-493a-b1dd-7302f031b8c0",
@@ -423,12 +399,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Repository Details -> Update Result",
-            "targetStep": "\/api\/3\/workflow_steps\/24817f53-9caa-4f57-8fee-064c62c00e2a",
-            "sourceStep": "\/api\/3\/workflow_steps\/bf99c5a9-1603-478b-b061-8a9a878bdbd5",
+            "name": "Import Zip File -> Populate Pull Change Request Details",
+            "targetStep": "\/api\/3\/workflow_steps\/f7b1721f-5c87-4cb7-8c8c-9e8e95f394f2",
+            "sourceStep": "\/api\/3\/workflow_steps\/c738ed48-1da5-45f3-ba06-5886b1e748ac",
             "label": null,
             "isExecuted": false,
-            "uuid": "d74c75ce-5f42-40ba-a259-a6a56ce365a9"
+            "uuid": "5b8c1105-ff57-4d35-9218-0a7943de876d"
         },
         {
             "@type": "WorkflowRoute",
@@ -438,6 +414,15 @@
             "label": "OK",
             "isExecuted": false,
             "uuid": "fcc43050-a8d2-4079-a15e-c01974e59bda"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Result -> Clone Repository",
+            "targetStep": "\/api\/3\/workflow_steps\/4c47d46e-891c-4d93-a9fa-cfcaa8b94f8d",
+            "sourceStep": "\/api\/3\/workflow_steps\/24817f53-9caa-4f57-8fee-064c62c00e2a",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "8c0075dd-0be2-4553-828f-5a0fa3d6c40d"
         }
     ],
     "groups": [],
@@ -446,5 +431,8 @@
     "owners": [],
     "isPrivate": false,
     "deletedAt": null,
-    "recordTags": []
+    "recordTags": [
+        "ManualTrigger",
+        "CICD"
+    ]
 }

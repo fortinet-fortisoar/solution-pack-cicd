@@ -17,6 +17,26 @@
     "steps": [
         {
             "@type": "WorkflowStep",
+            "name": "Save Production Settings",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "cicd_cofig": "{{vars.cicd_cofig}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/69179225-e990-4112-b47b-ef9f4c877411"
+            },
+            "status": null,
+            "top": "570",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "16c74a65-4d4d-4f65-971c-6d2bbf83acae"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Pull Latest Content from GitHub",
             "description": null,
             "arguments": {
@@ -27,7 +47,7 @@
                 "workflowReference": "\/api\/3\/workflows\/20a37bc8-6f60-469e-95f6-6e5d25e839d0"
             },
             "status": null,
-            "top": "435",
+            "top": "570",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -49,29 +69,11 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "570",
+            "top": "705",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "3e1d7dda-dc18-46f4-8c2e-5768314f6e04"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Save Production Settings",
-            "description": null,
-            "arguments": {
-                "arguments": [],
-                "apply_async": false,
-                "step_variables": [],
-                "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/a58f22fc-e207-4fac-9c34-719efcc3df7a"
-            },
-            "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
-            "group": null,
-            "uuid": "4efb1d4e-335e-4d06-9a66-700585287f40"
         },
         {
             "@type": "WorkflowStep",
@@ -108,8 +110,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "435",
-            "left": "825",
+            "top": "570",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "b28d7140-a828-48f7-9ea9-d9788a02abca"
@@ -133,9 +135,9 @@
                     },
                     {
                         "option": "Save Production Settings",
-                        "step_iri": "\/api\/3\/workflow_steps\/4efb1d4e-335e-4d06-9a66-700585287f40",
+                        "step_iri": "\/api\/3\/workflow_steps\/ea34aa94-d6ee-4487-8c74-ddb790d8fde8",
                         "condition": "{{ \"Save Production Settings\" in vars.input.records[0].title }}",
-                        "step_name": "Save Production Settings"
+                        "step_name": "Get Source Control Details"
                     }
                 ]
             },
@@ -145,6 +147,31 @@
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "c40cb2c7-79a2-458e-835c-0928200c91b6"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Source Control Details",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_cofig",
+                    "body": "",
+                    "method": "GET"
+                },
+                "version": "3.2.2",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": {
+                    "cicd_cofig": "{{vars.result.data['hydra:member'][0].value | toDict }}"
+                }
+            },
+            "status": null,
+            "top": "435",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "ea34aa94-d6ee-4487-8c74-ddb790d8fde8"
         },
         {
             "@type": "WorkflowStep",
@@ -213,12 +240,30 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
+            "name": "Get Source Control Details -> Save FortiSOAR Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/16c74a65-4d4d-4f65-971c-6d2bbf83acae",
+            "sourceStep": "\/api\/3\/workflow_steps\/ea34aa94-d6ee-4487-8c74-ddb790d8fde8",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "04ff0183-5791-4b0f-b04d-8914d5904f70"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Task Selected -> Initial Repository Configuration",
             "targetStep": "\/api\/3\/workflow_steps\/341ebfa1-1b8b-432b-a4f6-f3b88597d551",
             "sourceStep": "\/api\/3\/workflow_steps\/c40cb2c7-79a2-458e-835c-0928200c91b6",
             "label": "Apply Latest Content",
             "isExecuted": false,
             "uuid": "0931510b-c927-4dc2-b76d-1812410d8371"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Task Selected -> Get Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/ea34aa94-d6ee-4487-8c74-ddb790d8fde8",
+            "sourceStep": "\/api\/3\/workflow_steps\/c40cb2c7-79a2-458e-835c-0928200c91b6",
+            "label": "Save Production Settings",
+            "isExecuted": false,
+            "uuid": "3a691d7a-1dfc-40e2-bacd-b52550efe96f"
         },
         {
             "@type": "WorkflowRoute",
@@ -249,15 +294,6 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Task Selected -> Merge CR to Main Branch",
-            "targetStep": "\/api\/3\/workflow_steps\/4efb1d4e-335e-4d06-9a66-700585287f40",
-            "sourceStep": "\/api\/3\/workflow_steps\/c40cb2c7-79a2-458e-835c-0928200c91b6",
-            "label": "Save Production Settings",
-            "isExecuted": false,
-            "uuid": "4c907558-5e5e-44e1-93a0-24f31749b499"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Start -> Copy of Update Status as Complete",
             "targetStep": "\/api\/3\/workflow_steps\/98c687fe-9018-477c-9217-7b6bec1daae1",
             "sourceStep": "\/api\/3\/workflow_steps\/eca9d868-eb74-43a8-9e84-01efe628e234",
@@ -267,12 +303,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Setup the Development Environment -> Update Status as Complete",
+            "name": "Save Production Settings -> Update Status as Complete",
             "targetStep": "\/api\/3\/workflow_steps\/3e1d7dda-dc18-46f4-8c2e-5768314f6e04",
-            "sourceStep": "\/api\/3\/workflow_steps\/4efb1d4e-335e-4d06-9a66-700585287f40",
+            "sourceStep": "\/api\/3\/workflow_steps\/16c74a65-4d4d-4f65-971c-6d2bbf83acae",
             "label": null,
             "isExecuted": false,
-            "uuid": "57628d46-4758-4afb-8f76-b4f50147508e"
+            "uuid": "eae475d8-4941-4161-9920-c1d49425f07f"
         },
         {
             "@type": "WorkflowRoute",

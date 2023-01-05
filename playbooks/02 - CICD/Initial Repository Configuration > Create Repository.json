@@ -6,7 +6,7 @@
     "tag": null,
     "description": "Create the Public Repository for the specified repository name and base branch name in GitHub",
     "isActive": true,
-    "debug": true,
+    "debug": false,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
     "parameters": [

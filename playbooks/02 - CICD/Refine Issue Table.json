@@ -55,7 +55,7 @@
             "name": "Refine Issue Json",
             "description": null,
             "arguments": {
-                "demo": "{% for ij in vars.issues_json %}\n{% for u in vars.url %}\n{% if (ij.repo_url in u) and (ij.cRNo in u) %}{% set _ = ij.update({\"cRNo\": u}) %}{% endif %}{% endfor %}{% endfor %}\n{% for ij in vars.issues_json %}{% for u in vars.url %}{% if (ij.repo_url in u) and (ij.cRNo not in u) %}{% set _ = ij.update({\"repo_url\": u}) %}{% endif %}{% endfor %}{% endfor %}\n{% for ij in vars.issues_json %}{% for u in vars.url %}{% if (ij.pullRequest == \"None\") %}{% set _ = ij.update({\"pullRequest\": \"None\"}) %}{% elif ((ij.pullRequest | int) is number) %}{% set _ = ij.update({\"pullRequest\": u}) %}{% endif %}{% endfor %}{% endfor %}"
+                "demo": "{% for ij in vars.issues_json %}{% set uuid = (999999999999999999995 | random | to_uuid)%}{% set iri = \"\/api\/3\/\"+ij.repo_url+\"_\"+ij.cRNo+\"\/\"+uuid %}{% set _ = ij.update({\"@id\": iri}) %}{% endfor %}{% for ij in vars.issues_json %}\n{% for u in vars.url %}\n{% if (ij.repo_url in u) and (ij.cRNo in u) %}{% set _ = ij.update({\"cRNo\": u}) %}{% endif %}{% endfor %}{% endfor %}\n{% for ij in vars.issues_json %}{% for u in vars.url %}{% if (ij.repo_url in u) and (ij.cRNo not in u) %}{% set _ = ij.update({\"repo_url\": u}) %}{% endif %}{% endfor %}{% endfor %}\n{% for ij in vars.issues_json %}{% for u in vars.url %}{% if (ij.pullRequest == \"None\") %}{% set _ = ij.update({\"pullRequest\": \"None\"}) %}{% elif ((ij.pullRequest | int) is number) %}{% set _ = ij.update({\"pullRequest\": u}) %}{% endif %}{% endfor %}{% endfor %}"
             },
             "status": null,
             "top": "570",

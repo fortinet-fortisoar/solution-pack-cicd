@@ -1,0 +1,289 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Close Change Request",
+    "aliasName": null,
+    "tag": null,
+    "description": "Closed the change Request and and Delete the specified change request branch",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/f95d5f8c-3ac5-45c4-9a6a-7f659f529bf1",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "No Operation",
+            "description": null,
+            "arguments": {
+                "params": [],
+                "version": "3.2.1",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "1fef85e2-cfa9-4264-bf53-88392f8b75c5"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Extract Source Control Details",
+            "description": null,
+            "arguments": {
+                "org_name": "{{vars.cicd_cofig. organizationName}}",
+                "repo_name": "{% if vars.repo_name == \"fortisoar-content\" %}{{vars.cicd_cofig.content.split('\/')[-1]}}{% endif %}{% if vars.repo_name == \"fortisoar-settings-prod\" %}{{vars.cicd_cofig.productionSettings.split('\/')[-1]}}{% endif %}{% if vars.repo_name == \"fortisoar-settings-dev\" %}{{vars.cicd_cofig.developmentSettings.split('\/')[-1]}}{% endif %}"
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "2b48627c-5f81-40aa-94f4-304a26604df3"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Source Control Details",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_cofig",
+                    "body": "",
+                    "method": "GET"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": {
+                    "cicd_cofig": "{{vars.result.data['hydra:member'][0].value | toDict }}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "95fb2a4a-16b2-45fa-97e7-191bddeb5c0f"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "issue_no": "{{(vars.input.records[0].split('\/')[-2]).split('_')[-1]}}",
+                "repo_name": "{{(vars.input.records[0].split('\/')[-2]).split('_')[0]}}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "b01cbfa5-267a-484c-b5ab-4b137c4ef661"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Close Issue",
+            "description": null,
+            "arguments": {
+                "name": "GitHub",
+                "config": "d5b34d4b-1af5-46b8-8df0-eeb4653d50bf",
+                "params": {
+                    "org": "{{vars.org_name}}",
+                    "body": "",
+                    "repo": "{{vars.repo_name}}",
+                    "state": "closed",
+                    "title": "",
+                    "labels": "",
+                    "assignees": "",
+                    "milestone": "",
+                    "repo_type": "Organization",
+                    "issue_number": "{{vars.issue_no}}",
+                    "state_reason": "completed"
+                },
+                "version": "1.0.0",
+                "connector": "github",
+                "operation": "update_issue",
+                "operationTitle": "Update Issue",
+                "pickFromTenant": false,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "e0ed0ee8-7712-49e6-965b-a136e11bdc20"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "route": "740e63ae-b3c3-4586-971c-f3437a0c13f8",
+                "title": "Mark as Complete",
+                "resources": [
+                    "change_management"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    }
+                },
+                "displayConditions": {
+                    "change_requests": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "OR",
+                        "filters": [
+                            {
+                                "type": "object",
+                                "field": "pRStatus",
+                                "value": "\/api\/3\/picklists\/8e8d3689-92ec-4229-844b-50a45be3cd72",
+                                "_value": {
+                                    "@id": "\/api\/3\/picklists\/8e8d3689-92ec-4229-844b-50a45be3cd72",
+                                    "itemValue": "Approved"
+                                },
+                                "operator": "eq"
+                            }
+                        ]
+                    },
+                    "change_management": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "AND",
+                        "filters": []
+                    }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": false,
+                "singleRecordExecution": true
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "group": null,
+            "uuid": "f95d5f8c-3ac5-45c4-9a6a-7f659f529bf1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Populate PR Merged Details",
+            "description": null,
+            "arguments": {
+                "type": "DecisionBased",
+                "input": {
+                    "schema": {
+                        "title": "Closed Issue",
+                        "description": "\"{{vars.repo_name}}\" repository Issue {{vars.steps.Close_Issue.data.number}} is closed successfully ",
+                        "inputVariables": []
+                    }
+                },
+                "record": "",
+                "agent_id": null,
+                "resources": "change_requests",
+                "owner_detail": {
+                    "isAssigned": false
+                },
+                "isRecordLinked": false,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "OK",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/1fef85e2-cfa9-4264-bf53-88392f8b75c5"
+                        }
+                    ],
+                    "duplicateOption": false
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                }
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "fc1eb982-8230-4206-bf80-74c42ff54c55"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/b01cbfa5-267a-484c-b5ab-4b137c4ef661",
+            "sourceStep": "\/api\/3\/workflow_steps\/f95d5f8c-3ac5-45c4-9a6a-7f659f529bf1",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "004ad461-40e1-404c-809c-d94d8af10ec4"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Get Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/95fb2a4a-16b2-45fa-97e7-191bddeb5c0f",
+            "sourceStep": "\/api\/3\/workflow_steps\/b01cbfa5-267a-484c-b5ab-4b137c4ef661",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "16971a65-252f-4110-9b69-acfb54f71141"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Extract Source Control Details -> Close Issue",
+            "targetStep": "\/api\/3\/workflow_steps\/e0ed0ee8-7712-49e6-965b-a136e11bdc20",
+            "sourceStep": "\/api\/3\/workflow_steps\/2b48627c-5f81-40aa-94f4-304a26604df3",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "1bac862d-2b80-4715-8489-dcfaa880cfbb"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Source Control Details -> Extract Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/2b48627c-5f81-40aa-94f4-304a26604df3",
+            "sourceStep": "\/api\/3\/workflow_steps\/95fb2a4a-16b2-45fa-97e7-191bddeb5c0f",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "2e74a922-d6f3-471e-9885-32f0a4b0f3b6"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Populate PR Merged Details -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/1fef85e2-cfa9-4264-bf53-88392f8b75c5",
+            "sourceStep": "\/api\/3\/workflow_steps\/fc1eb982-8230-4206-bf80-74c42ff54c55",
+            "label": "OK",
+            "isExecuted": false,
+            "uuid": "451885fa-ee51-4e26-ab51-866ae3fda6be"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Close Issue -> Populate PR Merged Details",
+            "targetStep": "\/api\/3\/workflow_steps\/fc1eb982-8230-4206-bf80-74c42ff54c55",
+            "sourceStep": "\/api\/3\/workflow_steps\/e0ed0ee8-7712-49e6-965b-a136e11bdc20",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "900fdd5c-4d2a-4a4c-a1a6-9e20d604b507"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "ce29b3d9-06c5-4157-b1d1-52368c74c527",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "ManualTrigger",
+        "CICD"
+    ]
+}

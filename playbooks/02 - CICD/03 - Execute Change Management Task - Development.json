@@ -1,0 +1,333 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "03 - Execute Change Management Task - Development",
+    "aliasName": null,
+    "tag": null,
+    "description": "Execute Development Change Management Task on specified record",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/1f5e3baa-9900-431e-b11b-8a6d0c0dc0f5",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Pull Latest Content from GitHub",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/20a37bc8-6f60-469e-95f6-6e5d25e839d0"
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "0c108e8a-3297-4c93-b8f5-ab859d2afb59"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Source Control Details",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_cofig",
+                    "body": "",
+                    "method": "GET"
+                },
+                "version": "3.2.2",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": {
+                    "cicd_cofig": "{{vars.result.data['hydra:member'][0].value | toDict }}"
+                }
+            },
+            "status": null,
+            "top": "435",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "18248ee7-141b-4db5-90f0-bb7aec7b8739"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "route": "04c2d59a-c6de-460c-97d2-f2faaa12d1a3",
+                "title": "Execute",
+                "resources": [
+                    "change_management"
+                ],
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    }
+                },
+                "displayConditions": {
+                    "change_management": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "AND",
+                        "filters": [
+                            {
+                                "type": "array",
+                                "field": "status",
+                                "value": [
+                                    "\/api\/3\/picklists\/7f0263bf-29ab-4453-aefe-41d20f0fe9c3",
+                                    "\/api\/3\/picklists\/eb7e156f-f599-4cf6-a12b-5484c1bc414d"
+                                ],
+                                "module": "status",
+                                "display": "",
+                                "operator": "nin",
+                                "template": "multiselectpicklist",
+                                "OPERATOR_KEY": "$",
+                                "previousOperator": "nin",
+                                "previousTemplate": "multiselectpicklist"
+                            },
+                            {
+                                "type": "object",
+                                "field": "environment",
+                                "value": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
+                                "_value": {
+                                    "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
+                                    "display": "Development",
+                                    "itemValue": "Development"
+                                },
+                                "operator": "eq"
+                            }
+                        ]
+                    }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": false,
+                "singleRecordExecution": true
+            },
+            "status": null,
+            "top": "30",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "group": null,
+            "uuid": "1f5e3baa-9900-431e-b11b-8a6d0c0dc0f5"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Task Selected",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Apply Latest Content",
+                        "step_iri": "\/api\/3\/workflow_steps\/0c108e8a-3297-4c93-b8f5-ab859d2afb59",
+                        "condition": "{{ \"Apply Latest Content\" in vars.input.records[0].title }}",
+                        "step_name": "Pull Latest Content from GitHub"
+                    },
+                    {
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/9373df29-7d22-4b4d-b6d8-725f1a6fdd9f",
+                        "step_name": "No Operation"
+                    },
+                    {
+                        "option": "Save Dev Settings",
+                        "step_iri": "\/api\/3\/workflow_steps\/18248ee7-141b-4db5-90f0-bb7aec7b8739",
+                        "condition": "{{ \"Save Dev Settings\" in vars.input.records[0].title }}",
+                        "step_name": "Get Source Control Details"
+                    }
+                ]
+            },
+            "status": null,
+            "top": "300",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "22da62d1-c0cc-402e-ba73-344227e91bf8"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Save Dev Settings",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "cicd_cofig": "{{vars.cicd_cofig}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/69179225-e990-4112-b47b-ef9f4c877411"
+            },
+            "status": null,
+            "top": "570",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "727d2cb9-9734-412f-ac52-b3807897de13"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "No Operation",
+            "description": null,
+            "arguments": {
+                "params": [],
+                "version": "3.2.2",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "9373df29-7d22-4b4d-b6d8-725f1a6fdd9f"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Status as In Progress",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "status": "\/api\/3\/picklists\/7f0263bf-29ab-4453-aefe-41d20f0fe9c3"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": [],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "9712f5f1-54d1-45b6-b791-f3bbab9cc55b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Status as Complete",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "status": "\/api\/3\/picklists\/eb7e156f-f599-4cf6-a12b-5484c1bc414d"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": [],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "fc0f4b22-4a28-415e-ab4b-70c92671d004"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Task Selected -> Get Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/18248ee7-141b-4db5-90f0-bb7aec7b8739",
+            "sourceStep": "\/api\/3\/workflow_steps\/22da62d1-c0cc-402e-ba73-344227e91bf8",
+            "label": "Save Dev Settings",
+            "isExecuted": false,
+            "uuid": "51abfb90-2fe7-403a-a21a-4e9b42820780"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Source Control Details -> Save FortiSOAR Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/727d2cb9-9734-412f-ac52-b3807897de13",
+            "sourceStep": "\/api\/3\/workflow_steps\/18248ee7-141b-4db5-90f0-bb7aec7b8739",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "9a070272-e26a-4be8-ba70-0d87b0570eb7"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Pull Latest Content from GitHub -> Update Status as Complete",
+            "targetStep": "\/api\/3\/workflow_steps\/fc0f4b22-4a28-415e-ab4b-70c92671d004",
+            "sourceStep": "\/api\/3\/workflow_steps\/0c108e8a-3297-4c93-b8f5-ab859d2afb59",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "a2a593d6-725e-435f-b3e8-65d351dd0524"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Task Selected -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/9373df29-7d22-4b4d-b6d8-725f1a6fdd9f",
+            "sourceStep": "\/api\/3\/workflow_steps\/22da62d1-c0cc-402e-ba73-344227e91bf8",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "d36b7ad5-e70d-4a34-b615-665aa80c033a"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Task Selected -> Initial Repository Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/0c108e8a-3297-4c93-b8f5-ab859d2afb59",
+            "sourceStep": "\/api\/3\/workflow_steps\/22da62d1-c0cc-402e-ba73-344227e91bf8",
+            "label": "Apply Latest Content",
+            "isExecuted": false,
+            "uuid": "dddc8237-e49e-44e6-a267-e560b6fe57dd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Copy of Update Status as Complete",
+            "targetStep": "\/api\/3\/workflow_steps\/9712f5f1-54d1-45b6-b791-f3bbab9cc55b",
+            "sourceStep": "\/api\/3\/workflow_steps\/1f5e3baa-9900-431e-b11b-8a6d0c0dc0f5",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "e208686b-1270-4283-80d6-5cdc95885d15"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Status as In Progress -> Task Selected",
+            "targetStep": "\/api\/3\/workflow_steps\/22da62d1-c0cc-402e-ba73-344227e91bf8",
+            "sourceStep": "\/api\/3\/workflow_steps\/9712f5f1-54d1-45b6-b791-f3bbab9cc55b",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "e21bc9d5-2486-48cd-a1d8-a329e3c12b15"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Save Dev Settings -> Update Status as Complete",
+            "targetStep": "\/api\/3\/workflow_steps\/fc0f4b22-4a28-415e-ab4b-70c92671d004",
+            "sourceStep": "\/api\/3\/workflow_steps\/727d2cb9-9734-412f-ac52-b3807897de13",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "ec2ef261-5ced-40c7-b298-75bf38c8d464"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "No Operation -> Update Status as Complete",
+            "targetStep": "\/api\/3\/workflow_steps\/fc0f4b22-4a28-415e-ab4b-70c92671d004",
+            "sourceStep": "\/api\/3\/workflow_steps\/9373df29-7d22-4b4d-b6d8-725f1a6fdd9f",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "f27f8b44-42f0-4eb8-a3c9-2f2e3965230a"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "e9e08e05-b997-4241-9104-440c9ad57380",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "ManualTrigger",
+        "CICD"
+    ]
+}

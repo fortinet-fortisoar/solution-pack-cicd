@@ -17,31 +17,6 @@
     "steps": [
         {
             "@type": "WorkflowStep",
-            "name": "Create HTML Body",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "data": "[{{vars.cr_info}}]",
-                    "display": "Horizontal",
-                    "styling": false,
-                    "template": "Stylized with row selection",
-                    "row_fields": ""
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "json_to_html",
-                "operationTitle": "Utils: Convert JSON into a HTML Table",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "30",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "0155f631-2123-4ea6-8154-5df63ad2734d"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Update Issue Number",
             "description": null,
             "arguments": {
@@ -69,7 +44,7 @@
             },
             "status": null,
             "top": "840",
-            "left": "1175",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
             "uuid": "0f90aae2-2039-48e3-b78c-383d798495e3"
@@ -94,31 +69,10 @@
             },
             "status": null,
             "top": "705",
-            "left": "1175",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "10c5429a-7a3f-4b63-8333-637b13bba191"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Create HTML Table",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "value": "<!DOCTYPE html>\n<html>\n<head>\n    <style>\n        table.scrolldown {\n            width: 100%;\n            \/* border-collapse: collapse; *\/\n            border-spacing: 0;\n            border: 2px solid black;\n        }\n        \/* To display the block as level element *\/\n        table.scrolldown tbody,\n        table.scrolldown thead {\n            display: table-header-group;\n        }\n        thead tr th {\n            height: 40px;\n            text-align: center;\n            \/* line-height: 40px;*\/\n        }\n        table.scrolldown tbody {\n            \/* Set the height of table body *\/\n            height: 50px;\n            \/* Set vertical scroll *\/\n            overflow-y: auto;\n            \/* Hide the horizontal scroll *\/\n            overflow-x: hidden;\n        }\n        tbody {\n            border-top: 2px solid black;\n        }\n        tbody td,\n        thead th {\n            width: 200px;\n            border-right: 2px solid black;\n        }\n        td {\n            text-align: center;\n        }\n    <\/style>\n<\/head>\n\n<body>\n    <table class=\"scrolldown\">\n        <!-- Table head content -->\n        <thead>\n            <tr>\n                <th>CR-No<\/th>\n                <th>Type<\/th>\n                <th>State<\/th>\n                <th>Summary<\/th>\n                <th>Description<\/th>\n                <th>Organization Name<\/th>\n                <th>Repository<\/th>\n                <th>Assignee Username<\/th>\n                <th>Reporter Username<\/th>\n                <th>Pull Request<\/th>\n                <th>PR Status<\/th>\n                <th>PR Reviewers<\/th>\n            <\/tr>\n        <\/thead>\n        <!-- Table body content -->\n        <tbody>\n            {% for item in vars.cr_info %}\n            <tr>\n                <td>{{item.cRNo}}<\/td>\n                <td>{{item.type}}<\/td>\n                <td>{{item.state}}<\/td>\n                <td>{{item.summary}}<\/td>\n                <td>{{item.description}}<\/td>\n                <td>{{item.organizationName}}<\/td>\n                <td>{{item.repo_url}}<\/td>\n                <td>{{item.assigneeUsername}}<\/td>\n                <td>{{item.reporterUsername}}<\/td>\n                <td>{{item.pullRequest}}<\/td>\n                <td>{{item.pRStatus}}<\/td>\n                <td>{{item.pRReviewers}}<\/td>\n            <\/tr>\n            {% endfor %}\n        <\/tbody>\n    <\/table>\n    <body>\n<\/html>"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "format_richtext",
-                "operationTitle": "Utils: Format as RichText (Markdown)",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "30",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "327d29ef-551e-4f47-90ef-2920e7c6fb14"
         },
         {
             "@type": "WorkflowStep",
@@ -141,24 +95,10 @@
             },
             "status": null,
             "top": "300",
-            "left": "1175",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "362f353a-d9d3-46fa-af66-54b797c87906"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Refine HTML",
-            "description": null,
-            "arguments": {
-                "refine_html": "{{vars.steps.Create_HTML_Body.data.replace(\"&#x27;\",\"'\").replace(\"&lt;\",\"<\").replace(\"&gt;\",\">\").replace(\"\\\"\",\"'\")}}"
-            },
-            "status": null,
-            "top": "30",
-            "left": "825",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "70a29961-d1c0-485d-93bc-b7569f2a6244"
         },
         {
             "@type": "WorkflowStep",
@@ -166,6 +106,7 @@
             "description": null,
             "arguments": {
                 "route": "2b72955d-c7e4-44fc-99d5-990d49eb7154",
+                "title": "Create New Request",
                 "resources": [
                     "change_management"
                 ],
@@ -195,8 +136,8 @@
                 "singleRecordExecution": false
             },
             "status": null,
-            "top": "20",
-            "left": "1180",
+            "top": "30",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
             "uuid": "8df330fd-e64c-4372-8198-fc8e72184bc5"
@@ -229,32 +170,10 @@
             },
             "status": null,
             "top": "570",
-            "left": "1175",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
             "uuid": "8e1adefc-2588-4fa2-9333-7af4a7019c82"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Change Management Result",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "results": "<p>Following Change Request is Created in GitHub<\/p>\n<p>{{vars.steps.Update_Issue_Number.data.body}}<\/p>\n<p>&nbsp;<\/p>"
-                },
-                "operation": "Append",
-                "collection": "{{vars.input.records[0]['@id']}}",
-                "__recommend": [],
-                "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
-                "step_variables": []
-            },
-            "status": null,
-            "top": "975",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
-            "group": null,
-            "uuid": "aa6a50e3-d2ba-4630-b69d-0108d3394dd2"
         },
         {
             "@type": "WorkflowStep",
@@ -474,7 +393,7 @@
             },
             "status": null,
             "top": "165",
-            "left": "1175",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "bb247814-03fd-437d-9e7b-62c68e0877fc"
@@ -489,7 +408,7 @@
             },
             "status": null,
             "top": "435",
-            "left": "1175",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "e9b1e3c1-af41-4302-81de-72a2958cd7eb"
@@ -513,15 +432,6 @@
             "label": null,
             "isExecuted": false,
             "uuid": "850aacba-defe-48f6-94ab-4d86e46d6082"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Update Issue Number -> Update",
-            "targetStep": "\/api\/3\/workflow_steps\/aa6a50e3-d2ba-4630-b69d-0108d3394dd2",
-            "sourceStep": "\/api\/3\/workflow_steps\/0f90aae2-2039-48e3-b78c-383d798495e3",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "8d5c2f02-0563-4b09-880d-238ffe67c579"
         },
         {
             "@type": "WorkflowRoute",
@@ -567,6 +477,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
+        "CICD",
         "CreateIssue"
     ]
 }

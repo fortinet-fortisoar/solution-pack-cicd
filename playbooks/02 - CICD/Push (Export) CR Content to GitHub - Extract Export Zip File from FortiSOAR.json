@@ -6,7 +6,7 @@
     "tag": null,
     "description": "Extract \"FortiSOAR Production Environment\" exported Zip File from FortiSOAR",
     "isActive": true,
-    "debug": true,
+    "debug": false,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
     "parameters": [
@@ -112,7 +112,7 @@
                 },
                 "apply_async": false,
                 "step_variables": [],
-                "pass_input_record": false,
+                "pass_input_record": true,
                 "workflowReference": "\/api\/3\/workflows\/0ea1cb9c-1963-49e7-9e34-df143abc43ee"
             },
             "status": null,

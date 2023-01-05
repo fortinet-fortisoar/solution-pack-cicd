@@ -6,7 +6,7 @@
     "tag": null,
     "description": "Push (Export) specified change request content into the GitHub content repository",
     "isActive": true,
-    "debug": true,
+    "debug": false,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
     "parameters": [],
@@ -15,29 +15,6 @@
     "versions": [],
     "triggerStep": "\/api\/3\/workflow_steps\/7af127bd-9fe7-467c-afe4-3bb9fdd681bb",
     "steps": [
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Export Template",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/query\/export_templates?$limit=30",
-                    "body": "{\"sort\":[{\"field\":\"modifyDate\",\"direction\":\"DESC\"}],\"limit\":30,\"logic\":\"AND\",\"filters\":[{\"field\":\"type\",\"operator\":\"neq\",\"_operator\":\"neq\",\"value\":\"SolutionPack Export\",\"type\":\"primitive\"}],\"__selectFields\":[\"name\",\"lastExportDate\",\"modifyUser\",\"portingActions\",\"@id\",\"@type\",\"id\"]}",
-                    "method": "POST"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "30",
-            "left": "825",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "0d66adcb-560a-4a0b-8b12-e5a6212060bd"
-        },
         {
             "@type": "WorkflowStep",
             "name": "Create Checkout Branch",
@@ -55,72 +32,11 @@
                 "workflowReference": "\/api\/3\/workflows\/5f736791-1989-4306-9b54-b7d9696e13ea"
             },
             "status": null,
-            "top": "435",
+            "top": "570",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "16cabb8a-c431-4246-8f85-f26b382391b1"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Change Management Record",
-            "description": null,
-            "arguments": {
-                "resource": {
-                    "results": "<p>\"Change Request {{vars.steps.Get_Issue_Details.issue_details.cRNo}} | {{vars.steps.Get_Issue_Details.issue_details.summary}}\" is successfully pushed (exported) into the GitHub <a href=\"https:\/\/github.com\/{{vars.org_name}}\/{{vars.repo_name}}\/tree\/{{vars.new_branch}}\" target=\"_blank\" rel=\"noopener\">https:\/\/github.com\/{{vars.org_name}}\/{{vars.repo_name}}\/tree\/{{vars.new_branch}}<\/a>&nbsp;Repository.<\/p>"
-                },
-                "operation": "Append",
-                "collection": "{{vars.input.records[0]['@id']}}",
-                "__recommend": [],
-                "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1380",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
-            "group": null,
-            "uuid": "200feec5-0e3a-438f-8f3d-24c20167d1cc"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Issues",
-            "description": null,
-            "arguments": {
-                "name": "GitHub",
-                "config": "d47bdd7a-aa4e-434b-9826-515d1565b59d",
-                "params": {
-                    "org": "{{vars.org_name}}",
-                    "page": "",
-                    "repo": "{{vars.repo_name}}",
-                    "sort": "created",
-                    "since": "",
-                    "state": "open",
-                    "labels": "",
-                    "creator": "",
-                    "assignee": "",
-                    "per_page": 100,
-                    "direction": "desc",
-                    "mentioned": "",
-                    "milestone": "",
-                    "repo_type": "Organization"
-                },
-                "version": "1.0.0",
-                "connector": "github",
-                "operation": "list_repository_issue",
-                "operationTitle": "List Repository Issue",
-                "pickFromTenant": false,
-                "step_variables": {
-                    "issue_details": "{{vars.result.data | selectattr(\"number\", \"equalto\", (vars.steps.Provide_Issue_and_Source_Control_Details.input.issueNumber | int)) | list | first}}"
-                }
-            },
-            "status": null,
-            "top": "300",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
-            "group": null,
-            "uuid": "2258389e-91c4-42e8-a741-e7a238786e56"
         },
         {
             "@type": "WorkflowStep",
@@ -137,7 +53,7 @@
                 "export_template_name": "{% if \"content\" in vars.steps.Get_Issue_Details.issue_details.repo_url %}FortiSOAR Production Environment Content{% elif \"dev\" in vars.steps.Get_Issue_Details.issue_details.repo_url %}FortiSOAR Development Environment Settings{% else %}FortiSOAR Production Environment Settings{% endif %}"
             },
             "status": null,
-            "top": "300",
+            "top": "435",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -145,39 +61,12 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get SP Export Job",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/3\/export_jobs\/{{vars.steps.Update_SP_Export_Content.data.jobUuid}}?__selectFields=errorMessage,status,file",
-                    "body": "",
-                    "method": "GET"
-                },
-                "version": "3.2.1",
-                "do_until": {
-                    "delay": 5,
-                    "retries": 10,
-                    "condition": "{{vars.result.data.status==\"Export Complete\"}}"
-                },
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "300",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "30cdaf4f-aba8-4397-8fd4-f0b0305ebf3f"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Get Issue Details",
             "description": null,
             "arguments": {
                 "arguments": {
-                    "issue_sourceControl_details": "{{vars.steps.Provide_Issue_and_Source_Control_Details.input}}"
+                    "issue_no": "{{vars.issue_no}}",
+                    "repo_name": "{{vars.repo_name}}"
                 },
                 "apply_async": false,
                 "step_variables": [],
@@ -185,26 +74,11 @@
                 "workflowReference": "\/api\/3\/workflows\/8c04ee86-fa48-4ac7-8c4f-e4c771b64838"
             },
             "status": null,
-            "top": "165",
+            "top": "300",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "333e0548-b4c1-4ec8-bb12-d99ef5a23d2d"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Extract Source Control Details",
-            "description": null,
-            "arguments": {
-                "org_name": "{{vars.cicd_cofig. organizationName}}",
-                "repo_name": "{% for k,v in vars.steps.Provide_Issue_and_Source_Control_Details.input.items() %}{% if k == \"repositoryType\" %}{% if v == \"Development Settings\" %}{{vars.cicd_cofig.developmentSettings.split('\/')[-1]}}{% endif %}{% if v == \"Production Settings\" %}{{vars.cicd_cofig.productionSettings.split('\/')[-1]}}{% endif %}{% if v == \"Content\" %}{{vars.cicd_cofig.content.split('\/')[-1]}}{% endif %}{% endif %}{% endfor %}"
-            },
-            "status": null,
-            "top": "165",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "363c6b77-bd6c-4da6-b0bc-fee98e00a908"
         },
         {
             "@type": "WorkflowStep",
@@ -229,7 +103,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1110",
+            "top": "1245",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
@@ -261,7 +135,7 @@
                         {
                             "option": "OK",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/200feec5-0e3a-438f-8f3d-24c20167d1cc"
+                            "step_iri": "\/api\/3\/workflow_steps\/828fca03-7702-43eb-a3d4-08fac3db35f0"
                         }
                     ],
                     "duplicateOption": false
@@ -272,7 +146,7 @@
                 }
             },
             "status": null,
-            "top": "1245",
+            "top": "1380",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -280,35 +154,11 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get Source Control Details",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_cofig",
-                    "body": "",
-                    "method": "GET"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": {
-                    "cicd_cofig": "{{vars.result.data['hydra:member'][0].value | toDict }}"
-                }
-            },
-            "status": null,
-            "top": "30",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "78ecb0e6-2a25-48c2-82aa-c1653450aabd"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
                 "route": "b333b2d8-eb5c-4015-962d-c226aff386eb",
+                "title": "Push Changes to Source Control",
                 "resources": [
                     "change_management"
                 ],
@@ -379,73 +229,22 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Demo1",
+            "name": "No Operation",
             "description": null,
             "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "dsddasdas",
-                        "description": "asdasdada",
-                        "inputVariables": [
-                            {
-                                "name": "selectDL",
-                                "type": "array",
-                                "label": "Select DL",
-                                "title": "Dynamic List",
-                                "usable": true,
-                                "options": "{{vars.dl_list}}",
-                                "tooltip": "",
-                                "dataType": "dynamicList",
-                                "formType": "dynamicList",
-                                "required": false,
-                                "_expanded": true,
-                                "mmdUpdate": true,
-                                "collection": false,
-                                "dataSource": {
-                                    "model": null
-                                },
-                                "searchable": false,
-                                "templateUrl": "app\/components\/form\/fields\/dynamicList.html",
-                                "defaultValue": null,
-                                "_previousName": "select",
-                                "playbookField": true,
-                                "lengthConstraint": true,
-                                "allowedEncryption": false,
-                                "allowedGridColumn": false,
-                                "useRecordFieldDefault": false
-                            }
-                        ]
-                    }
-                },
-                "record": "",
-                "agent_id": null,
-                "resources": "change_requests",
-                "owner_detail": {
-                    "isAssigned": false
-                },
-                "isRecordLinked": false,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "Submit",
-                            "step_iri": "\/api\/3\/workflow_steps\/undefined"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                }
+                "params": [],
+                "version": "3.2.2",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
             },
             "status": null,
-            "top": "165",
-            "left": "825",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "top": "1515",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "87540b19-4b85-4c50-92c6-5a404e901b37"
+            "uuid": "828fca03-7702-43eb-a3d4-08fac3db35f0"
         },
         {
             "@type": "WorkflowStep",
@@ -466,34 +265,11 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "840",
+            "top": "975",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
             "uuid": "92287c6b-1655-45af-9ec3-eb6b8dcbb002"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update SP Export Content",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/export?fileName=fsrProdEnv-{{vars.steps.Get_FSR_Production_Environment_SP_Details.data['hydra:member'][0].version}}.zip&solutionpacks={{vars.steps.Get_FSR_Production_Environment_SP_Details.data['hydra:member'][0].uuid}}&template={{vars.steps.Get_FSR_Production_Environment_SP_Details.data['hydra:member'][0].template.uuid}}",
-                    "body": "",
-                    "method": "PUT"
-                },
-                "version": "3.2.1",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "165",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "9a6ec947-d529-4dea-8484-25afd7e4d22e"
         },
         {
             "@type": "WorkflowStep",
@@ -510,32 +286,11 @@
                 "workflowReference": "\/api\/3\/workflows\/d4417bac-2af8-441d-a58a-83e21abfa672"
             },
             "status": null,
-            "top": "705",
+            "top": "840",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "af8bbcc3-9d2c-4531-9932-249f245db23c"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Convert HTML To Dict",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "html": "{{vars.issue_details.body}}"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "html_table_to_dictionary",
-                "operationTitle": "Utils: Convert HTML Table to Dictionary",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "435",
-            "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "bf197b89-7d4c-43b4-9e05-b192132ac92f"
         },
         {
             "@type": "WorkflowStep",
@@ -588,7 +343,7 @@
                 }
             },
             "status": null,
-            "top": "975",
+            "top": "1110",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -615,7 +370,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "570",
+            "top": "705",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
@@ -623,128 +378,30 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get FSR Production Environment SP Details",
+            "name": "Extract Grid Issue Details",
             "description": null,
             "arguments": {
-                "params": {
-                    "iri": "\/api\/query\/solutionpacks?$limit=30&$page=1&$search={{vars.content_sp}}",
-                    "body": "{\"sort\":[{\"field\":\"label\",\"direction\":\"ASC\"}],\"page\":1,\"limit\":30,\"logic\":\"AND\",\"filters\":[{\"field\":\"type\",\"operator\":\"in\",\"value\":[\"solutionpack\"]},{\"field\":\"installed\",\"operator\":\"eq\",\"value\":true},{\"logic\":\"OR\",\"filters\":[{\"field\":\"development\",\"operator\":\"eq\",\"value\":false},{\"field\":\"type\",\"operator\":\"eq\",\"value\":\"widget\"},{\"field\":\"type\",\"operator\":\"eq\",\"value\":\"solutionpack\"}]}],\"search\":\"Change Request Export\"}",
-                    "method": "POST"
-                },
-                "version": "3.2.1",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": {
-                    "sp_file_iri": "{{vars.result.data['hydra:member'][0].exportJob.file}}"
-                }
+                "issue_no": "{{(vars.input.records[0].split('\/')[-2]).split('_')[-1]}}",
+                "repo_name": "{{(vars.input.records[0].split('\/')[-2]).split('_')[0]}}"
             },
             "status": null,
-            "top": "30",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "ecd1fbc2-56e5-4eb6-92e8-425dac4accbd"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Provide Issue and Source Control Details",
-            "description": null,
-            "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "Issue Details",
-                        "description": "Provide the Push (Export) Details",
-                        "inputVariables": [
-                            {
-                                "name": "issueNumber",
-                                "type": "string",
-                                "label": "Issue Number",
-                                "tooltip": "",
-                                "dataType": "text",
-                                "formType": "text",
-                                "required": true,
-                                "_expanded": true,
-                                "defaultValue": null,
-                                "_previousName": "issue",
-                                "useRecordFieldDefault": false
-                            },
-                            {
-                                "name": "repositoryType",
-                                "type": "array",
-                                "label": "Repository Type",
-                                "title": "Dynamic List",
-                                "usable": true,
-                                "options": [
-                                    "Content",
-                                    "Production Settings",
-                                    "Development Settings"
-                                ],
-                                "tooltip": "",
-                                "dataType": "dynamicList",
-                                "formType": "dynamicList",
-                                "required": true,
-                                "_expanded": true,
-                                "mmdUpdate": true,
-                                "collection": false,
-                                "searchable": false,
-                                "templateUrl": "app\/components\/form\/fields\/dynamicList.html",
-                                "defaultValue": null,
-                                "_previousName": "",
-                                "playbookField": true,
-                                "lengthConstraint": true,
-                                "allowedGridColumn": false,
-                                "useRecordFieldDefault": false
-                            },
-                            {
-                                "name": "repositoryBaseBranch",
-                                "type": "string",
-                                "label": "Repository Base Branch",
-                                "tooltip": "",
-                                "dataType": "text",
-                                "formType": "text",
-                                "required": false,
-                                "_expanded": true,
-                                "defaultValue": null,
-                                "_previousName": "repositoryBase",
-                                "useRecordFieldDefault": false
-                            }
-                        ]
-                    }
-                },
-                "record": "",
-                "agent_id": null,
-                "resources": "change_requests",
-                "owner_detail": {
-                    "isAssigned": false
-                },
-                "isRecordLinked": false,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "Submit",
-                            "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/333e0548-b4c1-4ec8-bb12-d99ef5a23d2d"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                }
-            },
-            "status": null,
-            "top": "30",
-            "left": "1525",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
-            "group": null,
-            "uuid": "f86a389c-fe55-49de-a7a1-30b60845feec"
+            "uuid": "f2109c3a-5b34-4d2b-9524-d53ac1bb72f1"
         }
     ],
     "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Populate Push Change Request Details -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/828fca03-7702-43eb-a3d4-08fac3db35f0",
+            "sourceStep": "\/api\/3\/workflow_steps\/5540c83a-de50-4c6b-967e-f75a78173c8d",
+            "label": "OK",
+            "isExecuted": false,
+            "uuid": "d9ea37ba-d5ab-47a6-8907-c398b81ae162"
+        },
         {
             "@type": "WorkflowRoute",
             "name": "Push Change Request into Public Repository -> Clone Repository",
@@ -783,24 +440,6 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update SP Export Content -> Get SP Export Job",
-            "targetStep": "\/api\/3\/workflow_steps\/30cdaf4f-aba8-4397-8fd4-f0b0305ebf3f",
-            "sourceStep": "\/api\/3\/workflow_steps\/9a6ec947-d529-4dea-8484-25afd7e4d22e",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "0b9a8d1f-eceb-42a1-826d-8f5fa3d3ba2f"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get FSR Production Environment SP Details -> Update SP Export Content",
-            "targetStep": "\/api\/3\/workflow_steps\/9a6ec947-d529-4dea-8484-25afd7e4d22e",
-            "sourceStep": "\/api\/3\/workflow_steps\/ecd1fbc2-56e5-4eb6-92e8-425dac4accbd",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "c329ec91-84be-48fc-9eb4-58228fa72119"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Specify Commit Message -> Push Export Config into GitHub",
             "targetStep": "\/api\/3\/workflow_steps\/518a02f1-50be-4f64-bd36-caeba09857df",
             "sourceStep": "\/api\/3\/workflow_steps\/c3429296-0762-42c4-9f4b-62e251cb438e",
@@ -810,57 +449,12 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Export Template -> Demo1",
-            "targetStep": "\/api\/3\/workflow_steps\/87540b19-4b85-4c50-92c6-5a404e901b37",
-            "sourceStep": "\/api\/3\/workflow_steps\/0d66adcb-560a-4a0b-8b12-e5a6212060bd",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "58598cbf-d1b6-4f90-8ef0-ab08aae1e04d"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Get Issue Details -> Configuration",
             "targetStep": "\/api\/3\/workflow_steps\/2b5440ab-7eb7-4d3b-b9f1-034c62daa246",
             "sourceStep": "\/api\/3\/workflow_steps\/333e0548-b4c1-4ec8-bb12-d99ef5a23d2d",
             "label": null,
             "isExecuted": false,
             "uuid": "af588612-80f1-4c9f-8152-72ac7aa3168e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Source Control Details -> Conf",
-            "targetStep": "\/api\/3\/workflow_steps\/363c6b77-bd6c-4da6-b0bc-fee98e00a908",
-            "sourceStep": "\/api\/3\/workflow_steps\/78ecb0e6-2a25-48c2-82aa-c1653450aabd",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "d0da024a-990f-4308-a5fd-8eb1cf1d9e5e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Conf -> Get Issues",
-            "targetStep": "\/api\/3\/workflow_steps\/2258389e-91c4-42e8-a741-e7a238786e56",
-            "sourceStep": "\/api\/3\/workflow_steps\/363c6b77-bd6c-4da6-b0bc-fee98e00a908",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "4dc3cf49-b004-4a4f-a42c-de342feb92e3"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Issues -> Convert HTML To Dict",
-            "targetStep": "\/api\/3\/workflow_steps\/bf197b89-7d4c-43b4-9e05-b192132ac92f",
-            "sourceStep": "\/api\/3\/workflow_steps\/2258389e-91c4-42e8-a741-e7a238786e56",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "c515b935-280b-4a42-ae1c-14205c74c84c"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Get Issue Details",
-            "targetStep": "\/api\/3\/workflow_steps\/333e0548-b4c1-4ec8-bb12-d99ef5a23d2d",
-            "sourceStep": "\/api\/3\/workflow_steps\/7af127bd-9fe7-467c-afe4-3bb9fdd681bb",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "ac18983a-d5f5-449d-8322-85c5acbb278e"
         },
         {
             "@type": "WorkflowRoute",
@@ -882,12 +476,21 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Populate Push Change Request Details -> Update Change Management Record",
-            "targetStep": "\/api\/3\/workflow_steps\/200feec5-0e3a-438f-8f3d-24c20167d1cc",
-            "sourceStep": "\/api\/3\/workflow_steps\/5540c83a-de50-4c6b-967e-f75a78173c8d",
-            "label": "OK",
+            "name": "Start -> Extract Grid Issue Details",
+            "targetStep": "\/api\/3\/workflow_steps\/f2109c3a-5b34-4d2b-9524-d53ac1bb72f1",
+            "sourceStep": "\/api\/3\/workflow_steps\/7af127bd-9fe7-467c-afe4-3bb9fdd681bb",
+            "label": null,
             "isExecuted": false,
-            "uuid": "53d40d6a-ca50-4211-8331-639abcb3ad55"
+            "uuid": "80c1e836-878c-4ad9-81eb-466ff282f9cf"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Extract Grid Issue Details -> Get Issue Details",
+            "targetStep": "\/api\/3\/workflow_steps\/333e0548-b4c1-4ec8-bb12-d99ef5a23d2d",
+            "sourceStep": "\/api\/3\/workflow_steps\/f2109c3a-5b34-4d2b-9524-d53ac1bb72f1",
+            "label": null,
+            "isExecuted": false,
+            "uuid": "06657006-7fd9-4d5e-844d-249a2a539951"
         }
     ],
     "groups": [],

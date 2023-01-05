@@ -422,12 +422,21 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Get Repositories Detail -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/38172dc0-b3a5-4dc5-a9bb-5f900b82e650",
-            "sourceStep": "\/api\/3\/workflow_steps\/af50d35a-1f68-4c8b-9b57-1d1c1115231e",
-            "label": "Setup",
+            "name": "Is Repositories Created Automatically -> Provide Repositories Detail",
+            "targetStep": "\/api\/3\/workflow_steps\/18b86c22-2d44-45ae-83c3-560dcf651a44",
+            "sourceStep": "\/api\/3\/workflow_steps\/64961e22-a788-4e67-bceb-35fb39687f80",
+            "label": "Manually",
             "isExecuted": false,
-            "uuid": "2671cd03-00da-4283-a40e-ff9250f500b9"
+            "uuid": "89c75213-26c3-4164-a085-28873c02f1fd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Provide Repositories Detail -> Repository Details",
+            "targetStep": "\/api\/3\/workflow_steps\/b174fefe-817b-48e3-be4a-7222799fba7d",
+            "sourceStep": "\/api\/3\/workflow_steps\/18b86c22-2d44-45ae-83c3-560dcf651a44",
+            "label": "Submit",
+            "isExecuted": false,
+            "uuid": "aeb7608c-3846-4418-8f75-6613a167e3da"
         },
         {
             "@type": "WorkflowRoute",
@@ -437,15 +446,6 @@
             "label": null,
             "isExecuted": false,
             "uuid": "4d37d351-6b0d-4adb-ad1a-84dd534381ac"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Get Repositories Detail",
-            "targetStep": "\/api\/3\/workflow_steps\/af50d35a-1f68-4c8b-9b57-1d1c1115231e",
-            "sourceStep": "\/api\/3\/workflow_steps\/1fa83340-33e4-4d27-99e3-bbab6f5cc3b4",
-            "label": null,
-            "isExecuted": false,
-            "uuid": "58ecdaa4-1e55-4fe0-a79f-36902bd6dd66"
         },
         {
             "@type": "WorkflowRoute",
@@ -467,21 +467,30 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Repositories Created Automatically -> Provide Repositories Detail",
-            "targetStep": "\/api\/3\/workflow_steps\/18b86c22-2d44-45ae-83c3-560dcf651a44",
-            "sourceStep": "\/api\/3\/workflow_steps\/64961e22-a788-4e67-bceb-35fb39687f80",
-            "label": "Manually",
+            "name": "Show Repositories Details -> Update Result",
+            "targetStep": "\/api\/3\/workflow_steps\/91e2e908-b7a9-42d4-9bed-d311560b8f6e",
+            "sourceStep": "\/api\/3\/workflow_steps\/6c1d1f69-1de6-4b81-8ff8-db80babb9bdc",
+            "label": "OK",
             "isExecuted": false,
-            "uuid": "89c75213-26c3-4164-a085-28873c02f1fd"
+            "uuid": "faacca1c-4067-4696-8c45-a8a556123218"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Provide Repositories Detail -> Repository Details",
-            "targetStep": "\/api\/3\/workflow_steps\/b174fefe-817b-48e3-be4a-7222799fba7d",
-            "sourceStep": "\/api\/3\/workflow_steps\/18b86c22-2d44-45ae-83c3-560dcf651a44",
-            "label": "Submit",
+            "name": "Start -> Get Repositories Detail",
+            "targetStep": "\/api\/3\/workflow_steps\/af50d35a-1f68-4c8b-9b57-1d1c1115231e",
+            "sourceStep": "\/api\/3\/workflow_steps\/1fa83340-33e4-4d27-99e3-bbab6f5cc3b4",
+            "label": null,
             "isExecuted": false,
-            "uuid": "aeb7608c-3846-4418-8f75-6613a167e3da"
+            "uuid": "58ecdaa4-1e55-4fe0-a79f-36902bd6dd66"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Repositories Detail -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/38172dc0-b3a5-4dc5-a9bb-5f900b82e650",
+            "sourceStep": "\/api\/3\/workflow_steps\/af50d35a-1f68-4c8b-9b57-1d1c1115231e",
+            "label": "Setup",
+            "isExecuted": false,
+            "uuid": "2671cd03-00da-4283-a40e-ff9250f500b9"
         },
         {
             "@type": "WorkflowRoute",
@@ -500,15 +509,6 @@
             "label": "Playbook",
             "isExecuted": false,
             "uuid": "ef9cd3ad-436a-47a1-affb-e7d46a60b940"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Show Repositories Details -> Update Result",
-            "targetStep": "\/api\/3\/workflow_steps\/91e2e908-b7a9-42d4-9bed-d311560b8f6e",
-            "sourceStep": "\/api\/3\/workflow_steps\/6c1d1f69-1de6-4b81-8ff8-db80babb9bdc",
-            "label": "OK",
-            "isExecuted": false,
-            "uuid": "faacca1c-4067-4696-8c45-a8a556123218"
         }
     ],
     "groups": [],

@@ -173,7 +173,7 @@
                 "route": "75a6cdfd-0b98-4513-9469-2664832e3a36",
                 "title": "Assign GitHub User",
                 "resources": [
-                    "change_requests"
+                    "change_management"
                 ],
                 "inputVariables": [],
                 "step_variables": {
