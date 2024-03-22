@@ -17,6 +17,25 @@
     "steps": [
         {
             "@type": "WorkflowStep",
+            "name": "Abort Push Operation",
+            "description": null,
+            "arguments": {
+                "params": [],
+                "version": "3.2.6",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1110",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "10527b19-c15b-44c7-9e60-25d16ab941a3"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Add Closed PR Comment",
             "description": null,
             "arguments": {
@@ -96,8 +115,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1245",
-            "left": "650",
+            "top": "1380",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "eec3b0cf-92b8-4e65-9a14-9ba7dbbdaa2f"
@@ -206,6 +225,64 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Is Export Template Review",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Review Export Template",
+                        "description": "#### `Attention: Push Verification`\n\nTo ensure module-related changes are correctly pushed to source control in FortiSOAR, following actions **must** be carried out in \"***{{vars.export_template_name}}***\" export template:\n1. Checkbox **\"*Auto-Select Required Picklists*\"** is selected on the \"Filter Data\" page of Export wizard.\n2. Confirm that all module fields are selected in the **\"*Schema Preview*\"**.",
+                        "inputVariables": []
+                    }
+                },
+                "record": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                "agent_id": null,
+                "resources": "tasks",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": true,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Confirm",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/1deb2f29-0fdb-4a3d-9113-eddd876e4aa4"
+                        },
+                        {
+                            "option": "Cancel",
+                            "step_iri": "\/api\/3\/workflow_steps\/10527b19-c15b-44c7-9e60-25d16ab941a3"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": ""
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "975",
+            "left": "650",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "f4b4374e-315b-4d88-a230-59f7421f08de"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Is Playbook Active or Awaiting",
             "description": null,
             "arguments": {
@@ -282,8 +359,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1380",
-            "left": "650",
+            "top": "1515",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "08027c16-ab47-4837-91ea-af29a3e0314f"
@@ -312,8 +389,8 @@
                 "workflowReference": "\/api\/3\/workflows\/8413a393-367b-4501-9196-ffbb027f0a3b"
             },
             "status": null,
-            "top": "1110",
-            "left": "650",
+            "top": "1245",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "cf2f32bf-453f-42d0-b6f8-9434ee1a2493"
@@ -417,8 +494,8 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "975",
-            "left": "650",
+            "top": "1110",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "1deb2f29-0fdb-4a3d-9113-eddd876e4aa4"
@@ -555,13 +632,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Specify Commit Message",
-            "targetStep": "\/api\/3\/workflow_steps\/1deb2f29-0fdb-4a3d-9113-eddd876e4aa4",
+            "name": "Configuration -> Is Export Template Modified",
+            "targetStep": "\/api\/3\/workflow_steps\/f4b4374e-315b-4d88-a230-59f7421f08de",
             "sourceStep": "\/api\/3\/workflow_steps\/f8cb5711-7578-46d7-adc8-13b1ffb0db19",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "6e164341-03f2-49b6-9bbf-a95a1aaa08e1"
+            "uuid": "257a92aa-a692-49ea-a9d2-a8557f83b17f"
         },
         {
             "@type": "WorkflowRoute",
@@ -572,6 +649,26 @@
             "isExecuted": false,
             "group": null,
             "uuid": "49edbc35-7edb-4518-bdca-cb7209e0a86f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Export Template Modified -> Copy of No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/10527b19-c15b-44c7-9e60-25d16ab941a3",
+            "sourceStep": "\/api\/3\/workflow_steps\/f4b4374e-315b-4d88-a230-59f7421f08de",
+            "label": "Cancel",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "73ced866-7c32-4a40-8ea7-74a123078970"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Export Template Modified -> Specify Commit Message",
+            "targetStep": "\/api\/3\/workflow_steps\/1deb2f29-0fdb-4a3d-9113-eddd876e4aa4",
+            "sourceStep": "\/api\/3\/workflow_steps\/f4b4374e-315b-4d88-a230-59f7421f08de",
+            "label": "Confirm",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "0b567592-a30c-4a35-bd2c-1899f92d7150"
         },
         {
             "@type": "WorkflowRoute",
