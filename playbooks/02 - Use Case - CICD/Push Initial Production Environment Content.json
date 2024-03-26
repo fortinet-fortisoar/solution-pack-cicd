@@ -4,16 +4,18 @@
     "name": "Push Initial Production Environment Content",
     "aliasName": null,
     "tag": null,
-    "description": "Push initial Production Environment Content into GitHub main branch",
+    "description": "Push initial Production Environment Content into Source Control main branch",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
-    "parameters": [],
+    "parameters": [
+        "connector_config_id"
+    ],
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/fa2762cc-e69b-4eb3-925c-d456262a24f6",
+    "triggerStep": "\/api\/3\/workflow_steps\/6b26f5cb-2ab1-4bc7-a1b1-b5b6e1ac3d01",
     "steps": [
         {
             "@type": "WorkflowStep",
@@ -25,6 +27,7 @@
                 "base_branch": "{{vars.cicd_config.baseBranch}}",
                 "export_file_name": "Source Control - Production Content",
                 "current_timestamp": "{{arrow.get((arrow.utcnow().int_timestamp  | int | abs)).format('YYYYMMDDHHmm')}}",
+                "source_control_type": "{{(globalVars.cicd_config | toDict)[\"source_control_web_url\"] }}",
                 "export_template_name": "Source Control - Production Content"
             },
             "status": null,
@@ -32,7 +35,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "7442fedc-4830-43c3-a7ad-1feb47234c8b"
+            "uuid": "b901b9f1-3b1c-4d58-9d15-64278a39d3ba"
         },
         {
             "@type": "WorkflowStep",
@@ -57,7 +60,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "ca25b3ef-dccd-4cea-a395-cdb76f34ba65"
+            "uuid": "e5ceedee-4195-4cf5-81fa-5a1bffb8a291"
         },
         {
             "@type": "WorkflowStep",
@@ -71,6 +74,7 @@
                     "branch_name": "{{vars.base_branch}}",
                     "commit_message": "Initial Production Environment Content",
                     "export_file_name": "{{vars.export_file_name}}",
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}",
                     "export_template_name": "{{vars.export_template_name}}"
                 },
                 "apply_async": false,
@@ -84,7 +88,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "8dbe9c94-fac3-450c-8b88-3cbd7a02f18c"
+            "uuid": "fcf56774-db2c-4f8b-9595-1715ebbeefe8"
         },
         {
             "@type": "WorkflowStep",
@@ -102,7 +106,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "fa2762cc-e69b-4eb3-925c-d456262a24f6"
+            "uuid": "6b26f5cb-2ab1-4bc7-a1b1-b5b6e1ac3d01"
         },
         {
             "@type": "WorkflowStep",
@@ -113,16 +117,18 @@
                     "tags": [],
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "tenant": "",
-                    "thread": true,
-                    "content": "<p class=\"mp-tile-description muted-80\">\"FortiSOAR Production Environment Content\" is successfully pushed (exported) into the <a rel=\"noopener\" target=\"_blank\" href=\"https:\/\/github.com\/{{vars.org_name}}\/{{vars.repo_name}}\">https:\/\/github.com\/{{vars.org_name}}\/{{vars.repo_name}}<\/a> Repository.<\/p>",
-                    "records": ""
+                    "thread": false,
+                    "content": "<p class=\"mp-tile-description muted-80\">Successfully pushed \"FortiSOAR Production Environment Content\" into the&nbsp;<a href=\"{{vars.source_control_type}}\/{{vars.org_name}}\/{{vars.repo_name}}\" target=\"_blank\" rel=\"noopener\">{{vars.source_control_type}}\/{{vars.org_name}}\/{{vars.repo_name}}<\/a> repository<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}"
                 },
                 "resource": [],
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
                 "__recommend": [],
                 "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
@@ -130,49 +136,49 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "8e2f8167-d026-4bf9-8509-5b7c3e40229a"
+            "uuid": "30cc2aaf-5dcc-4681-bf6d-13ee6ba536d9"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
             "name": "Configuration -> Push Export Config",
-            "targetStep": "\/api\/3\/workflow_steps\/8dbe9c94-fac3-450c-8b88-3cbd7a02f18c",
-            "sourceStep": "\/api\/3\/workflow_steps\/7442fedc-4830-43c3-a7ad-1feb47234c8b",
+            "targetStep": "\/api\/3\/workflow_steps\/fcf56774-db2c-4f8b-9595-1715ebbeefe8",
+            "sourceStep": "\/api\/3\/workflow_steps\/b901b9f1-3b1c-4d58-9d15-64278a39d3ba",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "cda87981-8470-4e59-ac26-18ee595a339a"
+            "uuid": "185c1f3b-3104-4bfb-a792-03d44e712988"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Get Source Control Details -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/7442fedc-4830-43c3-a7ad-1feb47234c8b",
-            "sourceStep": "\/api\/3\/workflow_steps\/ca25b3ef-dccd-4cea-a395-cdb76f34ba65",
+            "targetStep": "\/api\/3\/workflow_steps\/b901b9f1-3b1c-4d58-9d15-64278a39d3ba",
+            "sourceStep": "\/api\/3\/workflow_steps\/e5ceedee-4195-4cf5-81fa-5a1bffb8a291",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "fbc210d0-3e9d-4b58-aa54-09bd2406fef7"
+            "uuid": "eaede2a9-131b-4da8-bb69-daff4b900a72"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Push Export Config -> Update Record",
-            "targetStep": "\/api\/3\/workflow_steps\/8e2f8167-d026-4bf9-8509-5b7c3e40229a",
-            "sourceStep": "\/api\/3\/workflow_steps\/8dbe9c94-fac3-450c-8b88-3cbd7a02f18c",
+            "targetStep": "\/api\/3\/workflow_steps\/30cc2aaf-5dcc-4681-bf6d-13ee6ba536d9",
+            "sourceStep": "\/api\/3\/workflow_steps\/fcf56774-db2c-4f8b-9595-1715ebbeefe8",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "b6d8d3f2-8ee3-4504-afcd-8441687ca871"
+            "uuid": "202b8c1d-10bf-4be7-926d-9933b4558e0e"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/ca25b3ef-dccd-4cea-a395-cdb76f34ba65",
-            "sourceStep": "\/api\/3\/workflow_steps\/fa2762cc-e69b-4eb3-925c-d456262a24f6",
+            "targetStep": "\/api\/3\/workflow_steps\/e5ceedee-4195-4cf5-81fa-5a1bffb8a291",
+            "sourceStep": "\/api\/3\/workflow_steps\/6b26f5cb-2ab1-4bc7-a1b1-b5b6e1ac3d01",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "3e072478-51a2-41c0-89cb-7a7ca37d286d"
+            "uuid": "3eee7a22-d62b-48c7-8c28-79836f9173fc"
         }
     ],
     "groups": [],
@@ -182,7 +188,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Subroutine",
-        "CICD"
+        "CICD",
+        "Subroutine"
     ]
 }

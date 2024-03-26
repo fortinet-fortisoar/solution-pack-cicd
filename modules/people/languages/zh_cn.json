@@ -1,0 +1,34 @@
+{
+    "PEOPLE": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "个人",
+            "PLURAL_NAME": "人员"
+        },
+        "FIELDS": {
+            "FIRSTNAME": "名字",
+            "SOURCECONTROLUSERNAME": "源代码控制用户名",
+            "LASTNAME": "姓氏",
+            "TITLE": "职称",
+            "DEPARTMENT": "部门",
+            "EMAIL": "电子邮件",
+            "DESCRIPTION": "描述",
+            "PHONEFAX": "传真",
+            "PHONEHOME": "家庭电话",
+            "PHONEMOBILE": "移动电话",
+            "PHONEWORK": "工作电话",
+            "COMPANYID": "公司",
+            "TYPE": "类型",
+            "TASKS": "任务",
+            "ATTACHMENTS": "附件",
+            "COMMENTS": "评论",
+            "ALERTS": "警报",
+            "UUID": "UUID",
+            "INCIDENTS": "事件",
+            "FSRQUEUES": "队列",
+            "INDICATORS": "指标",
+            "SHIFTS": "班次",
+            "CSACTIVE": "活跃",
+            "ACCESSTYPE": "访问类型"
+        }
+    }    
+}

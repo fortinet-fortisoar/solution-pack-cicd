@@ -1,0 +1,21 @@
+{
+    "CHANGE_MANAGEMENT": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "Gestion du changement",
+            "PLURAL_NAME": "Gestion du changement"
+        },
+        "FIELDS": {
+            "ISSUES": "Problèmes",
+            "LASTBUILDDEPLOYEDON": "Dernière version déployée le",
+            "COMMENTS": "Commentaires",
+            "TITLE": "Titre",
+            "DESCRIPTION": "Description",
+            "RESULTS": "Résultats",
+            "STATUS": "Statut",
+            "TYPE": "Type",
+            "ENVIRONMENT": "Environnement",
+            "SEQUENCE": "Séquence",
+            "RECORDICON": "Icône d'enregistrement"
+        }
+    }
+}

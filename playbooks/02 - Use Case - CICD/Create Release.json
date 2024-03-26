@@ -11,12 +11,13 @@
     "remoteExecutableFlag": false,
     "parameters": [
         "release_number",
-        "release_description"
+        "release_description",
+        "connector_config_id"
     ],
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/372189da-8f74-4bd7-a5c5-96bfd11ba480",
+    "triggerStep": "\/api\/3\/workflow_steps\/48c3020d-e1a4-4960-91ae-1a0591836ead",
     "steps": [
         {
             "@type": "WorkflowStep",
@@ -26,7 +27,7 @@
                 "resource": {
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "people": [],
-                    "content": "<p>The release <a rel=\"noopener\" target=\"_blank\" href=\"{{vars.steps.Fetch_Release.data['html_url']}}\">{{vars.steps.Fetch_Release.data.name}}<\/a> already exist for the <a rel=\"noopener\" target=\"_blank\" href=\"https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\">https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.<\/p>",
+                    "content": "<p>The release <a href=\"{{vars.steps.Fetch_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Fetch_Release.data.name}}<\/a> already exist for the <a href=\"{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false,
@@ -41,11 +42,11 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "975",
-            "left": "125",
+            "top": "980",
+            "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "4e00c23d-a741-4743-8eff-4db9b0b420a2"
+            "uuid": "87e28c72-85e0-48f8-ae2b-d11d659cf9d6"
         },
         {
             "@type": "WorkflowStep",
@@ -55,7 +56,7 @@
                 "resource": {
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "people": [],
-                    "content": "<p>A new release &nbsp;<a href=\"{{vars.steps.Create_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Create_Release.data.name}}<\/a> is successfully created for the <a href=\"https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.<\/p>",
+                    "content": "<p>A new release &nbsp;<a href=\"{{vars.steps.Create_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Create_Release.data.name}}<\/a> is successfully created for the <a href=\"{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> repository<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false,
@@ -70,30 +71,32 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "975",
-            "left": "475",
+            "top": "980",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "cace1a7e-73ec-40e6-a823-996c7c6bad34"
+            "uuid": "153d8ce3-45f9-4a9d-9bb1-b7f092551aa4"
         },
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "cicd_env": "{{globalVars.cicd_env}}",
                 "cicd_config": "{{(globalVars.cicd_config | toDict)}}",
                 "release_name": "Release\/",
                 "release_number": "1.0",
+                "source_control_web_url": "{{(globalVars.cicd_config | toDict)[\"source_control_web_url\"]}}",
                 "prod_environment_record_iri": "\/api\/3\/change_management\/4be084b9-c5fe-4d42-943f-6bb2161d7157",
                 "release_initial_description": "Intial Commit",
                 "development_environment_record_uuid": "\/api\/3\/change_management\/acae4646-2b5b-4e4c-9f7f-9a4d47d93d47"
             },
             "status": null,
-            "top": "165",
+            "top": "160",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "a5c5f88a-991d-4772-91cf-d67012a02a0b"
+            "uuid": "88629062-0a07-4f0c-8b2e-204b651b6af4"
         },
         {
             "@type": "WorkflowStep",
@@ -101,11 +104,8 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.cicd_config.content.split('\/')[-2]}}",
-                    "tag_name": "{{vars.release_name}}{{vars.input.params['release_number']| ternary(vars.input.params['release_number'], vars.release_number)}}",
-                    "repo_name": "{{vars.cicd_config.content.split('\/')[-1]}}",
-                    "base_branch": "{{vars.cicd_config.baseBranch}}",
-                    "release_description": "{{vars.input.params['release_description']| ternary(vars.input.params['release_description'], vars.release_initial_description)}}"
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}",
+                    "create_release_params": "{\n\"org_name\": \"{{vars.cicd_config.content.split('\/')[-2]}}\",\n\"repo_name\": \"{{vars.cicd_config.content.split('\/')[-1]}}\",\n\"base_branch\": \"{{vars.cicd_config.baseBranch}}\",\n\"release_description\": \"{{vars.input.params['release_description']| ternary(vars.input.params['release_description'], vars.release_initial_description)}}\",\n\"tag_name\": \"{{vars.release_name}}{{vars.input.params['release_number']| ternary(vars.input.params['release_number'], vars.release_number)}}\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": {
@@ -113,14 +113,14 @@
                 },
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/7979ea2a-20c8-470b-8480-8a63d7985b03"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateRelease\"][\"@id\"]}}"
             },
             "status": null,
             "top": "840",
-            "left": "475",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "8b21fcbd-8e28-45f1-aadf-b599de289f07"
+            "uuid": "93e3d5a7-bfbb-4b08-bd2e-4890c7cf1f7b"
         },
         {
             "@type": "WorkflowStep",
@@ -128,22 +128,22 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.cicd_config.content.split('\/')[-2]}}",
-                    "repo_name": "{{vars.cicd_config.content.split('\/')[-1]}}",
-                    "release_name": "{{vars.release_name}}{{vars.release_number}}"
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}",
+                    "fetch_release_params": "{\n\"org_name\": \"{{vars.cicd_config.content.split('\/')[-2]}}\",\n\"repo_name\": \"{{vars.cicd_config.content.split('\/')[-1]}}\",\n\"release_name\": \"{{vars.release_name}}{{vars.release_number}}\"\n}"
                 },
                 "apply_async": false,
+                "ignore_errors": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/b7ee90fe-7c05-4ad7-808c-7729abac28a8"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"FetchRelease\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "570",
+            "top": "560",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "079e2a9a-8b2c-4cdb-873d-85e5abacfe6b"
+            "uuid": "294510bd-8ca1-4e25-b857-a164b81d279d"
         },
         {
             "@type": "WorkflowStep",
@@ -187,7 +187,7 @@
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "05bfd00c-3d47-4f2a-a700-50fd6119a367"
+            "uuid": "5a8d3a4e-d850-4c2b-bbc8-d11be59b6bc3"
         },
         {
             "@type": "WorkflowStep",
@@ -216,11 +216,11 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "435",
+            "top": "440",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "017a219a-fd08-4083-b15f-35e0f31aa51a"
+            "uuid": "9d6e356e-d929-444d-ae85-e6f463f2a18b"
         },
         {
             "@type": "WorkflowStep",
@@ -230,24 +230,24 @@
                 "conditions": [
                     {
                         "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/4e00c23d-a741-4743-8eff-4db9b0b420a2",
+                        "step_iri": "\/api\/3\/workflow_steps\/87e28c72-85e0-48f8-ae2b-d11d659cf9d6",
                         "condition": "{{ vars.steps.Fetch_Release.data | length > 0 }}",
                         "step_name": "Copy of Add comment for new release"
                     },
                     {
                         "option": "No",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/8b21fcbd-8e28-45f1-aadf-b599de289f07",
+                        "step_iri": "\/api\/3\/workflow_steps\/93e3d5a7-bfbb-4b08-bd2e-4890c7cf1f7b",
                         "step_name": "Create Release"
                     }
                 ]
             },
             "status": null,
-            "top": "705",
+            "top": "700",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "1d55a575-da5f-4282-a9eb-ec0388330245"
+            "uuid": "a30e6ec7-8628-450d-a612-992c6ca026e9"
         },
         {
             "@type": "WorkflowStep",
@@ -265,7 +265,7 @@
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "372189da-8f74-4bd7-a5c5-96bfd11ba480"
+            "uuid": "48c3020d-e1a4-4960-91ae-1a0591836ead"
         },
         {
             "@type": "WorkflowStep",
@@ -273,7 +273,7 @@
             "description": null,
             "arguments": {
                 "resource": {
-                    "results": "<p>{% if vars.input.records[0].title != \"Apply Latest Content\" %}{{vars.steps.Find_Previous_Result[0].results}}{%endif%}<\/p>\n<p>&nbsp;<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Release<\/strong><\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Fetch_Release.data | length == 0 %}A new release &nbsp;<a href=\"{{vars.steps.Create_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Create_Release.data.name}}<\/a> is successfully created for the <a href=\"https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.{%else %}<\/p>\n<p class=\"mp-tile-description muted-80\">The release <a href=\"{{vars.steps.Fetch_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Fetch_Release.data.name}}<\/a> already exist for the <a href=\"https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">https:\/\/github.com\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.{%endif%}<\/p>"
+                    "results": "<p>{% if vars.input.records[0].title != \"Apply Latest Content\" %}{{vars.steps.Find_Previous_Result[0].results}}{%endif%}<\/p>\n<p>&nbsp;<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Release<\/strong><\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Fetch_Release.data | length == 0 %}A new release &nbsp;<a href=\"{{vars.steps.Create_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Create_Release.data.name}}<\/a> is successfully created for the <a href=\"{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.{%else %}<\/p>\n<p class=\"mp-tile-description muted-80\">The release <a href=\"{{vars.steps.Fetch_Release.data['html_url']}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Fetch_Release.data.name}}<\/a> already exist for the <a href=\"{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}\" target=\"_blank\" rel=\"noopener\">{{vars.source_control_web_url}}\/{{vars.cicd_config.content.split('\/')[-2]}}\/{{vars.cicd_config.content.split('\/')[-1]}}<\/a> Repository.{%endif%}<\/p>"
                 },
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
@@ -283,113 +283,113 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1110",
+            "top": "1100",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "30f05a4c-c574-4f7a-b3e8-5f2fafb75f82"
+            "uuid": "cbb514f9-802a-46e8-9120-40592bab4f24"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
             "name": "Add comment for existing release -> Update Record",
-            "targetStep": "\/api\/3\/workflow_steps\/30f05a4c-c574-4f7a-b3e8-5f2fafb75f82",
-            "sourceStep": "\/api\/3\/workflow_steps\/4e00c23d-a741-4743-8eff-4db9b0b420a2",
+            "targetStep": "\/api\/3\/workflow_steps\/cbb514f9-802a-46e8-9120-40592bab4f24",
+            "sourceStep": "\/api\/3\/workflow_steps\/87e28c72-85e0-48f8-ae2b-d11d659cf9d6",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e4b76edf-4410-48a3-b948-fb6176b72779"
+            "uuid": "c7c6a38c-0a9c-40d9-9e16-271ace8bfe24"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Add comment for new release -> Update Record",
-            "targetStep": "\/api\/3\/workflow_steps\/30f05a4c-c574-4f7a-b3e8-5f2fafb75f82",
-            "sourceStep": "\/api\/3\/workflow_steps\/cace1a7e-73ec-40e6-a823-996c7c6bad34",
+            "targetStep": "\/api\/3\/workflow_steps\/cbb514f9-802a-46e8-9120-40592bab4f24",
+            "sourceStep": "\/api\/3\/workflow_steps\/153d8ce3-45f9-4a9d-9bb1-b7f092551aa4",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "f222d0e0-7f2a-4dce-9448-29042c4a27dc"
+            "uuid": "d77b6df5-d704-471f-862f-3c0937ddfd8d"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Configuration -> Find Apply Latest Content Record",
-            "targetStep": "\/api\/3\/workflow_steps\/05bfd00c-3d47-4f2a-a700-50fd6119a367",
-            "sourceStep": "\/api\/3\/workflow_steps\/a5c5f88a-991d-4772-91cf-d67012a02a0b",
+            "targetStep": "\/api\/3\/workflow_steps\/5a8d3a4e-d850-4c2b-bbc8-d11be59b6bc3",
+            "sourceStep": "\/api\/3\/workflow_steps\/88629062-0a07-4f0c-8b2e-204b651b6af4",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "ba4db46b-bb41-4ce6-8ed6-8c8a741e9f56"
+            "uuid": "1fd8c3dc-d38c-487e-b03c-98da26036937"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Create Release -> Add comment for new release",
-            "targetStep": "\/api\/3\/workflow_steps\/cace1a7e-73ec-40e6-a823-996c7c6bad34",
-            "sourceStep": "\/api\/3\/workflow_steps\/8b21fcbd-8e28-45f1-aadf-b599de289f07",
+            "targetStep": "\/api\/3\/workflow_steps\/153d8ce3-45f9-4a9d-9bb1-b7f092551aa4",
+            "sourceStep": "\/api\/3\/workflow_steps\/93e3d5a7-bfbb-4b08-bd2e-4890c7cf1f7b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "683fa168-4439-489c-8efe-56b31ed44220"
+            "uuid": "a73a17de-7911-4787-a8b8-4e6d4516b9c8"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Fetch Release -> Is Release Exist",
-            "targetStep": "\/api\/3\/workflow_steps\/1d55a575-da5f-4282-a9eb-ec0388330245",
-            "sourceStep": "\/api\/3\/workflow_steps\/079e2a9a-8b2c-4cdb-873d-85e5abacfe6b",
+            "targetStep": "\/api\/3\/workflow_steps\/a30e6ec7-8628-450d-a612-992c6ca026e9",
+            "sourceStep": "\/api\/3\/workflow_steps\/294510bd-8ca1-4e25-b857-a164b81d279d",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "edbb0c64-92f5-458d-9ac8-47e48864d12d"
+            "uuid": "994bb96b-bac9-4f34-a513-e78c4e35b41f"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Find Apply Latest Content Record -> Find Previous Result",
-            "targetStep": "\/api\/3\/workflow_steps\/017a219a-fd08-4083-b15f-35e0f31aa51a",
-            "sourceStep": "\/api\/3\/workflow_steps\/05bfd00c-3d47-4f2a-a700-50fd6119a367",
+            "targetStep": "\/api\/3\/workflow_steps\/9d6e356e-d929-444d-ae85-e6f463f2a18b",
+            "sourceStep": "\/api\/3\/workflow_steps\/5a8d3a4e-d850-4c2b-bbc8-d11be59b6bc3",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "70ef0771-1e71-42d3-a568-9bd0bd8a565d"
+            "uuid": "f601f2d1-6f2c-4b4c-a568-d28e7c447afc"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Find Previous Result -> Fetch Release",
-            "targetStep": "\/api\/3\/workflow_steps\/079e2a9a-8b2c-4cdb-873d-85e5abacfe6b",
-            "sourceStep": "\/api\/3\/workflow_steps\/017a219a-fd08-4083-b15f-35e0f31aa51a",
+            "targetStep": "\/api\/3\/workflow_steps\/294510bd-8ca1-4e25-b857-a164b81d279d",
+            "sourceStep": "\/api\/3\/workflow_steps\/9d6e356e-d929-444d-ae85-e6f463f2a18b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "b46a4dd7-e1d8-49fb-b63a-1417dcd35402"
+            "uuid": "7185f721-6d04-437a-aa18-270e88ab24b0"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Release Exist -> Copy of Add comment for new release",
-            "targetStep": "\/api\/3\/workflow_steps\/4e00c23d-a741-4743-8eff-4db9b0b420a2",
-            "sourceStep": "\/api\/3\/workflow_steps\/1d55a575-da5f-4282-a9eb-ec0388330245",
-            "label": "Yes",
+            "name": "Is Release Exist -> Add comment for existing release",
+            "targetStep": "\/api\/3\/workflow_steps\/87e28c72-85e0-48f8-ae2b-d11d659cf9d6",
+            "sourceStep": "\/api\/3\/workflow_steps\/a30e6ec7-8628-450d-a612-992c6ca026e9",
+            "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "ba222448-e545-47b9-bb57-af2c3b835408"
+            "uuid": "69f95bae-1b98-4bec-a1f0-0812001a6afe"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Release Exist -> Create Release",
-            "targetStep": "\/api\/3\/workflow_steps\/8b21fcbd-8e28-45f1-aadf-b599de289f07",
-            "sourceStep": "\/api\/3\/workflow_steps\/1d55a575-da5f-4282-a9eb-ec0388330245",
-            "label": "No",
+            "targetStep": "\/api\/3\/workflow_steps\/93e3d5a7-bfbb-4b08-bd2e-4890c7cf1f7b",
+            "sourceStep": "\/api\/3\/workflow_steps\/a30e6ec7-8628-450d-a612-992c6ca026e9",
+            "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "bc3a9c7a-239f-43e0-b017-100281086ca2"
+            "uuid": "d4c57e07-5f09-4074-92b1-ef9a143b5764"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/a5c5f88a-991d-4772-91cf-d67012a02a0b",
-            "sourceStep": "\/api\/3\/workflow_steps\/372189da-8f74-4bd7-a5c5-96bfd11ba480",
+            "targetStep": "\/api\/3\/workflow_steps\/88629062-0a07-4f0c-8b2e-204b651b6af4",
+            "sourceStep": "\/api\/3\/workflow_steps\/48c3020d-e1a4-4960-91ae-1a0591836ead",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "2369ba31-7ba3-472e-883b-139b9223b97c"
+            "uuid": "24d3ba3f-a24e-4f9f-a420-95f26340ac5c"
         }
     ],
     "groups": [],
@@ -399,7 +399,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Subroutine",
-        "CICD"
+        "CICD",
+        "Subroutine"
     ]
 }

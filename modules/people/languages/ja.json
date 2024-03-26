@@ -1,0 +1,34 @@
+{
+    "PEOPLE": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "個人",
+            "PLURAL_NAME": "人々"
+        },
+        "FIELDS": {
+            "FIRSTNAME": "名",
+            "SOURCECONTROLUSERNAME": "ソースコントロールのユーザー名",
+            "LASTNAME": "姓",
+            "TITLE": "職位",
+            "DEPARTMENT": "部門",
+            "EMAIL": "メール",
+            "DESCRIPTION": "説明",
+            "PHONEFAX": "FAX",
+            "PHONEHOME": "自宅電話",
+            "PHONEMOBILE": "携帯電話",
+            "PHONEWORK": "勤務先電話",
+            "COMPANYID": "会社",
+            "TYPE": "タイプ",
+            "TASKS": "タスク",
+            "ATTACHMENTS": "添付ファイル",
+            "COMMENTS": "コメント",
+            "ALERTS": "アラート",
+            "UUID": "UUID",
+            "INCIDENTS": "インシデント",
+            "FSRQUEUES": "キュー",
+            "INDICATORS": "指標",
+            "SHIFTS": "シフト",
+            "CSACTIVE": "アクティブ",
+            "ACCESSTYPE": "アクセスタイプ"
+        }
+    }    
+}

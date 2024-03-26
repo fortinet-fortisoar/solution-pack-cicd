@@ -1,0 +1,34 @@
+{
+    "PEOPLE": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "Person",
+            "PLURAL_NAME": "People"
+        },
+        "FIELDS": {
+            "FIRSTNAME": "First Name",
+            "SOURCECONTROLUSERNAME": "Source Control Username",
+            "LASTNAME": "Last Name",
+            "TITLE": "Title",
+            "DEPARTMENT": "Dept",
+            "EMAIL": "Email",
+            "DESCRIPTION": "Description",
+            "PHONEFAX": "Fax",
+            "PHONEHOME": "Home",
+            "PHONEMOBILE": "Mobile",
+            "PHONEWORK": "Work Phone",
+            "COMPANYID": "Company",
+            "TYPE": "Type",
+            "TASKS": "Tasks",
+            "ATTACHMENTS": "Attachments",
+            "COMMENTS": "Comments",
+            "ALERTS": "Alerts",
+            "UUID": "UUID",
+            "INCIDENTS": "Incidents",
+            "FSRQUEUES": "Queues",
+            "INDICATORS": "Indicators",
+            "SHIFTS": "Shifts",
+            "CSACTIVE": "Active",
+            "ACCESSTYPE": "Access Type"
+        }
+    }
+}

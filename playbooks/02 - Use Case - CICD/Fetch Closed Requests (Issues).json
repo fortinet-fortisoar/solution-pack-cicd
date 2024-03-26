@@ -1,7 +1,7 @@
 {
     "@type": "Workflow",
     "triggerLimit": null,
-    "name": "Fetch Open Requests (Issues)",
+    "name": "Fetch Closed Requests (Issues)",
     "aliasName": null,
     "tag": null,
     "description": "Fetch all open Source Control requests (Issues) from Content, Production Setting and Development Setting repositories",
@@ -13,7 +13,7 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/52faabea-58b7-4115-9caa-0fd107f7b247",
+    "triggerStep": "\/api\/3\/workflow_steps\/98afabf5-4f12-4e72-a4a7-96758d1524c0",
     "steps": [
         {
             "@type": "WorkflowStep",
@@ -23,24 +23,24 @@
                 "conditions": [
                     {
                         "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/deae7f44-95e7-47c6-bdb1-d23c5b1b0957",
+                        "step_iri": "\/api\/3\/workflow_steps\/e385fd71-82fe-493b-a04b-45da8489e723",
                         "condition": "{{ vars.cicd_config | length > 0 }}",
                         "step_name": "Configuration"
                     },
                     {
                         "option": "No",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/c3459965-6b06-40fe-8129-997bbd8b9c5b",
+                        "step_iri": "\/api\/3\/workflow_steps\/cea03472-0e68-4c83-a4ff-3863e1eca790",
                         "step_name": "Return Blank Output"
                     }
                 ]
             },
             "status": null,
             "top": "435",
-            "left": "475",
+            "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "4073de99-9d80-45f9-84ac-6062a4ff3649"
+            "uuid": "7c87795f-4b9e-4a38-ba4b-7cfa6dfb1475"
         },
         {
             "@type": "WorkflowStep",
@@ -56,63 +56,66 @@
             },
             "status": null,
             "top": "165",
-            "left": "475",
+            "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "a05e66b1-4d8e-4112-baf4-b4fe9e4a50a3"
+            "uuid": "4839ee2b-c6ff-4cbd-bba8-a78b7abeb80b"
         },
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "since": "{{vars.input.records[0].lastBuildDeployedOn}}",
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "repo_list": "[\"{{vars.cicd_config.contentRepoName}}\", \"{{vars.cicd_config.prodSettingsRepoName}}\", \"{{vars.cicd_config.devSettingsRepoName}}\"]"
             },
             "status": null,
             "top": "570",
-            "left": "300",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "deae7f44-95e7-47c6-bdb1-d23c5b1b0957"
+            "uuid": "e385fd71-82fe-493b-a04b-45da8489e723"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Find PRs for Issues",
+            "name": "Find Apply Latest Changes Record",
             "description": null,
             "arguments": {
-                "issuePRs": "{% set _tempDict = {} %}{% for pr in vars.latest_pull_request %}{% if pr.body != None and \"Issue #\" in pr.body %}{% set issue = pr.body.split(\"Issue #\")[-1].split(\" \")[0] %}{% set _temp = _tempDict.update({issue: {\"title\": pr.title,\"html_url\": pr.html_url,\"state\": pr.state,\"reviewers\": pr.reviewer_names}}) %}{% endif %}{% endfor %}{{ _tempDict }}"
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Apply Latest Content",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "object",
+                            "field": "environment",
+                            "value": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                                "display": "Production",
+                                "itemValue": "Production"
+                            },
+                            "operator": "eq"
+                        }
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "step_variables": []
             },
             "status": null,
-            "top": "840",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "e082801b-023c-494d-b05d-e7aef5e7f119"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get All Pull Requests",
-            "description": null,
-            "arguments": {
-                "arguments": {
-                    "list_pr_params": "{\"org_name\": \"{{vars.cicd_config.organizationName}}\",\n\"repo_name\": \"{{vars.cicd_config.contentRepoName}}\",\n\"state\": \"all\"\n}",
-                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
-                },
-                "apply_async": false,
-                "step_variables": {
-                    "latest_pull_request": "{% set lpr = [] %}{% for pr in vars.steps.Get_All_Pull_Requests.data %}{% if pr.state==\"opened\" %}{% set _ =lpr.append(pr) %}{% endif %}{% endfor %}{% if lpr | length == 0 %}{% set _ = lpr.append(vars.steps.Get_All_Pull_Requests.data[0]) %}{% endif %}{{lpr}}"
-                },
-                "pass_parent_env": false,
-                "pass_input_record": true,
-                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"ListPullRequest\"][\"@id\"]}}"
-            },
-            "status": null,
-            "top": "700",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
-            "group": null,
-            "uuid": "914042fe-686a-4ad3-9238-6124bf09a528"
+            "uuid": "c66e0195-90a1-4212-b17e-79de54c6bce6"
         },
         {
             "@type": "WorkflowStep",
@@ -121,20 +124,20 @@
             "arguments": {
                 "arguments": {
                     "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
-                    "list_repo_issues_params": "{\"org_name\": \"{{vars.cicd_config.organizationName}}\",\n\"repo_name\": \"{{vars.cicd_config.contentRepoName}}\",\n\"state\": \"open\"\n}"
+                    "list_repo_issues_params": "{\"org_name\": \"{{vars.cicd_config.organizationName}}\",\n\"repo_name\": \"{{vars.cicd_config.contentRepoName}}\",\n\"state\": \"closed\",\n\"since\": \"{{vars.steps.Find_Apply_Latest_Changes_Record[0].lastBuildDeployedOn}}\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": [],
-                "pass_parent_env": false,
-                "pass_input_record": true,
+                "pass_parent_env": true,
+                "pass_input_record": false,
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"ListRepositoryIssue\"][\"@id\"]}}"
             },
             "status": null,
             "top": "840",
-            "left": "480",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "8b038cca-10ea-43ea-870b-1fe4329d0f97"
+            "uuid": "237277ee-619e-4bc1-b13f-0896b08fd68f"
         },
         {
             "@type": "WorkflowStep",
@@ -156,24 +159,24 @@
             },
             "status": null,
             "top": "300",
-            "left": "475",
+            "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "e190db03-961f-485f-a70d-91c88556cad4"
+            "uuid": "bb6ff9c7-9475-4f82-ae86-fa127dfb212e"
         },
         {
             "@type": "WorkflowStep",
             "name": "Prepare Issues JSON",
             "description": null,
             "arguments": {
-                "json_issue": "{%set _list=[] %}{% for issue in vars.steps.Get_Issues.data %}{% set cr=\"<a href='\" + issue.html_url + \"' target='_blank'>\" + (issue.number | string) + \"<\/a>\" %}{% set repo=\"<a href='\" + issue.html_url .split(\"\/issues\")[0]+ \"' target='_blank'>\" + issue.repository_url.split(\"\/\")[-1] + \"<\/a>\" %}{% set issueStr = (issue.number | string) %}{% set newbranch = \"CR-\"+ (issue.number | string) %}{% set issuePR = vars.issuePRs[issueStr] if issueStr in vars.issuePRs.keys() else {} %}{% set pr=(\"<a href='\" + issuePR.html_url + \"' target='_blank'>\" + issuePR.title + \"<\/a>\") if (issuePR | length > 0) else \"\" %}{% set _temp=_list.append({\"@id\": \"\/api\/3\/change_request\/\" +(issue.number | string), \"cRNo\": cr, \"summary\": issue.title, \"new_branch\": newbranch, \"pRStatus\": issuePR.state if (issuePR | length > 0) else \"\",\"pRReviewer\": issuePR.reviewers | join(\",\") if (issuePR | length > 0) else \"\", \"repo_url\": repo, \"description\": issue.body, \"pullRequest\": pr, \"reporterUsername\": issue.reporterUsername,\"assigneeUsername\": issue.assigneeUsername if issue.assigneeUsername else \"\", \"uuid\": issue.id | string}) %}{% endfor %}{{_list}}"
+                "json_issue": "{%set _list=[] %}{% for issue in vars.steps.Get_Issues.data %}\n{% set cr=\"<a href='\" + issue.html_url + \"' target='_blank'>\" + (issue.number | string) + \"<\/a>\" %}\n{% set repo=\"<a href='\" + issue.html_url .split(\"\/issues\")[0]+ \"' target='_blank'>\" + issue.repository_url.split(\"\/\")[-1] + \"<\/a>\" %}\n{% set issueStr = (issue.number | string) %}\n{% set newbranch = \"CR-\"+ (issue.number | string) %}\n{% set _temp=_list.append({\"@id\": \"\/api\/3\/change_request\/\" +(issue.number | string), \"cRNo\": cr, \"summary\": issue.title.split('\/')[0], \"new_branch\": newbranch, \"repo_url\": repo, \"description\": issue.body, \"reporterUsername\": issue.reporterUsername,\"assigneeUsername\": issue.assigneeUsername if issue.assigneeUsername else \"\", \"uuid\": issue.title.split('\/')[-1]}) %}\n{% endfor %}\n{{_list}}"
             },
             "status": null,
             "top": "975",
-            "left": "300",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "2f91888b-f37b-40a5-88c8-942a440421ad"
+            "uuid": "db0fb3d2-5270-4cd5-88b5-4ce38013f3f6"
         },
         {
             "@type": "WorkflowStep",
@@ -185,10 +188,10 @@
             },
             "status": null,
             "top": "570",
-            "left": "650",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "c3459965-6b06-40fe-8129-997bbd8b9c5b"
+            "uuid": "cea03472-0e68-4c83-a4ff-3863e1eca790"
         },
         {
             "@type": "WorkflowStep",
@@ -196,25 +199,26 @@
             "description": null,
             "arguments": {
                 "grid_data": "{{vars.json_issue | toDict}}",
-                "grid_columns": "{\n    \"columns\": [\n      {\n        \"field\": \"cRNo\",\n        \"displayName\": \"CR-No\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.cRNo }}\\\" data-ng-bind-html=\\\"row.entity.cRNo\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"repo_url\",\n        \"displayName\": \"Repository\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.repo_url }}\\\" data-ng-bind-html=\\\"row.entity.repo_url\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"summary\",\n        \"displayName\": \"Summary\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.summary\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"new_branch\",\n        \"displayName\": \"New Branch\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.new_branch\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"assigneeUsername\",\n        \"displayName\": \"Assignee\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.assigneeUsername\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"reporterUsername\",\n        \"displayName\": \"Reporter\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.reporterUsername\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"pullRequest\",\n        \"displayName\": \"Pull Request\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.pullRequest }}\\\" data-ng-bind-html=\\\"row.entity.pullRequest\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"pRStatus\",\n        \"displayName\": \"PR Status\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.pRStatus\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"pRReviewer\",\n        \"displayName\": \"Reviewers\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.pRReviewer\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      }\n    ]\n  }"
+                "grid_columns": "{\n    \"columns\": [\n      {\n        \"field\": \"cRNo\",\n        \"displayName\": \"CR-No\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.cRNo }}\\\" data-ng-bind-html=\\\"row.entity.cRNo\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"repo_url\",\n        \"displayName\": \"Repository\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.repo_url }}\\\" data-ng-bind-html=\\\"row.entity.repo_url\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"summary\",\n        \"displayName\": \"Summary\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.summary\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"new_branch\",\n        \"displayName\": \"New Branch\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.new_branch\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"assigneeUsername\",\n        \"displayName\": \"Assignee\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.assigneeUsername\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"reporterUsername\",\n        \"displayName\": \"Reporter\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.reporterUsername\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      }\n    ]\n  }"
             },
             "status": null,
             "top": "1110",
-            "left": "300",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "4ab82f05-5959-4023-9812-e090bff99a53"
+            "uuid": "a07ff9d3-7c8d-4891-a7af-179650b10caf"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "17dd2d1d-ec69-43ac-97b5-d21af7530f4d",
+                "route": "a2303fe4-fa2c-4259-b520-9cc6d31242f5",
                 "title": "Refresh",
                 "resources": [
                     "change_management"
                 ],
+                "__triggerLimit": true,
                 "inputVariables": [],
                 "step_variables": {
                     "input": {
@@ -223,6 +227,7 @@
                     },
                     "issues": "[]"
                 },
+                "triggerOnSource": true,
                 "displayConditions": {
                     "change_management": {
                         "sort": [],
@@ -243,137 +248,129 @@
                                 "OPERATOR_KEY": "$",
                                 "previousOperator": "nin",
                                 "previousTemplate": "multiselectpicklist"
+                            },
+                            {
+                                "type": "primitive",
+                                "field": "title",
+                                "value": "Apply Latest Content",
+                                "operator": "eq",
+                                "_operator": "eq"
                             }
                         ]
                     }
                 },
                 "executeButtonText": "Execute",
-                "noRecordExecution": true,
+                "noRecordExecution": false,
+                "showToasterMessage": {
+                    "visible": false,
+                    "messageVisible": true
+                },
+                "triggerOnReplicate": false,
                 "singleRecordExecution": false
             },
             "status": null,
             "top": "30",
-            "left": "475",
+            "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "52faabea-58b7-4115-9caa-0fd107f7b247"
+            "uuid": "98afabf5-4f12-4e72-a4a7-96758d1524c0"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
             "name": "Are Repositories Created -> Return Blank Output",
-            "targetStep": "\/api\/3\/workflow_steps\/c3459965-6b06-40fe-8129-997bbd8b9c5b",
-            "sourceStep": "\/api\/3\/workflow_steps\/4073de99-9d80-45f9-84ac-6062a4ff3649",
+            "targetStep": "\/api\/3\/workflow_steps\/cea03472-0e68-4c83-a4ff-3863e1eca790",
+            "sourceStep": "\/api\/3\/workflow_steps\/7c87795f-4b9e-4a38-ba4b-7cfa6dfb1475",
             "label": "No",
             "isExecuted": false,
             "group": null,
-            "uuid": "68fd14e3-d4e8-41c4-9815-b8cb27cc111c"
+            "uuid": "8366db71-d3c6-47ee-80d5-5a7fddbce6fe"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Check Source Control Connector Configuration -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/e190db03-961f-485f-a70d-91c88556cad4",
-            "sourceStep": "\/api\/3\/workflow_steps\/a05e66b1-4d8e-4112-baf4-b4fe9e4a50a3",
+            "targetStep": "\/api\/3\/workflow_steps\/bb6ff9c7-9475-4f82-ae86-fa127dfb212e",
+            "sourceStep": "\/api\/3\/workflow_steps\/4839ee2b-c6ff-4cbd-bba8-a78b7abeb80b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e63b3cd1-cdd7-43e4-bb00-db28b5d93e16"
+            "uuid": "ae5c75d6-93ce-4961-a313-d0265e8367e8"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Get All Pull Requests",
-            "targetStep": "\/api\/3\/workflow_steps\/914042fe-686a-4ad3-9238-6124bf09a528",
-            "sourceStep": "\/api\/3\/workflow_steps\/deae7f44-95e7-47c6-bdb1-d23c5b1b0957",
+            "name": "Configuration -> Find Apply Latest Change Record",
+            "targetStep": "\/api\/3\/workflow_steps\/c66e0195-90a1-4212-b17e-79de54c6bce6",
+            "sourceStep": "\/api\/3\/workflow_steps\/e385fd71-82fe-493b-a04b-45da8489e723",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "c7e50b34-7418-4c12-81f6-d646a551e487"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Configuration -> Get Issues",
-            "targetStep": "\/api\/3\/workflow_steps\/8b038cca-10ea-43ea-870b-1fe4329d0f97",
-            "sourceStep": "\/api\/3\/workflow_steps\/deae7f44-95e7-47c6-bdb1-d23c5b1b0957",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "1ff72651-580a-48fa-9428-83c17f41b6fb"
+            "uuid": "f9d06aad-9b87-4329-af1a-4ebc1484c59f"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Copy of Get Source Control Details -> Has Repositories Created",
-            "targetStep": "\/api\/3\/workflow_steps\/4073de99-9d80-45f9-84ac-6062a4ff3649",
-            "sourceStep": "\/api\/3\/workflow_steps\/e190db03-961f-485f-a70d-91c88556cad4",
+            "targetStep": "\/api\/3\/workflow_steps\/7c87795f-4b9e-4a38-ba4b-7cfa6dfb1475",
+            "sourceStep": "\/api\/3\/workflow_steps\/bb6ff9c7-9475-4f82-ae86-fa127dfb212e",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e09e6e4a-af27-4466-82ff-efcd40eeab8b"
+            "uuid": "7b33b382-6a80-47fb-b544-4c436583ce0a"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Find PRs for Issues -> Prepare Issues JSON",
-            "targetStep": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
-            "sourceStep": "\/api\/3\/workflow_steps\/e082801b-023c-494d-b05d-e7aef5e7f119",
+            "name": "Find Apply Latest Change Record -> Get Issues",
+            "targetStep": "\/api\/3\/workflow_steps\/237277ee-619e-4bc1-b13f-0896b08fd68f",
+            "sourceStep": "\/api\/3\/workflow_steps\/c66e0195-90a1-4212-b17e-79de54c6bce6",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "de1cd529-2667-4431-a4fa-cf6afb45b5a5"
+            "uuid": "83f90574-9cb9-4c58-aa16-173961dd38d0"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Get Issues -> Prepare Issues JSON",
-            "targetStep": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
-            "sourceStep": "\/api\/3\/workflow_steps\/8b038cca-10ea-43ea-870b-1fe4329d0f97",
+            "targetStep": "\/api\/3\/workflow_steps\/db0fb3d2-5270-4cd5-88b5-4ce38013f3f6",
+            "sourceStep": "\/api\/3\/workflow_steps\/237277ee-619e-4bc1-b13f-0896b08fd68f",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "bb6bae12-de0d-4658-9404-286061cf3389"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Open Pull Requests -> Find PRs for Issues",
-            "targetStep": "\/api\/3\/workflow_steps\/e082801b-023c-494d-b05d-e7aef5e7f119",
-            "sourceStep": "\/api\/3\/workflow_steps\/914042fe-686a-4ad3-9238-6124bf09a528",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "cabd150c-3b51-4818-a9a3-88c111a42fd0"
+            "uuid": "be0a9739-6ed6-41d9-8e00-b8a71f182671"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Has Repositories Created -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/deae7f44-95e7-47c6-bdb1-d23c5b1b0957",
-            "sourceStep": "\/api\/3\/workflow_steps\/4073de99-9d80-45f9-84ac-6062a4ff3649",
+            "targetStep": "\/api\/3\/workflow_steps\/e385fd71-82fe-493b-a04b-45da8489e723",
+            "sourceStep": "\/api\/3\/workflow_steps\/7c87795f-4b9e-4a38-ba4b-7cfa6dfb1475",
             "label": "Yes",
             "isExecuted": false,
             "group": null,
-            "uuid": "02932690-48ef-47e4-8c5f-34f2ce5112f1"
+            "uuid": "012ccab1-13c7-443d-bfed-4d8cbbcbd06f"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Prepare Issues JSON -> Return Output",
-            "targetStep": "\/api\/3\/workflow_steps\/4ab82f05-5959-4023-9812-e090bff99a53",
-            "sourceStep": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
+            "targetStep": "\/api\/3\/workflow_steps\/a07ff9d3-7c8d-4891-a7af-179650b10caf",
+            "sourceStep": "\/api\/3\/workflow_steps\/db0fb3d2-5270-4cd5-88b5-4ce38013f3f6",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "ddad16ec-5885-47b1-a7bd-94e9ecc99eae"
+            "uuid": "156e85e8-5bc5-422a-8096-e5a2ea36dffd"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Check Source Control Connector Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/a05e66b1-4d8e-4112-baf4-b4fe9e4a50a3",
-            "sourceStep": "\/api\/3\/workflow_steps\/52faabea-58b7-4115-9caa-0fd107f7b247",
+            "targetStep": "\/api\/3\/workflow_steps\/4839ee2b-c6ff-4cbd-bba8-a78b7abeb80b",
+            "sourceStep": "\/api\/3\/workflow_steps\/98afabf5-4f12-4e72-a4a7-96758d1524c0",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "8814213d-9e10-450e-be4d-22acd41b649c"
+            "uuid": "9b36aa12-f4da-4a95-9cc2-2ca90c3e883a"
         }
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
-    "uuid": "22ddd2f3-b2e5-4465-b8b8-86ca8a276a6a",
+    "uuid": "471a93fa-553c-4e6b-a3fc-91a31463d842",
     "owners": [],
     "isPrivate": false,
     "deletedAt": null,

@@ -1,6 +1,4 @@
 {
-    "@id": "\/api\/3\/staging_model_metadatas\/5a4f0f5c-5430-4191-9c5a-4f3dfa25e0b0",
-    "uuid": "5a4f0f5c-5430-4191-9c5a-4f3dfa25e0b0",
     "descriptions": {
         "plural": "People",
         "singular": "Person"
@@ -10,7 +8,7 @@
         {
             "@type": "AttributeMetadata",
             "type": "string",
-            "name": "gitUsername",
+            "name": "sourceControlUsername",
             "length": null,
             "orderIndex": 1,
             "formType": "text",
@@ -26,8 +24,7 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761,
-                "_enableRange": false
+                "maxlength": 10485761
             },
             "bulkAction": {
                 "allow": false,
@@ -47,9 +44,9 @@
             "unique": false,
             "recommend": false,
             "skipSerialization": false,
-            "displayName": "{{ gitUsername }}",
+            "displayName": "{{ sourceControlUsername }}",
             "descriptions": {
-                "singular": "GitHub Username"
+                "singular": "Source Control Username"
             }
         }
     ],

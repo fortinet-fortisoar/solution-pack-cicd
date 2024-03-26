@@ -22,6 +22,9 @@
             "Help",
             "User Community"
           ]
+        },
+        {
+          "value": "cs_queue_management"
         }
       ],
       "actors": [],
@@ -77,10 +80,10 @@
     "type": "Export Wizard",
     "solutionPack": null,
     "uuid": "2d471ee6-abe4-4ff3-81f9-5f1f6e158eb6",
-    "id": 3,
+    "id": 9,
     "createUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
     "createDate": 1681112515.749927,
-    "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-    "modifyDate": 1681112534.220286
+    "modifyUser": "/api/3/people/81dedc05-2446-4c80-bfbe-03a1db4a60d6",
+    "modifyDate": 1710400649.201648
   }
 ]

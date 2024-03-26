@@ -4,7 +4,7 @@
     "name": "Create a Request (Issue)",
     "aliasName": null,
     "tag": null,
-    "description": "Creates a Github Issue against the FortiSOAR Content or Settings Repository with the request content",
+    "description": "Creates a Source Control Issue against the FortiSOAR Content or Settings Repository with the request content",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -13,22 +13,42 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/46a87426-887f-49fb-8f79-635a7ee7b11e",
+    "triggerStep": "\/api\/3\/workflow_steps\/9b3eba7c-8cc9-4c39-aea5-05b2df668ae4",
     "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Source Control Connector Configuration",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "85cba27a-af44-4e37-a0c9-9fddf9598f16"
+        },
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "cicd_env": "{{globalVars.cicd_env}}",
                 "repo_name": "{{vars.cicd_config.content.split('\/')[-1]}}",
-                "assigneeUsername": "{{vars.input.params.assignee.gitUsername}}"
+                "assigneeUsername": "{{vars.USER_MAPPING.get(vars.steps.Get_Change_Request_Details.input.assignee)}}"
             },
             "status": null,
-            "top": "300",
-            "left": "310",
+            "top": "705",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "59b0b7bf-85ea-4c70-a885-3c5b9e7d57e4"
+            "uuid": "20429145-4b50-4df0-a0c8-cde5d66ccd7e"
         },
         {
             "@type": "WorkflowStep",
@@ -36,25 +56,22 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.cicd_config.organizationName}}",
-                    "repo_name": "{{vars.cicd_config.contentRepoName}}",
-                    "new_branch": "CR-{{vars.steps.Create_Issue.data.number | string}}",
-                    "branch_name": "{{vars.cicd_config.baseBranch}}",
-                    "base_branch_or_sha": "Branch Name"
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
+                    "create_branch_params": "{\"org_name\": \"{{vars.cicd_config.organizationName}}\",\"repo_name\": \"{{vars.cicd_config.contentRepoName}}\",\"new_branch\": \"CR-{{vars.steps.Create_Issue.data.number | string}}\",\"branch_name\": \"{{vars.cicd_config.baseBranch}}\",\"base_branch_or_sha\": \"Branch Name\"}"
                 },
                 "apply_async": false,
                 "ignore_errors": true,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/b1af64c8-276f-4736-a592-e18dcdc071dc"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateBranch\"][\"@id\"]}}"
             },
             "status": null,
             "top": "975",
-            "left": "135",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "c2f9f25e-4e19-4d1d-8777-73a79f99d16a"
+            "uuid": "ef404be3-62aa-4dac-8a59-e8caa1db9eb7"
         },
         {
             "@type": "WorkflowStep",
@@ -62,24 +79,138 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.cicd_config.organizationName}}",
-                    "repo_name": "{{vars.cicd_config.contentRepoName}}",
-                    "issue_title": "{{vars.input.params.summary}}",
-                    "issue_content": "{{vars.input.params.description}}",
-                    "issue_assignee": "[\"{{vars.assigneeUsername}}\"]"
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
+                    "create_issue_params": "{\"org_name\": \"{{vars.cicd_config.organizationName}}\",\"repo_name\": \"{{vars.cicd_config.contentRepoName}}\",\"issue_title\": \"{{vars.steps.Get_Change_Request_Details.input.summary}}\",\"issue_content\": \"{{vars.steps.Get_Change_Request_Details.input.description}}\",\"issue_assignee\": \"{{[vars.assigneeUsername]}}\"}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/c14a94aa-dd10-4c8c-854c-3c6546ede04a"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateIssue\"][\"@id\"]}}"
             },
             "status": null,
             "top": "840",
-            "left": "135",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "f70f1836-d9e0-408a-a48d-e100293e189f"
+            "uuid": "142799f7-839a-4e01-b9a1-962a8d7a826d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Change Request Details",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Create New Request",
+                        "description": "Creates a new change request (issue) on {{vars.cicd_config.contentRepoName}} repository.",
+                        "inputVariables": [
+                            {
+                                "name": "summary",
+                                "type": "string",
+                                "label": "Summary",
+                                "tooltip": "Provide the Summary of Change Request",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": true,
+                                "defaultValue": null,
+                                "_previousName": "",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "description",
+                                "type": "string",
+                                "label": "Description",
+                                "title": "Rich Text (HTML)",
+                                "usable": true,
+                                "tooltip": "Provide the Description of Change Request",
+                                "dataType": "text",
+                                "formType": "html",
+                                "required": true,
+                                "_expanded": true,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": true,
+                                "templateUrl": "app\/components\/form\/fields\/htmlEditor.html",
+                                "defaultValue": "",
+                                "_previousName": "description",
+                                "playbookField": true,
+                                "lengthConstraint": true,
+                                "allowedEncryption": true,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "assignee",
+                                "type": "array",
+                                "label": "Assignee",
+                                "title": "Dynamic List",
+                                "usable": true,
+                                "options": "{{vars.user_list}}",
+                                "tooltip": "Select the Change Request Assignee Username",
+                                "dataType": "dynamicList",
+                                "formType": "dynamicList",
+                                "required": true,
+                                "_expanded": true,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": false,
+                                "templateUrl": "app\/components\/form\/fields\/dynamicList.html",
+                                "defaultValue": null,
+                                "_previousName": "assignee",
+                                "playbookField": true,
+                                "lengthConstraint": true,
+                                "allowedGridColumn": false,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            }
+                        ]
+                    }
+                },
+                "record": "",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": false,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Submit",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/20429145-4b50-4df0-a0c8-cde5d66ccd7e"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "f87d6e93-7ed0-4a73-b3a8-0dba10b70241"
         },
         {
             "@type": "WorkflowStep",
@@ -91,7 +222,7 @@
                     "body": "",
                     "method": "GET"
                 },
-                "version": "3.2.3",
+                "version": "3.2.6",
                 "connector": "cyops_utilities",
                 "operation": "make_cyops_request",
                 "operationTitle": "FSR: Make FortiSOAR API Call",
@@ -101,377 +232,145 @@
                 }
             },
             "status": null,
-            "top": "165",
-            "left": "310",
+            "top": "300",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "001d8c1f-068e-4183-ae3a-e38b848151ca"
+            "uuid": "aa6d9b92-8a27-463a-94d0-63c28fef2630"
         },
         {
             "@type": "WorkflowStep",
-            "name": "GitHub User Not Mapped",
+            "name": "Get Users",
             "description": null,
             "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "Map GitHub Username",
-                        "description": "GitHub username is not mapped for assigned Change Request username \"{{vars.input.params.assignee.firstname}} {{vars.input.params.assignee.lastname}}\".\nFirst \"Map GitHub Username\" before creating the \"Change Request\"",
-                        "inputVariables": []
-                    }
+                "params": {
+                    "iri": "\/api\/3\/people",
+                    "body": "",
+                    "method": "GET"
                 },
-                "record": "",
-                "agent_id": null,
-                "resources": "change_management",
-                "owner_detail": {
-                    "isAssigned": false
-                },
-                "isRecordLinked": false,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "Ok",
-                            "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/24d14293-6b67-4892-98a0-092d9e1fe870"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                },
-                "inline_channel_list": [],
-                "external_channel_list": [],
-                "unauthenticated_input": false
-            },
-            "status": null,
-            "top": "840",
-            "left": "495",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
-            "group": null,
-            "uuid": "d7ad89ad-d8cb-468b-ab5f-ecd0c4b963b9"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Is Username Available",
-            "description": null,
-            "arguments": {
-                "conditions": [
-                    {
-                        "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/7f09e89d-2010-46fd-bf23-20803cfd64e3",
-                        "condition": "{{ vars.assigneeUsername != None }}",
-                        "step_name": "Placeholder"
-                    },
-                    {
-                        "option": "No",
-                        "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/6a938ed6-7a8f-4588-840a-5b1c1bcb1019",
-                        "step_name": "Refresh User Version Control Details"
-                    }
-                ]
+                "version": "3.2.6",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": {
+                    "user_list": "{% set user_list = [] %}{% for user in vars.steps.Get_Users.data['hydra:member'] %}{% if user['sourceControlUsername'] != None %}{% set _=user_list.append(user.firstname + \" \"+ (user.lastname or \"\")) %}{% endif %}{% endfor %}{{user_list}}",
+                    "USER_MAPPING": "{% set user_mapping = {} %}{% for user in vars.steps.Get_Users.data['hydra:member'] %}{% if user['sourceControlUsername'] != None %}{% set _=user_mapping.update({user.firstname + \" \"+ (user.lastname or \"\") : user.sourceControlUsername }) %}{% endif %}{% endfor %}{{user_mapping}}"
+                }
             },
             "status": null,
             "top": "435",
-            "left": "310",
-            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
-            "group": null,
-            "uuid": "573fabc5-9080-4534-a72e-a8e576cf956a"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Is Username Exist",
-            "description": null,
-            "arguments": {
-                "conditions": [
-                    {
-                        "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/f70f1836-d9e0-408a-a48d-e100293e189f",
-                        "condition": "{{ vars.assigneeUsername | length > 0 }}",
-                        "step_name": "Create Issue"
-                    },
-                    {
-                        "option": "No",
-                        "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/d7ad89ad-d8cb-468b-ab5f-ecd0c4b963b9",
-                        "step_name": "GitHub User Not Mapped"
-                    }
-                ]
-            },
-            "status": null,
-            "top": "705",
-            "left": "485",
-            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
-            "group": null,
-            "uuid": "ad898d59-7458-4309-8d93-02b60f2023b7"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "No Operation",
-            "description": null,
-            "arguments": {
-                "params": [],
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "no_op",
-                "operationTitle": "Utils: No Operation",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "975",
-            "left": "495",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "24d14293-6b67-4892-98a0-092d9e1fe870"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Placeholder",
-            "description": null,
-            "arguments": {
-                "_temp": "_temp"
-            },
-            "status": null,
-            "top": "705",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "7f09e89d-2010-46fd-bf23-20803cfd64e3"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Refresh User Version Control Details",
-            "description": null,
-            "arguments": {
-                "assigneeUsername": "{{(vars.input.params.assignee['@id'] | fromIRI).gitUsername}}"
-            },
-            "status": null,
-            "top": "570",
-            "left": "485",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "6a938ed6-7a8f-4588-840a-5b1c1bcb1019"
+            "uuid": "902690e1-0853-48a8-8244-a10801612e20"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "3576155e-3f67-41e0-b9fb-3002600da352",
+                "route": "05c8ab55-37b7-4d2a-877f-39db0cc73777",
                 "title": "Create New Request",
                 "resources": [
                     "change_management"
                 ],
-                "inputVariables": [
-                    {
-                        "name": "summary",
-                        "type": "string",
-                        "label": "Summary",
-                        "title": "Text Field",
-                        "usable": true,
-                        "tooltip": "Provide the Summary of Change Request",
-                        "dataType": "text",
-                        "formType": "text",
-                        "required": true,
-                        "_expanded": false,
-                        "mmdUpdate": true,
-                        "collection": false,
-                        "searchable": true,
-                        "templateUrl": "app\/components\/form\/fields\/input.html",
-                        "defaultValue": null,
-                        "_previousName": "summary",
-                        "playbookField": true,
-                        "lengthConstraint": true,
-                        "allowedEncryption": true,
-                        "allowedGridColumn": true,
-                        "useRecordFieldDefault": false
-                    },
-                    {
-                        "name": "description",
-                        "type": "string",
-                        "label": "Description",
-                        "title": "Rich Text (HTML)",
-                        "usable": true,
-                        "tooltip": "Provide the Description of Change Request",
-                        "dataType": "text",
-                        "formType": "html",
-                        "required": true,
-                        "_expanded": false,
-                        "mmdUpdate": true,
-                        "collection": false,
-                        "searchable": true,
-                        "templateUrl": "app\/components\/form\/fields\/htmlEditor.html",
-                        "defaultValue": "",
-                        "_previousName": "description",
-                        "playbookField": true,
-                        "lengthConstraint": true,
-                        "allowedEncryption": true,
-                        "allowedGridColumn": true,
-                        "useRecordFieldDefault": false
-                    },
-                    {
-                        "name": "assignee",
-                        "type": "people",
-                        "label": "Assignee",
-                        "title": "Lookup (One to Many or One to One)",
-                        "usable": true,
-                        "tooltip": "Select the Change Request Assignee Username",
-                        "dataType": "lookup",
-                        "formType": "lookup",
-                        "required": true,
-                        "_expanded": false,
-                        "mmdUpdate": true,
-                        "collection": false,
-                        "dataSource": {
-                            "model": "people"
-                        },
-                        "searchable": false,
-                        "templateUrl": "app\/components\/form\/fields\/typeahead.html",
-                        "defaultValue": null,
-                        "_previousName": "",
-                        "playbookField": true,
-                        "displayTemplate": "%7B%7B%20firstname%20%7D%7D%20%7B%7B%20lastname%20%7D%7D",
-                        "lengthConstraint": false,
-                        "allowedEncryption": false,
-                        "allowedGridColumn": true,
-                        "useRecordFieldDefault": false
-                    }
-                ],
+                "__triggerLimit": true,
+                "inputVariables": [],
                 "step_variables": {
                     "input": {
-                        "params": {
-                            "summary": "{{vars.request.data[\"summary\"]}}",
-                            "assignee": "{{vars.request.data[\"assignee\"]}}",
-                            "description": "{{vars.request.data[\"description\"]}}"
-                        },
+                        "params": [],
                         "records": "{{vars.input.records}}"
                     }
                 },
                 "_promptexpanded": true,
+                "triggerOnSource": true,
                 "executeButtonText": "Submit",
                 "noRecordExecution": true,
+                "showToasterMessage": {
+                    "visible": false,
+                    "messageVisible": true
+                },
+                "triggerOnReplicate": false,
                 "singleRecordExecution": false
             },
             "status": null,
             "top": "30",
-            "left": "310",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "46a87426-887f-49fb-8f79-635a7ee7b11e"
+            "uuid": "9b3eba7c-8cc9-4c39-aea5-05b2df668ae4"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Is Username Available",
-            "targetStep": "\/api\/3\/workflow_steps\/573fabc5-9080-4534-a72e-a8e576cf956a",
-            "sourceStep": "\/api\/3\/workflow_steps\/59b0b7bf-85ea-4c70-a885-3c5b9e7d57e4",
+            "name": "Check Source Control Connector Configuration -> Get Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/aa6d9b92-8a27-463a-94d0-63c28fef2630",
+            "sourceStep": "\/api\/3\/workflow_steps\/85cba27a-af44-4e37-a0c9-9fddf9598f16",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "9cbb269e-3724-47d0-993f-bce3c345c0d2"
+            "uuid": "f0f75937-2e1e-4645-aa8b-97e768e9df16"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Create Issue",
+            "targetStep": "\/api\/3\/workflow_steps\/142799f7-839a-4e01-b9a1-962a8d7a826d",
+            "sourceStep": "\/api\/3\/workflow_steps\/20429145-4b50-4df0-a0c8-cde5d66ccd7e",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "4bcdd94c-f279-4203-b2e7-0cf60496faf7"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Create Iss -> Create Branch",
-            "targetStep": "\/api\/3\/workflow_steps\/c2f9f25e-4e19-4d1d-8777-73a79f99d16a",
-            "sourceStep": "\/api\/3\/workflow_steps\/f70f1836-d9e0-408a-a48d-e100293e189f",
+            "targetStep": "\/api\/3\/workflow_steps\/ef404be3-62aa-4dac-8a59-e8caa1db9eb7",
+            "sourceStep": "\/api\/3\/workflow_steps\/142799f7-839a-4e01-b9a1-962a8d7a826d",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e6aee142-2114-4580-a9b9-8a1675086cad"
+            "uuid": "8663eaf3-765e-444b-8973-7c5d62678ea7"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Source Control Details -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/59b0b7bf-85ea-4c70-a885-3c5b9e7d57e4",
-            "sourceStep": "\/api\/3\/workflow_steps\/001d8c1f-068e-4183-ae3a-e38b848151ca",
+            "name": "Create New Request -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/20429145-4b50-4df0-a0c8-cde5d66ccd7e",
+            "sourceStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
+            "label": "Submit",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "fce529fa-5b2d-4a67-bcc6-c8c35ba4808a"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Source Control Details -> Get Users",
+            "targetStep": "\/api\/3\/workflow_steps\/902690e1-0853-48a8-8244-a10801612e20",
+            "sourceStep": "\/api\/3\/workflow_steps\/aa6d9b92-8a27-463a-94d0-63c28fef2630",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "44205299-0456-4e36-8cf3-4d49d5c4a515"
+            "uuid": "d79c1cf7-9b4f-49ac-98ae-a117f07dd243"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "GitHub User Not Mapped -> No Operation",
-            "targetStep": "\/api\/3\/workflow_steps\/24d14293-6b67-4892-98a0-092d9e1fe870",
-            "sourceStep": "\/api\/3\/workflow_steps\/d7ad89ad-d8cb-468b-ab5f-ecd0c4b963b9",
-            "label": "Ok",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "4f37bef4-2978-43f4-b471-c0ba356396d5"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Username Available -> Placeholder",
-            "targetStep": "\/api\/3\/workflow_steps\/7f09e89d-2010-46fd-bf23-20803cfd64e3",
-            "sourceStep": "\/api\/3\/workflow_steps\/573fabc5-9080-4534-a72e-a8e576cf956a",
-            "label": "Yes",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "f92d8e93-a914-4212-ac70-d7d7413043e4"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Username Available -> Refresh User Version Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/6a938ed6-7a8f-4588-840a-5b1c1bcb1019",
-            "sourceStep": "\/api\/3\/workflow_steps\/573fabc5-9080-4534-a72e-a8e576cf956a",
-            "label": "No",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "9a4769fe-8246-405b-a85f-501112fe5943"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Username Exist -> Create Issue",
-            "targetStep": "\/api\/3\/workflow_steps\/f70f1836-d9e0-408a-a48d-e100293e189f",
-            "sourceStep": "\/api\/3\/workflow_steps\/ad898d59-7458-4309-8d93-02b60f2023b7",
-            "label": "Yes",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "37e2ce49-39b0-4258-92de-a6e54a076118"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Username Exist -> GitHub User Not Mapped",
-            "targetStep": "\/api\/3\/workflow_steps\/d7ad89ad-d8cb-468b-ab5f-ecd0c4b963b9",
-            "sourceStep": "\/api\/3\/workflow_steps\/ad898d59-7458-4309-8d93-02b60f2023b7",
-            "label": "No",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "5d00afd2-9583-4a00-b312-b8e8489684cc"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Placeholder -> Create Iss",
-            "targetStep": "\/api\/3\/workflow_steps\/f70f1836-d9e0-408a-a48d-e100293e189f",
-            "sourceStep": "\/api\/3\/workflow_steps\/7f09e89d-2010-46fd-bf23-20803cfd64e3",
+            "name": "Get Users -> hgvh",
+            "targetStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
+            "sourceStep": "\/api\/3\/workflow_steps\/902690e1-0853-48a8-8244-a10801612e20",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "afcb48fc-d19a-4458-85c2-41e70d969fb9"
+            "uuid": "7405cc1b-cc6f-43e3-930b-e651e7a9a141"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Refresh User Version Control Details -> Is Username Exist",
-            "targetStep": "\/api\/3\/workflow_steps\/ad898d59-7458-4309-8d93-02b60f2023b7",
-            "sourceStep": "\/api\/3\/workflow_steps\/6a938ed6-7a8f-4588-840a-5b1c1bcb1019",
+            "name": "Start -> Check Source Control Connector Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/85cba27a-af44-4e37-a0c9-9fddf9598f16",
+            "sourceStep": "\/api\/3\/workflow_steps\/9b3eba7c-8cc9-4c39-aea5-05b2df668ae4",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "9f2bcc8e-032b-44b5-b156-4523da95b77b"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/001d8c1f-068e-4183-ae3a-e38b848151ca",
-            "sourceStep": "\/api\/3\/workflow_steps\/46a87426-887f-49fb-8f79-635a7ee7b11e",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "f6966223-8c74-4f1e-90d0-943578d94597"
+            "uuid": "12f79c69-b8b2-4565-8469-3aee9bed4c45"
         }
     ],
     "groups": [],
@@ -481,7 +380,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "ManualAction",
-        "CICD"
+        "CICD",
+        "ManualAction"
     ]
 }

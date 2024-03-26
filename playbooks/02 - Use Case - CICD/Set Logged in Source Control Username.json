@@ -1,10 +1,10 @@
 {
     "@type": "Workflow",
     "triggerLimit": null,
-    "name": "Set Logged in GitHub Username",
+    "name": "Set Logged in Source Control Username",
     "aliasName": null,
     "tag": null,
-    "description": "Update the GitHub Usernames in FortiSOAR  logged in user record",
+    "description": "Update the Source Control Usernames in FortiSOAR  logged in user record",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -13,22 +13,22 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/242c638c-5a84-4edb-941e-441d13ceb5cf",
+    "triggerStep": "\/api\/3\/workflow_steps\/9ccdc547-d5df-47f3-b71d-042f2d0b744b",
     "steps": [
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
-                "git_username": "{{vars.steps.Get_Usernames.input.gitHubUsername}}",
-                "fsr_user_uuid": "{{(vars.currentUser | fromIRI).uuid}}"
+                "fsr_user_uuid": "{{(vars.currentUser | fromIRI).uuid or (vars.request['currentUser'] | fromIRI).uuid}}",
+                "source_control_username": "{{vars.steps.Get_Usernames.input.sourceControlUsername}}"
             },
             "status": null,
             "top": "300",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "f41f05c3-7406-49f3-a699-dbe3b03aac48"
+            "uuid": "54961ff3-8d9b-48f7-b313-d69edcbd9087"
         },
         {
             "@type": "WorkflowStep",
@@ -61,7 +61,7 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "676b9f18-a98e-4965-bf9b-765ac9d382da"
+            "uuid": "4c72233f-939d-4571-b61d-99d50d514622"
         },
         {
             "@type": "WorkflowStep",
@@ -71,20 +71,22 @@
                 "type": "InputBased",
                 "input": {
                     "schema": {
-                        "title": "Set GitHub User Account",
-                        "description": "Provide the GitHub Username which you want to map with the logged in FortiSOAR User \"{{vars.logged_in_user}}\".",
+                        "title": "Set Source Control User Account",
+                        "description": "Provide the {{(globalVars.cicd_env | toDict)[\"source_control\"][\"label\"]}} username which you want to map with the logged in FortiSOAR user \"{{vars.logged_in_user}}\"",
                         "inputVariables": [
                             {
-                                "name": "gitHubUsername",
+                                "name": "sourceControlUsername",
                                 "type": "string",
-                                "label": "GitHub Username",
-                                "tooltip": "Enter the GitHub username which you want to map with FortiSOAR user",
+                                "label": "Source Control Username",
+                                "tooltip": "Enter the Source Control username which you want to map with FortiSOAR user",
                                 "dataType": "text",
                                 "formType": "text",
                                 "required": true,
                                 "_expanded": true,
+                                "_nameTouched": true,
                                 "defaultValue": null,
-                                "_previousName": "gitHubU",
+                                "_previousName": "gitHubUsernamesourceControl",
+                                "jinjaExpressionView": true,
                                 "useRecordFieldDefault": false
                             }
                         ]
@@ -93,8 +95,10 @@
                 "record": "{{vars.input.records[0]['@id']}}",
                 "agent_id": null,
                 "resources": "change_management",
+                "is_approval": false,
                 "owner_detail": {
-                    "isAssigned": false
+                    "isAssigned": false,
+                    "emailRecipients": ""
                 },
                 "isRecordLinked": true,
                 "step_variables": [],
@@ -103,67 +107,53 @@
                         {
                             "option": "Ok",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/f41f05c3-7406-49f3-a699-dbe3b03aac48"
+                            "step_iri": "\/api\/3\/workflow_steps\/54961ff3-8d9b-48f7-b313-d69edcbd9087"
                         }
                     ],
-                    "duplicateOption": false
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
                 },
                 "email_notification": {
                     "enabled": false,
                     "smtpParameters": []
                 },
+                "customEmailExternal": false,
                 "inline_channel_list": [],
                 "external_channel_list": [],
-                "unauthenticated_input": false
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
             },
             "status": null,
             "top": "165",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
-            "uuid": "c54ec4e3-4c32-4e1f-b042-4ae402c1b17a"
+            "uuid": "b99c34ab-fcbb-4977-94b0-7ad6fc99c45f"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
+                "__triggerLimit": true,
                 "step_variables": {
                     "input": {
                         "params": []
                     },
-                    "logged_in_user": "{{(vars.currentUser | fromIRI).firstname}} {{(vars.currentUser | fromIRI).lastname}}"
-                }
+                    "logged_in_user": "{{((vars.currentUser | fromIRI).firstname) or ((vars.request.currentUser | fromIRI).firstname)}} {{((vars.currentUser | fromIRI).lastname) or ((vars.request.currentUser | fromIRI).lastname)}}"
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
             },
             "status": null,
             "top": "30",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "242c638c-5a84-4edb-941e-441d13ceb5cf"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update GitHub Username",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/3\/people\/{{vars.fsr_user_uuid}}",
-                    "body": "{\"gitUsername\": \"{{vars.git_username}}\"}",
-                    "method": "PUT"
-                },
-                "version": "3.2.1",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "bd19680c-3732-42df-9cf9-373d4f9e1fc5"
+            "uuid": "9ccdc547-d5df-47f3-b71d-042f2d0b744b"
         },
         {
             "@type": "WorkflowStep",
@@ -175,18 +165,20 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "tenant": "",
                     "thread": false,
-                    "content": "<p class=\"mp-tile-description muted-80\">\"{{vars.steps.Get_Usernames.input.gitHubUsername}}\" GitHub username assigned to FortiSOAR user \"<a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.logged_in_user}}<\/a>\".<\/p>",
+                    "content": "<p class=\"mp-tile-description muted-80\"><strong>Mapped Following FortiSOAR User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.logged_in_user}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User:<\/em> {{vars.steps.Get_Usernames.input.sourceControlUsername}}<\/li>\n<\/ul>",
                     "records": "{{vars.input.records[0]['@id']}}",
                     "parentstepid": "\/api\/3\/workflow_steps\/05bcfc1c-3b6a-4fbb-a4de-a5b5c662366d"
                 },
                 "resource": {
-                    "results": "<p>{% if vars.steps.Find_Previous_Result | length %}{{vars.steps.Find_Previous_Result[0].results}}<\/p>\n<p>{%endif %}<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Administrator User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.logged_in_user}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>GitHub User:<\/em> {{vars.steps.Get_Usernames.input.gitHubUsername}}<\/li>\n<\/ul>"
+                    "results": "<p>{% if vars.steps.Find_Previous_Result | length %}{{vars.steps.Find_Previous_Result[0].results}}<\/p>\n<p>{%endif %}<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Administrator User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.logged_in_user}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User:<\/em> {{vars.steps.Get_Usernames.input.sourceControlUsername}}<\/li>\n<\/ul>"
                 },
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
                 "__recommend": [],
                 "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
@@ -194,59 +186,82 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "f29a7481-447a-4866-980f-012b516cb665"
+            "uuid": "571b42c8-f63d-4a78-a505-a0023169d0e3"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Source Control Username",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/3\/people\/{{vars.fsr_user_uuid}}",
+                    "body": "{\"sourceControlUsername\": \"{{vars.source_control_username}}\"}",
+                    "method": "PUT"
+                },
+                "version": "3.2.6",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "0373a860-85f3-4441-a883-bdf58828b7f0"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Update GitHub Username",
-            "targetStep": "\/api\/3\/workflow_steps\/bd19680c-3732-42df-9cf9-373d4f9e1fc5",
-            "sourceStep": "\/api\/3\/workflow_steps\/f41f05c3-7406-49f3-a699-dbe3b03aac48",
+            "name": "Configuration -> Update Source Control Username",
+            "targetStep": "\/api\/3\/workflow_steps\/0373a860-85f3-4441-a883-bdf58828b7f0",
+            "sourceStep": "\/api\/3\/workflow_steps\/54961ff3-8d9b-48f7-b313-d69edcbd9087",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "58483462-71e9-41be-9067-fa14d6c7ec41"
+            "uuid": "0f608084-9a57-41bd-a51f-2aeaa08fa387"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Find Previous Result -> Update Record",
-            "targetStep": "\/api\/3\/workflow_steps\/f29a7481-447a-4866-980f-012b516cb665",
-            "sourceStep": "\/api\/3\/workflow_steps\/676b9f18-a98e-4965-bf9b-765ac9d382da",
+            "targetStep": "\/api\/3\/workflow_steps\/571b42c8-f63d-4a78-a505-a0023169d0e3",
+            "sourceStep": "\/api\/3\/workflow_steps\/4c72233f-939d-4571-b61d-99d50d514622",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "c5511bb6-3831-4b6b-a03a-05adb254d89f"
+            "uuid": "15161171-502c-4dee-888e-f2fb7d1776ab"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get GitHub Username -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/f41f05c3-7406-49f3-a699-dbe3b03aac48",
-            "sourceStep": "\/api\/3\/workflow_steps\/c54ec4e3-4c32-4e1f-b042-4ae402c1b17a",
+            "name": "Get Usernames -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/54961ff3-8d9b-48f7-b313-d69edcbd9087",
+            "sourceStep": "\/api\/3\/workflow_steps\/b99c34ab-fcbb-4977-94b0-7ad6fc99c45f",
             "label": "Ok",
             "isExecuted": false,
             "group": null,
-            "uuid": "f4f300c8-5b8c-467a-b219-464b4c71de97"
+            "uuid": "71e6d05e-61b4-4fb5-a129-6b1bf2067bd7"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Get Usernames",
-            "targetStep": "\/api\/3\/workflow_steps\/c54ec4e3-4c32-4e1f-b042-4ae402c1b17a",
-            "sourceStep": "\/api\/3\/workflow_steps\/242c638c-5a84-4edb-941e-441d13ceb5cf",
+            "targetStep": "\/api\/3\/workflow_steps\/b99c34ab-fcbb-4977-94b0-7ad6fc99c45f",
+            "sourceStep": "\/api\/3\/workflow_steps\/9ccdc547-d5df-47f3-b71d-042f2d0b744b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "79feb0e1-1ae1-44fb-b4fe-0f40fed683c4"
+            "uuid": "e2952b79-bbe3-4d30-a83c-3f7d6b88a878"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update GitHub Username -> Find Previous Result",
-            "targetStep": "\/api\/3\/workflow_steps\/676b9f18-a98e-4965-bf9b-765ac9d382da",
-            "sourceStep": "\/api\/3\/workflow_steps\/bd19680c-3732-42df-9cf9-373d4f9e1fc5",
+            "name": "Update Source Control Username -> Find Previous Result",
+            "targetStep": "\/api\/3\/workflow_steps\/4c72233f-939d-4571-b61d-99d50d514622",
+            "sourceStep": "\/api\/3\/workflow_steps\/0373a860-85f3-4441-a883-bdf58828b7f0",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "cba75261-141f-4e2f-9303-dba44c893f2d"
+            "uuid": "c8a70bb7-1d97-41d6-989e-240dfb7bc0a3"
         }
     ],
     "groups": [],
@@ -256,7 +271,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Subroutine",
-        "CICD"
+        "CICD",
+        "Subroutine"
     ]
 }

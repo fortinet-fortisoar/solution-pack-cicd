@@ -1,61 +1,58 @@
 | [Home](./README.md) |
 |----------------------|
 
-# Release Notes
+# What's New
 
-## Enhancements
+- GitLab is now supported as one of the source control platforms. Earlier, source control was only available for GitHub.
 
->**IMPORTANT**: This solution pack now requires FortiSOAR version `7.4.0` and later
+- A new **Pluggable Source Control** framework now connects with any of the available source control platforms.
 
-- Added the tag `CICD` to enhance searchability for the *Continuous Delivery* solution pack on Content Hub
+## Widget Enhancements
 
-- Aligned the sequence of the task *Setup the Development Environment* with *Setup the Source Control for Production Environment*
+Introduced following new widgets:
 
-- Removed the dependency on the **Attachments** records to create export templates
+- **Playbook Execution Wizard** displays continuous delivery solution pack's playbook execution progress on the user interface. This widget can be configured to display execution of any of the playbooks.
 
-    - Added *Content and Settings Export Templates* in export template record
+- **Playbook Buttons** executes following continuous delivery operations on the widget **Playbook Execution Wizard**:
 
-- Added a new team *Content Development* to add users involved with content development in FortiSOAR
+    - Setup the Source Control for Production Environment
 
-- Option to invite collaborators with write permissions available during mapping GitHub users.
+    - Setup the Development Environment
 
-### Playbook Enhancements
+    - Apply Latest Content
 
-- Added Pull Request (PR) title as an issue comment in *Create Pull Request* playbook
+    - Save Production Settings
 
-- Pass input record to child playbook in The *Fetch Latest Changes* playbook
+    - Map Source Control Username
 
-- Renamed *Get User Confirmation* step to *Confirm Apply Latest Changes* in *Pull Latest Content from GitHub* playbook
+    This widget can be configured to place button within any record's detail helping trigger playbooks at the click of a button.
 
-- Removed redundant *Update Import Job* and *Modify Configuration Option* steps from *Setup Development Environment* playbook
+- **JSON to Grid** widget now has following capabilities:
 
-- Added *Add Repository Collaborator* step in *Set GitHub Username* playbook
+    - Execute grid operations of **Production** or **Development** environment on **Playbook Execution Wizard** widget 
 
-- *GitHub - Clone Repository* action uses the Codeload service that speeds up the subsequent push and pull operations
+    - Show grid columns even if there is no change request record present  
 
-- Following playbooks were added
-    - GitHub - Create Issue Comment
-    - GitHub - Add Repository Collaborator
-    - GitHub - List Repository Collaborator
-    - Add GitHub Repository Collaborator
-    - Push Content to Source Control
-    - Push Initial Production Environment Content
-    - Get FortiSOAR Export Templates
+    - Supported auto refresh of the Grid on create of the change request record 
 
-- Following playbooks were removed
-    - Update Export Templates
-    - Synchronize Export Templates
-    - Setup Export Templates
-    - Setup Export Templates - Content and Settings
-    - Push (Export) CR Content to GitHub - Update Export Config Attachment
-    - Push Content
-    - Push (Initial) Production Environment Content
-    - Push (Export) CR Content to GitHub - Extract Export Zip File from FortiSOAR
+- **CICD Configuration Wizard** now offers **GitLab**, along with GitHub, as a source control platform and helps configure the selected source control with *Continuous Delivery* solution pack.
 
-- Following playbooks pass the branch name parameter to the **GitHub - Clone Repository** playbook:
-    - Push Initial Production Environment Content
-    - Push Change to Source Control
-    - Push Content to Source Control
-    - Save FortiSOAR Settings
-    - Setup Development Environment
-    - Pull Latest Content from GitHub
+## UI Enhancements
+
+- Refreshed infographic on the **Setup** tab of the *Continuous Delivery* solution pack.
+
+- Refreshed infographic on the Continuous Delivery configuration wizard.
+
+## Other Enhancements
+
+- **Map GitHub Username** operation is now **Map Source Control Username**.
+
+- **GitHub** as a term in the *Continuous Delivery* solution pack is now referred to **Source Control** to include current (GitLab and GitHub) and future source control integrations.
+
+- The **Export/Import** workflow operations is now optimized.
+
+- **Closed Issues** records are now viewable in a separate grid under **Apply Latest Changes** in *Development* and *Production* tabs of *Continuous Delivery*.
+
+- Moved all **GitHub** playbooks to the GitHub connector
+
+- Added **Source Control Username** field in the **People** module
