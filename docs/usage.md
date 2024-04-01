@@ -3,7 +3,7 @@
 
 # Usage
 
-In this section we detail the various user flows to understand the scenarios where this solution pack’s automation addresses our needs.
+In this section we detail the various user flows to understand the scenarios where this solution pack’s automation addresses your needs.
 
 ## Lifecycle of a Change Request (CR)
 
@@ -11,9 +11,9 @@ In this section we detail the various user flows to understand the scenarios whe
 
 The following pointers help understand the various steps of this lifecycle:
 
-1. Application administrator creates a new change request.
+1. Application administrator creates a new change request in FortiSOAR.
 
-2. The change request appears as a new issue under **Issues** in the GitHub repository.
+2. The change request appears as a new issue under **Issues** in the source control platform's repository.
 
 3. Content developer builds the content as detailed in the CR.
 
@@ -25,19 +25,19 @@ The following pointers help understand the various steps of this lifecycle:
 
 5. Content developer selects the CR again and clicks **Submit Changes for Review**.
 
-6. A PR is created on GitHub with the title and reviewers added by the content developer.
+6. A PR is created on the source control platform with the title and reviewers added by the content developer.
 
 7. CRs with changes appear with a PR name under the column **Pull Request**.
 
-    >**NOTE**: The reviewers must log in to GitHub to view the differences (`diff`).
+    >**NOTE**: The reviewers must log in to their preferred source control platform to view the differences (`diff`).
 
 8. Select the CR in FortiSOAR and click **Approve Changes**. This action merges the PR into the main branch and deletes the CR branch.
 
-9. Select the CR again and click **Mark as Complete** to close the issue from FortiSOAR and GitHub.
+9. Select the CR again and click **Mark as Complete** to close the issue from FortiSOAR and the source control platform.
 
-10. The changes made by content developer is now on GitHub, but still needs to be applied to FortiSOAR's production instance.
+10. The changes made by content developer is now on the source control platform, but still needs to be applied to FortiSOAR's production instance.
 
-11. Application administrator clicks the tile **Apply Latest Content** to initiate a `git merge` of content on GitHub with content on the FortiSOAR instance.
+11. Application administrator clicks the tile **Apply Latest Content** to initiate a `git merge` of content on the source control platform with content on the FortiSOAR instance.
 
 
 ## CR for Building a new Playbook
@@ -58,7 +58,7 @@ This task entails following sub-tasks:
 
 5. Application administrator [Approves & marks as complete the CR in Production environment](#approve--mark-as-complete-a-cr-in-production-environment).
 
-6. Application administrator merges latest changes from GitHub by [Applying Latest changes in Production environment](#apply-latest-changes-in-production-environment).
+6. Application administrator merges latest changes from the source control platform by [Applying Latest changes in Production environment](#apply-latest-changes-in-production-environment).
 
 This flow is valid for all content customizations like:
 - Reports
@@ -89,7 +89,7 @@ This task entails following sub-tasks:
 
 7. Application administrator [Approves & marks as complete the CR in Production environment](#approve--mark-as-complete-a-cr-in-production-environment).
 
-8. Application administrator merges latest changes from GitHub by [Applying Latest changes in Production environment](#apply-latest-changes-in-production-environment).
+8. Application administrator merges latest changes from the source control platform by [Applying Latest changes in Production environment](#apply-latest-changes-in-production-environment).
 
 >**NOTE**: Once a module is created and applied to production and development, [applying latest changes in production](#apply-latest-changes-in-production-environment) or in [development](#apply-latest-changes-in-development-environment) will not remove it &mdash; even if the module no longer exists in the pulled changes.
 
@@ -171,7 +171,7 @@ You can raise a change request (CR) from within the FortiSOAR’s production env
 
 6. Click **Submit** to save and submit the CR for further action
 
-The raised CR appears under **Issues** on GitHub under your organization’s Production Content repository.
+The raised CR appears under **Issues** on the source control platform under your organization’s Production Content repository.
 
 It also appears under the Continuous Delivery menu for both the Application Administrator and the Content Developer to whom the issue is assigned.
 
@@ -185,7 +185,7 @@ After content developers are done making the customizations to address the CR ra
 
 2. Select the CR and click **Push Changes to Source Control**. Following tasks are performed:
 
-    1. A branch containing the changes of this CR is created on GitHub.
+    1. A branch containing the changes of this CR is created on the source control platform.
 
     2. The changes are committed and pushed to the new branch.
 
@@ -205,15 +205,15 @@ The CR submitted for review needs approval of the application administrator in F
 
 3. CRs with changes appear with a PR name under the column **Pull Request**.
 
-    >**NOTE**: The reviewers have to log in to GitHub to view the comparatable differences (`diff`).
+    >**NOTE**: The reviewers have to log in to the source control platform to view the comparable differences (`diff`).
 
 4. Select the CR in FortiSOAR and click **Approve Changes**. This merges the PR into the main branch and deletes the CR branch.
 
-5. Select the CR again and click **Mark as Complete** to close the issue from FortiSOAR and GitHub.
+5. Select the CR again and click **Mark as Complete** to close the issue from FortiSOAR and the source control platform.
 
 ## Apply Latest changes in Production environment
 
-Application administrators may want to merge the customizations on GitHub on the main branch to production instance on FortiSOAR.
+Application administrators may want to merge the customizations on the source control platform on the main branch to production instance on FortiSOAR.
 
 1. Select **Continuous Delivery** from the FortiSOAR menu.
 
@@ -225,7 +225,7 @@ Application administrators may want to merge the customizations on GitHub on the
 
 5. Click the button **Submit**.
 
-6. Click **Yes** on the confirmation to initiate a git merge of content on GitHub with content on the FortiSOAR instance.
+6. Click **Yes** on the confirmation to initiate a git merge of content on the source control platform with content on the FortiSOAR instance.
 
 Once the changes are applied, logout and login again to view published changes.
 
@@ -235,11 +235,11 @@ Once the changes are applied, logout and login again to view published changes.
 
 2. Select the tab **Development**.
 
-3. Click the tile **Save Development Settings** to initiate export of development settings like connector configurations, SSO settings, and user configurations to GitHub in the repository mapped with FortiSOAR Development Settings.
+3. Click the tile **Save Development Settings** to initiate export of development settings like connector configurations, SSO settings, and user configurations to the source control platform in the repository mapped with FortiSOAR Development Settings.
 
 ## Apply Latest changes in Development environment
 
-Application administrators may want to merge the customizations on GitHub on the main branch to development instance on FortiSOAR.
+Application administrators may want to merge the customizations on the source control platform on the main branch to development instance on FortiSOAR.
 
 1. Select **Continuous Delivery** from the FortiSOAR menu.
 
@@ -251,7 +251,7 @@ Application administrators may want to merge the customizations on GitHub on the
 
 5. Click the button **Submit**.
 
-6. Click **Yes** on the confirmation to initiate a git merge of content on GitHub with content on the FortiSOAR instance.
+6. Click **Yes** on the confirmation to initiate a git merge of content on the source control platform with content on the FortiSOAR instance.
 
 Once the changes are applied, logout and login again to view published changes.
 

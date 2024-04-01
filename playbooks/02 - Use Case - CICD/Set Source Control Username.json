@@ -1,0 +1,1037 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Set Source Control Username",
+    "aliasName": null,
+    "tag": null,
+    "description": "Map the Source Control usernames with FortiSOAR user",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/883f3764-8dbb-46c7-93af-5c6aa6b3a67e",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Development Collaborator",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Map User and Add as a Collaborator",
+                        "description": "Map the source control username to the FortiSOAR user\n\nSelect a repository to add the mapped user as a collaborator with ***\"Write\"*** permissions",
+                        "inputVariables": [
+                            {
+                                "name": "fortiSOARUsername",
+                                "type": "people",
+                                "label": "FortiSOAR Username",
+                                "title": "Lookup (One to Many or One to One)",
+                                "usable": true,
+                                "tooltip": "Select the FotiSOAR user which you want to map with Source Control username",
+                                "dataType": "lookup",
+                                "formType": "lookup",
+                                "required": true,
+                                "_expanded": false,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "dataSource": {
+                                    "model": "people"
+                                },
+                                "searchable": false,
+                                "templateUrl": "app\/components\/form\/fields\/typeahead.html",
+                                "defaultValue": null,
+                                "_previousName": "",
+                                "playbookField": true,
+                                "displayTemplate": "%7B%7B%20firstname%20%7D%7D%20%7B%7B%20lastname%20%7D%7D",
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "sourceControlUsername",
+                                "type": "string",
+                                "label": "Source Control Username",
+                                "tooltip": "Enter the Source Control username which you want to map with FortiSOAR user",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": false,
+                                "defaultValue": null,
+                                "_previousName": "",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "prod_content_role",
+                                "type": "boolean",
+                                "label": "Production Content Repository",
+                                "title": "Checkbox",
+                                "usable": true,
+                                "tooltip": "Add as a Collaborator with a \"Write\" role to the \"Prod Content Repository\"",
+                                "dataType": "checkbox",
+                                "formType": "checkbox",
+                                "required": false,
+                                "_expanded": true,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": true,
+                                "templateUrl": "app\/components\/form\/fields\/checkbox.html",
+                                "_nameTouched": true,
+                                "defaultValue": true,
+                                "_previousName": "dasdda",
+                                "playbookField": true,
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "dev_settings_role",
+                                "type": "boolean",
+                                "label": "Development Settings Repository",
+                                "title": "Checkbox",
+                                "usable": true,
+                                "tooltip": "Add as a Collaborator with a \"Write\" role to the \"Dev Settings Repository\"",
+                                "dataType": "checkbox",
+                                "formType": "checkbox",
+                                "required": false,
+                                "_expanded": true,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": true,
+                                "templateUrl": "app\/components\/form\/fields\/checkbox.html",
+                                "_nameTouched": true,
+                                "defaultValue": true,
+                                "_previousName": "sada",
+                                "playbookField": true,
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            }
+                        ]
+                    }
+                },
+                "record": "{{ vars.input.records[0][\"@id\"] }}",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": true,
+                "step_variables": {
+                    "collaborator_repo": "{% set repo_names = [] %}{% if vars.steps.Add_Development_Collaborator.input['prod_content_role'] %}{% set _= repo_names.append(vars.cicd_config.contentRepoName) %}{% endif %}{% if vars.steps.Add_Development_Collaborator.input['dev_settings_role'] %}{% set _= repo_names.append(vars.cicd_config.devSettingsRepoName) %}{% endif %}{{repo_names}}"
+                },
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Submit",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/2bc72d77-98f4-4854-b499-e69997251406"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "560",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "64895882-1da3-4c57-8046-28b50aadb367"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Production Collaborator",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Map User and Add as a Collaborator",
+                        "description": "Map the source control username to the FortiSOAR user\n\nSelect a repository to add the mapped user as a collaborator with ***\"Write\"*** permissions.",
+                        "inputVariables": [
+                            {
+                                "name": "fortiSOARUsername",
+                                "type": "people",
+                                "label": "FortiSOAR Username",
+                                "title": "Lookup (One to Many or One to One)",
+                                "usable": true,
+                                "tooltip": "Select the FotiSOAR user which you want to map with Source Control username",
+                                "dataType": "lookup",
+                                "formType": "lookup",
+                                "required": true,
+                                "_expanded": false,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "dataSource": {
+                                    "model": "people"
+                                },
+                                "searchable": false,
+                                "templateUrl": "app\/components\/form\/fields\/typeahead.html",
+                                "defaultValue": null,
+                                "_previousName": "",
+                                "playbookField": true,
+                                "displayTemplate": "%7B%7B%20firstname%20%7D%7D%20%7B%7B%20lastname%20%7D%7D",
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "sourceControlUsername",
+                                "type": "string",
+                                "label": "Source Control Username",
+                                "tooltip": "Enter the Source Control username which you want to map with FortiSOAR user",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": false,
+                                "defaultValue": null,
+                                "_previousName": "",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "prod_content_role",
+                                "type": "boolean",
+                                "label": "Production Content Repository",
+                                "title": "Checkbox",
+                                "usable": true,
+                                "tooltip": "Add as a Collaborator with a \"Write\" role to the \"Prod Content Repository\" aads",
+                                "dataType": "checkbox",
+                                "formType": "checkbox",
+                                "required": false,
+                                "_expanded": false,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": true,
+                                "templateUrl": "app\/components\/form\/fields\/checkbox.html",
+                                "_nameTouched": true,
+                                "defaultValue": true,
+                                "_previousName": "dasdda",
+                                "playbookField": true,
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "prod_settings_role",
+                                "type": "boolean",
+                                "label": "Production Settings Repository",
+                                "title": "Checkbox",
+                                "usable": true,
+                                "tooltip": "Add as a Collaborator with a \"Write\" role to the \"Prod Settings Repository\"",
+                                "dataType": "checkbox",
+                                "formType": "checkbox",
+                                "required": false,
+                                "_expanded": false,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": true,
+                                "templateUrl": "app\/components\/form\/fields\/checkbox.html",
+                                "_nameTouched": true,
+                                "defaultValue": true,
+                                "_previousName": "asssa",
+                                "playbookField": true,
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "dev_settings_role",
+                                "type": "boolean",
+                                "label": "Development Settings Repository",
+                                "title": "Checkbox",
+                                "usable": true,
+                                "tooltip": "Add as a Collaborator with a \"Write\" role to the \"Dev Settings Repository\"",
+                                "dataType": "checkbox",
+                                "formType": "checkbox",
+                                "required": false,
+                                "_expanded": false,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": true,
+                                "templateUrl": "app\/components\/form\/fields\/checkbox.html",
+                                "_nameTouched": true,
+                                "defaultValue": true,
+                                "_previousName": "sada",
+                                "playbookField": true,
+                                "lengthConstraint": false,
+                                "allowedEncryption": false,
+                                "allowedGridColumn": true,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            }
+                        ]
+                    }
+                },
+                "record": "{{ vars.input.records[0][\"@id\"] }}",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": true,
+                "step_variables": {
+                    "collaborator_repo": "{% set repo_names = [] %}{% if vars.steps.Add_Production_Collaborator.input['prod_content_role'] %}{% set _= repo_names.append(vars.cicd_config.contentRepoName) %}{% endif %}{% if vars.steps.Add_Production_Collaborator.input['prod_settings_role'] %}{% set _= repo_names.append(vars.cicd_config.prodSettingsRepoName) %}{% endif %}{% if vars.steps.Add_Production_Collaborator.input['dev_settings_role'] %}{% set _= repo_names.append(vars.cicd_config.devSettingsRepoName) %}{% endif %}{{repo_names}}"
+                },
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Submit",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/2bc72d77-98f4-4854-b499-e69997251406"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "570",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "f9f93930-0eea-4f5c-a64e-2d3f5d2160cc"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Source Control Repository Collaborator",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.collaborator_repo}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "arguments": {
+                    "org_name": "{{vars.org_name}}",
+                    "repo_name": "{{vars.item}}",
+                    "git_username": "{{vars.source_control_username}}",
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/a7087e20-c07a-4f79-80e2-751bd693875f"
+            },
+            "status": null,
+            "top": "1515",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "4d15b681-6db0-4c21-8e87-3d079f95a0f6"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Record Type",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Development",
+                        "step_iri": "\/api\/3\/workflow_steps\/64895882-1da3-4c57-8046-28b50aadb367",
+                        "condition": "{{ vars.input.records[0].type.itemValue == \"Development\" }}",
+                        "step_name": "Add Development Collaborator"
+                    },
+                    {
+                        "option": "Production",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/f9f93930-0eea-4f5c-a64e-2d3f5d2160cc",
+                        "step_name": "Add Prod Collaborator"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "d17c4c86-f708-4dd1-b2b2-a42ea0f5be2f"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Source Control Connector Configuration",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
+            },
+            "status": null,
+            "top": "1380",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "f3dde8a0-dec3-4527-8f7a-2daf1d130806"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "cicd_env": "{{globalVars.cicd_env}}",
+                "org_name": "{{vars.cicd_config.organizationName}}",
+                "repo_name": "{{vars.cicd_config.contentRepoName}}",
+                "fsr_username": "{{vars.steps.Add_Development_Collaborator.input.fortiSOARUsername.display or vars.steps.Add_Production_Collaborator.input.fortiSOARUsername.display}}",
+                "fsr_user_uuid": "{{vars.steps.Add_Development_Collaborator.input.fortiSOARUsername.uuid or vars.steps.Add_Production_Collaborator.input.fortiSOARUsername.uuid}}",
+                "source_control_username": "{{vars.steps.Add_Development_Collaborator.input.sourceControlUsername or vars.steps.Add_Production_Collaborator.input.sourceControlUsername}}"
+            },
+            "status": null,
+            "top": "705",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "2bc72d77-98f4-4854-b499-e69997251406"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Previous Result",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "id",
+                            "value": "{{vars.input.records[0].id}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "results"
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "checkboxFields": true,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1110",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "e0e424ef-6a25-4d5c-ac6f-a6450e2a6d1e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Previous Updated Result",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "id",
+                            "value": "{{vars.input.records[0].id}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "results"
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "checkboxFields": true,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1650",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "42e5c919-53d1-49a6-8496-b19d70da8003"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Source Control Details",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_config",
+                    "body": "",
+                    "method": "GET"
+                },
+                "version": "3.2.3",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "ignore_errors": true,
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": {
+                    "cicd_config": "{{vars.result.data['hydra:member'][0].value | toDict }}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "c596c038-9b0b-4fe8-9ddb-6c5f5507701d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is Repositories Present",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/3803d70b-9b38-49d5-aa45-114bb4a13b44",
+                        "condition": "{{ vars.repo_name | length > 0 }}",
+                        "step_name": "Update Source Control Username"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/28f3f5e1-d0d5-4685-9743-a688f7c0ef71",
+                        "step_name": "Repositories Not Present"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "7ba5e0bb-2ec1-4fbb-ac3c-df764047c96d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Repositories Not Present",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Repositories are not present",
+                        "description": "Create the repositories before mapping the Source Control Username {{vars.source_control_username}} to FortiSOAR Username ",
+                        "inputVariables": []
+                    }
+                },
+                "record": "{{ vars.input.records[0][\"@id\"] }}",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": true,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Ok",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/0cd35089-1845-47c4-9f08-c30daaf40d9c"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "1785",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "28f3f5e1-d0d5-4685-9743-a688f7c0ef71"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Set Status to In Progress",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Initiating Task: Map Source Control Username to FortiSOAR user<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}"
+                },
+                "resource": {
+                    "status": "\/api\/3\/picklists\/7f0263bf-29ab-4453-aefe-41d20f0fe9c3"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "4f4f48ea-abac-4fa2-973f-fcc404229264"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "route": "f35e0c6d-64b0-4c21-a3bf-b8fe6537a86d",
+                "title": "Map Source Control Username",
+                "resources": [
+                    "change_management"
+                ],
+                "__triggerLimit": true,
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    },
+                    "logged_in_user": "{{(vars.currentUser | fromIRI).firstname}} {{(vars.currentUser | fromIRI).lastname}}"
+                },
+                "_promptexpanded": true,
+                "triggerOnSource": true,
+                "displayConditions": {
+                    "change_management": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "AND",
+                        "filters": [
+                            {
+                                "type": "primitive",
+                                "field": "title",
+                                "value": "Map Source Control Username",
+                                "operator": "eq",
+                                "_operator": "eq"
+                            },
+                            {
+                                "type": "array",
+                                "field": "type",
+                                "value": [
+                                    "\/api\/3\/picklists\/409b289f-33f5-423f-9174-24bc8628cc4a",
+                                    "\/api\/3\/picklists\/dc57442c-3d52-43a0-aa19-ed2898e30ff7"
+                                ],
+                                "module": "type",
+                                "display": "",
+                                "operator": "in",
+                                "template": "multiselectpicklist",
+                                "OPERATOR_KEY": "$",
+                                "useInOperator": true,
+                                "previousOperator": "in",
+                                "previousTemplate": "multiselectpicklist"
+                            },
+                            {
+                                "type": "object",
+                                "field": "status",
+                                "value": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                                "_value": {
+                                    "@id": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                                    "display": "Pending",
+                                    "itemValue": "Pending"
+                                },
+                                "operator": "eq"
+                            }
+                        ]
+                    }
+                },
+                "executeButtonText": "Map",
+                "noRecordExecution": false,
+                "showToasterMessage": {
+                    "visible": false,
+                    "messageVisible": true
+                },
+                "triggerOnReplicate": false,
+                "singleRecordExecution": true
+            },
+            "status": null,
+            "top": "30",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "group": null,
+            "uuid": "883f3764-8dbb-46c7-93af-5c6aa6b3a67e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Record",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p class=\"mp-tile-description muted-80\"><strong>Mapped Following FortiSOAR User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.fsr_username}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User:<\/em> {{vars.source_control_username}}<\/li>\n<\/ul>",
+                    "records": "{{vars.input.records[0]['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/05bcfc1c-3b6a-4fbb-a4de-a5b5c662366d"
+                },
+                "resource": {
+                    "results": "<p>{{vars.steps.Find_Previous_Result[0].results}}<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>Mapped Following FortiSOAR User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a rel=\"noopener\" target=\"_blank\" href=\"{{vars.request.baseUri}}\/security\/people\">{{vars.fsr_username}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User:<\/em> {{vars.source_control_username}}<\/li>\n<\/ul>"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1245",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "0d76fae3-42c2-4c0f-8315-4d6eb62ab73a"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Record With Collaberator Details",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p class=\"mp-tile-description muted-80\">{% if vars.steps.Add_Development_Collaborator.input['prod_content_role'] or vars.steps.Add_Production_Collaborator.input['prod_content_role'] %}<\/p>\n<p class=\"mp-tile-description muted-80\">Assigned write permission on \"Production Content Repository\" to <a rel=\"noopener\" target=\"_blank\" href=\"{{vars.request.baseUri}}\/security\/people\">{{vars.fsr_username}}<\/a> FortiSOAR user.<\/p>\n<p class=\"mp-tile-description muted-80\">{% endif %}<\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Add_Development_Collaborator.input['prod_settings_role'] or vars.steps.Add_Production_Collaborator.input['prod_settings_role'] %}<\/p>\n<p class=\"mp-tile-description muted-80\">Assigned write permission on \"Production Settings Repository\" to <a rel=\"noopener\" target=\"_blank\" href=\"{{vars.request.baseUri}}\/security\/people\">{{vars.fsr_username}}<\/a> FortiSOAR user.<\/p>\n<p class=\"mp-tile-description muted-80\">{% endif %}<\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Add_Development_Collaborator.input['dev_settings_role'] or vars.steps.Add_Production_Collaborator.input['dev_settings_role'] %}<\/p>\n<p class=\"mp-tile-description muted-80\">Assigned write permission on \"Development Settings Repository\" to <a rel=\"noopener\" target=\"_blank\" href=\"{{vars.request.baseUri}}\/security\/people\">{{vars.fsr_username}}<\/a> FortiSOAR user.<\/p>\n<p class=\"mp-tile-description muted-80\">{% endif %}<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/05bcfc1c-3b6a-4fbb-a4de-a5b5c662366d"
+                },
+                "resource": {
+                    "results": "<p>{{vars.steps.Find_Previous_Updated_Result[0].results}}<\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Add_Development_Collaborator.input['prod_content_role'] or vars.steps.Add_Production_Collaborator.input['prod_content_role'] %}<\/p>\n<p class=\"mp-tile-description muted-80\">Assigned write permission on \"Production Content Repository\" to <a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.fsr_username}}<\/a> FortiSOAR user.<\/p>\n<p class=\"mp-tile-description muted-80\">{% endif %}<\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Add_Development_Collaborator.input['prod_settings_role'] or vars.steps.Add_Production_Collaborator.input['prod_settings_role'] %}<\/p>\n<p class=\"mp-tile-description muted-80\">Assigned write permission on \"Production Settings Repository\" to <a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.fsr_username}}<\/a> FortiSOAR user.<\/p>\n<p class=\"mp-tile-description muted-80\">{% endif %}<\/p>\n<p class=\"mp-tile-description muted-80\">{% if vars.steps.Add_Development_Collaborator.input['dev_settings_role'] or vars.steps.Add_Production_Collaborator.input['dev_settings_role'] %}<\/p>\n<p class=\"mp-tile-description muted-80\">Assigned write permission on \"Development Settings Repository\" to <a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.fsr_username}}<\/a> FortiSOAR user.<\/p>\n<p class=\"mp-tile-description muted-80\">{% endif %}<\/p>"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1785",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "90d25b7a-d791-4046-9d25-c7e6bda63fff"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Source Control Username",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/3\/people\/{{vars.fsr_user_uuid}}",
+                    "body": "{\"sourceControlUsername\": \"{{vars.source_control_username}}\"}",
+                    "method": "PUT"
+                },
+                "version": "3.2.6",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "975",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "3803d70b-9b38-49d5-aa45-114bb4a13b44"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Status as Pending",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Completed Task: Map Source Control Username to FortiSOAR user<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/4f4f48ea-abac-4fa2-973f-fcc404229264"
+                },
+                "resource": {
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1920",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "0cd35089-1845-47c4-9f08-c30daaf40d9c"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Development Collaborator -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/2bc72d77-98f4-4854-b499-e69997251406",
+            "sourceStep": "\/api\/3\/workflow_steps\/64895882-1da3-4c57-8046-28b50aadb367",
+            "label": "Submit",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "333c78ea-1675-4c41-9a78-7fe6c2678346"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Prod Collaborator -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/2bc72d77-98f4-4854-b499-e69997251406",
+            "sourceStep": "\/api\/3\/workflow_steps\/f9f93930-0eea-4f5c-a64e-2d3f5d2160cc",
+            "label": "Submit",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "851d59c9-9712-4a99-9918-5a1c29d6e390"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Source Control Repository Collaborator -> Find Previous Updated Result",
+            "targetStep": "\/api\/3\/workflow_steps\/42e5c919-53d1-49a6-8496-b19d70da8003",
+            "sourceStep": "\/api\/3\/workflow_steps\/4d15b681-6db0-4c21-8e87-3d079f95a0f6",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a38a03be-66d8-477a-a556-f8b7840f060f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Record Type -> Add Development Collaborator",
+            "targetStep": "\/api\/3\/workflow_steps\/64895882-1da3-4c57-8046-28b50aadb367",
+            "sourceStep": "\/api\/3\/workflow_steps\/d17c4c86-f708-4dd1-b2b2-a42ea0f5be2f",
+            "label": "Development",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "35f94b7d-a672-4f8b-aa8e-2ee336b49573"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Record Type -> Copy of Add Development Collaborator",
+            "targetStep": "\/api\/3\/workflow_steps\/f9f93930-0eea-4f5c-a64e-2d3f5d2160cc",
+            "sourceStep": "\/api\/3\/workflow_steps\/d17c4c86-f708-4dd1-b2b2-a42ea0f5be2f",
+            "label": "Production",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "7b78b6be-08c5-416c-a1dc-67e3489fff2b"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Source Control Connector Configuration -> Add Source Control Repository Collaborator",
+            "targetStep": "\/api\/3\/workflow_steps\/4d15b681-6db0-4c21-8e87-3d079f95a0f6",
+            "sourceStep": "\/api\/3\/workflow_steps\/f3dde8a0-dec3-4527-8f7a-2daf1d130806",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "6911da54-b89f-4b57-9cd8-a80d02a9c9db"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Is Repositories Present",
+            "targetStep": "\/api\/3\/workflow_steps\/7ba5e0bb-2ec1-4fbb-ac3c-df764047c96d",
+            "sourceStep": "\/api\/3\/workflow_steps\/2bc72d77-98f4-4854-b499-e69997251406",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "44d8c9f4-e1dd-4cb3-9925-84ea1a682c54"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Copy of Find Previous Result -> Copy of Update Record",
+            "targetStep": "\/api\/3\/workflow_steps\/90d25b7a-d791-4046-9d25-c7e6bda63fff",
+            "sourceStep": "\/api\/3\/workflow_steps\/42e5c919-53d1-49a6-8496-b19d70da8003",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "e475a49c-41ac-487c-bdd8-4f9e378b6e7e"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Copy of Update Record -> Update Status as Pending",
+            "targetStep": "\/api\/3\/workflow_steps\/0cd35089-1845-47c4-9f08-c30daaf40d9c",
+            "sourceStep": "\/api\/3\/workflow_steps\/90d25b7a-d791-4046-9d25-c7e6bda63fff",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "6db8bc83-e4b4-4ed7-9602-a21fb5a7ee12"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Find Previous Result -> Update Record",
+            "targetStep": "\/api\/3\/workflow_steps\/0d76fae3-42c2-4c0f-8315-4d6eb62ab73a",
+            "sourceStep": "\/api\/3\/workflow_steps\/e0e424ef-6a25-4d5c-ac6f-a6450e2a6d1e",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "6f21e42c-a73b-4061-8e57-11aa4b5034ed"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Source Control Details -> Check Record Type",
+            "targetStep": "\/api\/3\/workflow_steps\/d17c4c86-f708-4dd1-b2b2-a42ea0f5be2f",
+            "sourceStep": "\/api\/3\/workflow_steps\/c596c038-9b0b-4fe8-9ddb-6c5f5507701d",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b77258b6-80e5-4ae8-95b6-cf54537b5015"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Repositories Present -> Repositories Not Present",
+            "targetStep": "\/api\/3\/workflow_steps\/28f3f5e1-d0d5-4685-9743-a688f7c0ef71",
+            "sourceStep": "\/api\/3\/workflow_steps\/7ba5e0bb-2ec1-4fbb-ac3c-df764047c96d",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a812ae27-7c4c-467b-8002-973c9eb6f608"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Repositories Present -> Update Source Control Username",
+            "targetStep": "\/api\/3\/workflow_steps\/3803d70b-9b38-49d5-aa45-114bb4a13b44",
+            "sourceStep": "\/api\/3\/workflow_steps\/7ba5e0bb-2ec1-4fbb-ac3c-df764047c96d",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "778d080a-dc41-49a3-b570-2cb258a377bd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Repositories Not Present -> Update Status as Pending",
+            "targetStep": "\/api\/3\/workflow_steps\/0cd35089-1845-47c4-9f08-c30daaf40d9c",
+            "sourceStep": "\/api\/3\/workflow_steps\/28f3f5e1-d0d5-4685-9743-a688f7c0ef71",
+            "label": "Ok",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b2d1d6fa-c5d2-45e7-9cd8-c51392de45bd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Set Status to In Progress -> Get Source Control Details",
+            "targetStep": "\/api\/3\/workflow_steps\/c596c038-9b0b-4fe8-9ddb-6c5f5507701d",
+            "sourceStep": "\/api\/3\/workflow_steps\/4f4f48ea-abac-4fa2-973f-fcc404229264",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a5067f0c-ae60-4913-a98a-be2b8828257c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Set Status to In Progress",
+            "targetStep": "\/api\/3\/workflow_steps\/4f4f48ea-abac-4fa2-973f-fcc404229264",
+            "sourceStep": "\/api\/3\/workflow_steps\/883f3764-8dbb-46c7-93af-5c6aa6b3a67e",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "fd1ebf92-1062-4493-bb67-48bff0ef70d4"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Record -> Check Source Control Connector Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/f3dde8a0-dec3-4527-8f7a-2daf1d130806",
+            "sourceStep": "\/api\/3\/workflow_steps\/0d76fae3-42c2-4c0f-8315-4d6eb62ab73a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "144417f6-1152-457a-a3d4-f8be2d8b8152"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Source Control Username -> Find Previous Result",
+            "targetStep": "\/api\/3\/workflow_steps\/e0e424ef-6a25-4d5c-ac6f-a6450e2a6d1e",
+            "sourceStep": "\/api\/3\/workflow_steps\/3803d70b-9b38-49d5-aa45-114bb4a13b44",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b6ae610c-8aa3-4e08-8319-7785588c15a1"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "uuid": "07a59630-d29a-47ca-9d97-b755025fed1e",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CICD",
+        "ManualTrigger"
+    ]
+}

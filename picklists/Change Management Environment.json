@@ -24,6 +24,16 @@
             "icon": null,
             "listName": "\/api\/3\/picklist_names\/6b216e0d-c167-4cfd-a772-97fe1be0f52d",
             "uuid": "48b9f120-34bc-4884-b886-85e82321684b"
+        },
+        {
+            "@id": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41",
+            "@type": "Picklist",
+            "itemValue": "Undefined",
+            "orderIndex": 2,
+            "color": "#bf9937",
+            "icon": null,
+            "listName": "\/api\/3\/picklist_names\/6b216e0d-c167-4cfd-a772-97fe1be0f52d",
+            "uuid": "5ec65649-9da5-4fcd-8198-48dcb548cf41"
         }
     ],
     "uuid": "6b216e0d-c167-4cfd-a772-97fe1be0f52d"

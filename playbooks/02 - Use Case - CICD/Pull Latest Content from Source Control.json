@@ -1,10 +1,10 @@
 {
     "@type": "Workflow",
     "triggerLimit": null,
-    "name": "Pull Latest Content from GitHub",
+    "name": "Pull Latest Content from Source Control",
     "aliasName": null,
     "tag": null,
-    "description": "Pull latest content from GitHub and apply it on production environment or development environment",
+    "description": "Pull latest content from Source Control repository and apply it within the FortiSOAR environment",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -13,41 +13,61 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/82d6e5e4-687e-4896-bbed-e3ec35aa0660",
+    "triggerStep": "\/api\/3\/workflow_steps\/b4747b90-3981-457f-ae61-6d587bf5129a",
     "steps": [
         {
             "@type": "WorkflowStep",
             "name": "Abort Further Setup Steps for Dev",
             "description": null,
-            "arguments": [],
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>The task of applying the latest content from the {{vars.repo_name}} repository has been aborted<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89"
+                }
+            },
             "status": null,
-            "top": "1200",
-            "left": "980",
+            "top": "1100",
+            "left": "1000",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "ae7fc75a-2fdc-41bb-97ff-dbfc88b56983"
+            "uuid": "720c2c06-94e9-4666-9cba-3e4e4e67e88f"
         },
         {
             "@type": "WorkflowStep",
             "name": "Abort Further Setup Steps for Prod",
             "description": null,
-            "arguments": [],
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>The task of applying the latest content from the {{vars.repo_name}} repository has been aborted<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89"
+                }
+            },
             "status": null,
-            "top": "1100",
-            "left": "800",
+            "top": "1160",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "acb512a9-d43a-4d40-8a48-93ac557d6f46"
+            "uuid": "c5889ca2-6cbb-439b-8e3d-0ffed3972b8f"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Apply Latest Changes",
+            "name": "Add Comment Playbook Is Active",
             "description": null,
             "arguments": {
                 "resource": {
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "people": [],
-                    "content": "<p>Applying the latest content from the {{vars.repo_name}} repository<\/p>",
+                    "content": "<h5>Warning: Playbook is Active or Awaiting State<\/h5>\n<hr>\n<p>{{vars.input.records[0].title}} operation is in Active\/Awaiting state. Please wait while the previous operation is completed.<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false,
@@ -62,11 +82,30 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1240",
-            "left": "120",
+            "top": "460",
+            "left": "1220",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "4889ad4e-352a-4e12-9095-e7b493f7266f"
+            "uuid": "a23ccc91-bd8e-434a-a9ee-61eeddc4e2cb"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Source Control Connector Configuration",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
+            },
+            "status": null,
+            "top": "140",
+            "left": "1000",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "2c1fa08e-4236-4130-a372-b3452d72ac5a"
         },
         {
             "@type": "WorkflowStep",
@@ -76,64 +115,54 @@
                 "conditions": [
                     {
                         "option": "Pending",
-                        "step_iri": "\/api\/3\/workflow_steps\/d6077c02-5b27-4d30-8b02-91177052d91f",
+                        "step_iri": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89",
                         "condition": "{{ vars.input.records[0].status.itemValue == \"Pending\" }}",
                         "step_name": "Update Status as In Progress"
                     },
                     {
                         "option": "In Progress",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/3233a030-152a-49b0-84f6-c0c24286e053",
-                        "step_name": "Playbook Is Active"
+                        "step_iri": "\/api\/3\/workflow_steps\/a23ccc91-bd8e-434a-a9ee-61eeddc4e2cb",
+                        "step_name": "Add Comment Playbook Is Active"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
-            "top": "165",
+            "top": "260",
             "left": "1000",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "8bbc239e-62c3-4e40-ba36-7983f33207b9"
+            "uuid": "845c3ed3-b29d-4af1-8d2f-f9c5e98bcfc0"
         },
         {
             "@type": "WorkflowStep",
             "name": "Clone Repository",
             "description": null,
             "arguments": {
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<p>{{vars.repo_name}} repository is cloned at the {{vars.steps.Clone_Repository.data.path}} location&nbsp;<\/p>",
-                    "records": "",
-                    "parentstepid": "\/api\/3\/workflow_steps\/8ab39c8c-8aeb-4aa1-b4aa-db172a382ba3"
-                },
                 "arguments": {
-                    "org_name": "{{vars.org_name}}",
-                    "repo_name": "{{vars.repo_name}}",
-                    "repo_type": "Organization",
-                    "branch_name": "{{vars.base_branch_name}}",
-                    "clone_as_zip": "true"
+                    "clone_repo_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"branch_name\": \"{{vars.base_branch_name}}\",\n\"clone_as_zip\": true,\n\"repo_type\": \"Organization\"\n}",
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/9ff46b00-868f-4b67-9a3d-9dca5d636803"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CloneRepository\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1360",
+            "top": "1220",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "22a8532b-b8cc-4fce-b292-03dc47127231"
+            "uuid": "d2a8a56c-dee8-44c3-8d20-e3a84533b1c8"
         },
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "cicd_env": "{{globalVars.cicd_env}}",
                 "org_name": "{{vars.cicd_config.organizationName}}",
                 "base_branch_name": "{{vars.cicd_config.baseBranch}}"
             },
@@ -142,7 +171,7 @@
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "37d57671-f503-49ba-929f-3462ef9f6c2f"
+            "uuid": "52a82349-5018-4ba9-95e6-dc8a86c71fe0"
         },
         {
             "@type": "WorkflowStep",
@@ -152,16 +181,18 @@
                 "type": "InputBased",
                 "input": {
                     "schema": {
-                        "title": "Warning",
-                        "description": "This task will apply the latest content from the {{vars.repo_name}} repository and may require publishing in case of edits to the module schema. The server will be unavailable for all users during the publishing process.",
+                        "title": "Confirmation",
+                        "description": "This task will apply the latest content from the {{vars.repo_name}} repository and may require publishing in case of edits to the module schema. The server will be unavailable for all users during the publishing process. Do you want to continue?",
                         "inputVariables": []
                     }
                 },
                 "record": "{{ vars.input.records[0][\"@id\"] }}",
                 "agent_id": null,
                 "resources": "change_management",
+                "is_approval": false,
                 "owner_detail": {
-                    "isAssigned": false
+                    "isAssigned": false,
+                    "emailRecipients": ""
                 },
                 "isRecordLinked": true,
                 "step_variables": [],
@@ -170,103 +201,93 @@
                         {
                             "option": "Yes",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/4889ad4e-352a-4e12-9095-e7b493f7266f"
+                            "step_iri": "\/api\/3\/workflow_steps\/d2a8a56c-dee8-44c3-8d20-e3a84533b1c8"
                         },
                         {
                             "option": "No",
-                            "step_iri": "\/api\/3\/workflow_steps\/f572b130-3ba2-4b86-b88c-26aafbbf84d2"
+                            "step_iri": "\/api\/3\/workflow_steps\/3fb0fbb3-cb7f-4847-b498-bfcea32e59db"
                         }
                     ],
-                    "duplicateOption": false
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
                 },
                 "email_notification": {
                     "enabled": false,
                     "smtpParameters": []
                 },
+                "customEmailExternal": false,
                 "inline_channel_list": [],
                 "external_channel_list": [],
-                "unauthenticated_input": false
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
             },
             "status": null,
             "top": "1110",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
-            "uuid": "7d0d744c-3657-4daa-9d8a-26e9cd5d35a4"
+            "uuid": "2360e578-052b-4f1a-9b3b-d9ccc0999936"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Create Import Job",
+            "name": "Create Comment",
             "description": null,
             "arguments": {
-                "params": {
-                    "iri": "\/api\/3\/import_jobs",
-                    "body": "{\n  \"status\": \"Draft\",\n  \"file\": {\n    \"@context\": \"{{vars.steps.Get_Clone_Repo_Zip_File.data['@context']}}\",\n    \"@id\": \"{{vars.steps.Get_Clone_Repo_Zip_File.data['@id']}}\",\n    \"@type\": \"File\",\n    \"uuid\": \"{{vars.steps.Get_Clone_Repo_Zip_File.data.uuid}}\",\n    \"assignee\": \"\",\n    \"id\": \"{{vars.steps.Get_Clone_Repo_Zip_File.data.uuid}}\",\n    \"filename\": \"{{vars.steps.Get_Clone_Repo_Zip_File.data.filename}}\",\n    \"mimeType\": \"application\/zip\"\n  }\n}",
-                    "method": "POST"
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "people": [],
+                    "content": "<p>Completed Task: Apply Latest Content<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false,
+                    "changeManagement": "{{vars.input.records[0]['@id']}}"
                 },
-                "version": "3.2.2",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1660",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "58f0f861-8cd6-4808-809b-16c977254c7a"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Clone Repo Zip File",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "filename": "{{vars.steps.Clone_Repository.data.path.split('\/')[-1]}}",
-                    "file_path": "{{vars.steps.Clone_Repository.data.path}}",
-                    "create_attachment": false
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
                 },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "upload_file_to_cyops",
-                "operationTitle": "File: Upload a file in the system and Create an Attachment",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1520",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "61839303-71b8-4d41-b0bc-d13aac96c92d"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Import Job",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/3\/import_jobs\/{{vars.steps.Create_Import_Job.data.uuid}}?__selectFields=errorMessage,status,progressPercent,file,currentlyImporting,options",
-                    "body": "",
-                    "method": "GET"
-                },
-                "version": "3.2.2",
-                "do_until": {
-                    "delay": 5,
-                    "retries": 5,
-                    "condition": "{{vars.result.data.status == \"Reviewing\"}}"
-                },
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
                 "step_variables": []
             },
             "status": null,
             "top": "1940",
             "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "892ced53-f38a-4707-95a6-d05e92ad4890"
+            "uuid": "f183e6b1-7bc4-4fa1-bbe5-c78d383d64b0"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Apply Latest Changes Record",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Apply Latest Content",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1340",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "b0caaefc-675c-41d8-b924-7c18f923dc3c"
         },
         {
             "@type": "WorkflowStep",
@@ -288,11 +309,11 @@
                 }
             },
             "status": null,
-            "top": "440",
+            "top": "480",
             "left": "820",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "14051544-1748-48d8-a66a-eb8f54f2357d"
+            "uuid": "97bbbdf3-3802-4078-aeaa-229c9e3c75ab"
         },
         {
             "@type": "WorkflowStep",
@@ -302,56 +323,49 @@
                 "conditions": [
                     {
                         "option": "Failed",
-                        "step_iri": "\/api\/3\/workflow_steps\/09b9ee23-5fe7-4896-ab22-79e367784b46",
+                        "step_iri": "\/api\/3\/workflow_steps\/43dbcd99-cb8e-47a8-84b0-7373c64230b8",
                         "condition": "{{ vars.steps.Get_Source_Control_Details.status==\"failed\" or vars.steps.Get_Source_Control_Details.data['hydra:member'] | length == 0 }}",
-                        "step_name": "Source Control is not Config"
+                        "step_name": "Source Control is not Configured"
                     },
                     {
                         "option": "Success",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/11e1cfb8-377e-40fc-b2a0-553d6d647bf6",
+                        "step_iri": "\/api\/3\/workflow_steps\/94153c82-1139-4ca1-9f22-7933dc708cfc",
                         "step_name": "Is Prod or Dev Env"
                     }
-                ]
-            },
-            "status": null,
-            "top": "580",
-            "left": "820",
-            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
-            "group": null,
-            "uuid": "dec44222-a71e-41d5-abd8-d1e16f7ce903"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Import Zip File",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/import\/{{vars.steps.Create_Import_Job.data.uuid}}",
-                    "body": "",
-                    "method": "PUT"
-                },
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<p><strong>System Publish Underway. Please Wait...<\/strong><\/p>\n<p>Applying the latest content from the {{vars.repo_name}} repository and may require publishing in case of edits to the module schema. The server will be unavailable for all users during the publishing process.<\/p>",
-                    "records": "",
-                    "parentstepid": "\/api\/3\/workflow_steps\/a5c3262e-440b-4950-82bc-ad5f39e9bb93"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
+                ],
                 "step_variables": []
             },
             "status": null,
-            "top": "2300",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "top": "600",
+            "left": "820",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "55f479c9-c142-4dab-975a-6f693385bd58"
+            "uuid": "7196870f-c012-4ec4-a913-0f7ed5db3a50"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Import FortiSOAR Template",
+            "description": null,
+            "arguments": {
+                "name": "CICD Utils",
+                "params": {
+                    "filename": "{{vars.steps.Clone_Repository.data.path.split('\/')[-1]}}",
+                    "file_path": "{{vars.steps.Clone_Repository.data.path}}"
+                },
+                "version": "1.1.0",
+                "connector": "cicd-utils",
+                "operation": "import_fortisoar_template",
+                "operationTitle": "Import FortiSOAR Template",
+                "pickFromTenant": false,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1580",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
+            "group": null,
+            "uuid": "4b66de3f-03f2-4cfa-bfbc-00453548e2a4"
         },
         {
             "@type": "WorkflowStep",
@@ -361,14 +375,14 @@
                 "conditions": [
                     {
                         "option": "Prod",
-                        "step_iri": "\/api\/3\/workflow_steps\/8946e9c5-c451-4d1e-8d62-45bc700ba81a",
+                        "step_iri": "\/api\/3\/workflow_steps\/e9297606-11c0-4951-9844-a07b16ef20a1",
                         "condition": "{{ vars.input.records[0].environment.itemValue == \"Production\" }}",
                         "step_name": "Select Input For Prod Env"
                     },
                     {
                         "option": "Dev",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/4df43ab6-f402-489f-a167-46b83ca05539",
+                        "step_iri": "\/api\/3\/workflow_steps\/cdebd176-5fcd-4475-9b77-67ad0e3ddf5f",
                         "step_name": "Select Input For Dev Env"
                     }
                 ]
@@ -378,52 +392,7 @@
             "left": "650",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "11e1cfb8-377e-40fc-b2a0-553d6d647bf6"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Modify Playbook Merge Option",
-            "description": null,
-            "arguments": {
-                "import_job_payload": "{% set playbook = {} %}{% set playbooks = [] %}{% for item in vars.steps.Get_Import_Job.data.options.playbooks[\"values\"].collections[\"values\"] %}{% if item.mergeType == \"merge_append\" %}{% set _= item.update({\"mergeType\": \"merge_replace\"}) %}{% set _ = playbooks.append(item) %}{% endif %}{% endfor %}{% set _ = vars.steps.Get_Import_Job.data.options.playbooks[\"values\"].collections.update({\"values\": playbooks}) %}{{vars.steps.Get_Import_Job.data}}"
-            },
-            "status": null,
-            "top": "2060",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "5f1ce1f6-e8c3-4426-80d4-cdd01bb497fb"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "No Operation",
-            "description": null,
-            "arguments": {
-                "params": [],
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "no_op",
-                "operationTitle": "Utils: No Operation",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "435",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "40372b9c-21d6-499a-81b5-4f87082f4399"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "No Source Control",
-            "description": null,
-            "arguments": [],
-            "status": null,
-            "top": "1380",
-            "left": "1200",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "84efc4dc-a854-4afc-bc39-b1efdc06d27d"
+            "uuid": "94153c82-1139-4ca1-9f22-7933dc708cfc"
         },
         {
             "@type": "WorkflowStep",
@@ -432,56 +401,10 @@
             "arguments": [],
             "status": null,
             "top": "1380",
-            "left": "480",
+            "left": "460",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "60d31122-69d2-446a-97e8-342385f1c58a"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Playbook Is Active",
-            "description": null,
-            "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "Warning: Playbook is Active or Awaiting State",
-                        "description": "{{vars.input.records[0].title}} operation is in Active\/Awaiting state.\nPlease wait while the previous operation is completed.",
-                        "inputVariables": []
-                    }
-                },
-                "record": "",
-                "agent_id": null,
-                "resources": "change_management",
-                "owner_detail": {
-                    "isAssigned": false
-                },
-                "isRecordLinked": false,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "Ok",
-                            "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/40372b9c-21d6-499a-81b5-4f87082f4399"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                },
-                "inline_channel_list": [],
-                "external_channel_list": [],
-                "unauthenticated_input": false
-            },
-            "status": null,
-            "top": "300",
-            "left": "1175",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
-            "group": null,
-            "uuid": "3233a030-152a-49b0-84f6-c0c24286e053"
+            "uuid": "697bee6f-0ae5-4909-b131-13ff078007f5"
         },
         {
             "@type": "WorkflowStep",
@@ -492,7 +415,7 @@
                 "input": {
                     "schema": {
                         "title": "Apply Latest Content",
-                        "description": "Select the repository you want to apply the changes from.",
+                        "description": "Select the repository you want to apply the changes from",
                         "inputVariables": [
                             {
                                 "name": "selectRepositoryType",
@@ -518,6 +441,7 @@
                                 "playbookField": true,
                                 "lengthConstraint": true,
                                 "allowedGridColumn": false,
+                                "jinjaExpressionView": true,
                                 "useRecordFieldDefault": false
                             }
                         ]
@@ -526,8 +450,10 @@
                 "record": "{{ vars.input.records[0][\"@id\"] }}",
                 "agent_id": null,
                 "resources": "change_management",
+                "is_approval": false,
                 "owner_detail": {
-                    "isAssigned": false
+                    "isAssigned": false,
+                    "emailRecipients": ""
                 },
                 "isRecordLinked": true,
                 "step_variables": {
@@ -538,29 +464,35 @@
                         {
                             "option": "Submit",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/37d57671-f503-49ba-929f-3462ef9f6c2f"
+                            "step_iri": "\/api\/3\/workflow_steps\/52a82349-5018-4ba9-95e6-dc8a86c71fe0"
                         },
                         {
                             "option": "Abort",
-                            "step_iri": "\/api\/3\/workflow_steps\/ae7fc75a-2fdc-41bb-97ff-dbfc88b56983"
+                            "step_iri": "\/api\/3\/workflow_steps\/720c2c06-94e9-4666-9cba-3e4e4e67e88f"
                         }
                     ],
-                    "duplicateOption": false
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
                 },
                 "email_notification": {
                     "enabled": false,
                     "smtpParameters": []
                 },
+                "customEmailExternal": false,
                 "inline_channel_list": [],
                 "external_channel_list": [],
-                "unauthenticated_input": false
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
             },
             "status": null,
             "top": "960",
-            "left": "800",
+            "left": "840",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
-            "uuid": "4df43ab6-f402-489f-a167-46b83ca05539"
+            "uuid": "cdebd176-5fcd-4475-9b77-67ad0e3ddf5f"
         },
         {
             "@type": "WorkflowStep",
@@ -571,7 +503,7 @@
                 "input": {
                     "schema": {
                         "title": "Apply Latest Content",
-                        "description": "Select the repository you want to apply the changes from.",
+                        "description": "Select the repository you want to apply the changes from",
                         "inputVariables": [
                             {
                                 "name": "selectRepositoryType",
@@ -597,6 +529,7 @@
                                 "playbookField": true,
                                 "lengthConstraint": true,
                                 "allowedGridColumn": false,
+                                "jinjaExpressionView": true,
                                 "useRecordFieldDefault": false
                             }
                         ]
@@ -605,8 +538,10 @@
                 "record": "{{ vars.input.records[0][\"@id\"] }}",
                 "agent_id": null,
                 "resources": "change_management",
+                "is_approval": false,
                 "owner_detail": {
-                    "isAssigned": false
+                    "isAssigned": false,
+                    "emailRecipients": ""
                 },
                 "isRecordLinked": true,
                 "step_variables": {
@@ -617,82 +552,71 @@
                         {
                             "option": "Submit",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/37d57671-f503-49ba-929f-3462ef9f6c2f"
+                            "step_iri": "\/api\/3\/workflow_steps\/52a82349-5018-4ba9-95e6-dc8a86c71fe0"
                         },
                         {
                             "option": "Abort",
-                            "step_iri": "\/api\/3\/workflow_steps\/acb512a9-d43a-4d40-8a48-93ac557d6f46"
+                            "step_iri": "\/api\/3\/workflow_steps\/c5889ca2-6cbb-439b-8e3d-0ffed3972b8f"
                         }
                     ],
-                    "duplicateOption": false
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
                 },
                 "email_notification": {
                     "enabled": false,
                     "smtpParameters": []
                 },
+                "customEmailExternal": false,
                 "inline_channel_list": [],
                 "external_channel_list": [],
-                "unauthenticated_input": false
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
             },
             "status": null,
             "top": "840",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
-            "uuid": "8946e9c5-c451-4d1e-8d62-45bc700ba81a"
+            "uuid": "e9297606-11c0-4951-9844-a07b16ef20a1"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Source Control is not Config",
+            "name": "Source Control is not Configured",
             "description": null,
             "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "Failed: Source Control Is Not Configured",
-                        "description": "Source Control for the task \"{{vars.input.records[0].title}}\" Is Not Configured",
-                        "inputVariables": []
-                    }
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "people": [],
+                    "content": "<h5>Failed: Source Control Is Not Configured<\/h5>\n<hr>\n<p>Source Control for the task \"{{vars.input.records[0].title}}\" Is Not Configured<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false,
+                    "changeManagement": "{{vars.input.records[0]['@id']}}"
                 },
-                "record": "{{ vars.input.records[0][\"@id\"] }}",
-                "agent_id": null,
-                "resources": "change_management",
-                "owner_detail": {
-                    "isAssigned": false
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
                 },
-                "isRecordLinked": true,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "Ok",
-                            "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/84efc4dc-a854-4afc-bc39-b1efdc06d27d"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                },
-                "inline_channel_list": [],
-                "external_channel_list": [],
-                "unauthenticated_input": false
+                "step_variables": []
             },
             "status": null,
-            "top": "700",
-            "left": "980",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "top": "720",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "09b9ee23-5fe7-4896-ab22-79e367784b46"
+            "uuid": "43dbcd99-cb8e-47a8-84b0-7373c64230b8"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "5f741ea3-fa33-443e-8677-1d5ebf395b80",
+                "route": "04cd4840-8fe2-419d-9726-dcb19215bce5",
                 "title": "Apply Latest Content",
                 "resources": [
                     "change_management"
@@ -721,8 +645,8 @@
                                 "type": "array",
                                 "field": "type",
                                 "value": [
-                                    "\/api\/3\/picklists\/409b289f-33f5-423f-9174-24bc8628cc4a",
-                                    "\/api\/3\/picklists\/dc57442c-3d52-43a0-aa19-ed2898e30ff7"
+                                    "409b289f-33f5-423f-9174-24bc8628cc4a",
+                                    "dc57442c-3d52-43a0-aa19-ed2898e30ff7"
                                 ],
                                 "module": "type",
                                 "display": "",
@@ -749,6 +673,10 @@
                 },
                 "executeButtonText": "Execute",
                 "noRecordExecution": false,
+                "showToasterMessage": {
+                    "visible": false,
+                    "messageVisible": true
+                },
                 "singleRecordExecution": true
             },
             "status": null,
@@ -756,39 +684,7 @@
             "left": "1000",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "82d6e5e4-687e-4896-bbed-e3ec35aa0660"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Start Import Job Option Generation",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/import\/{{vars.steps.Create_Import_Job.data.uuid}}",
-                    "body": "",
-                    "method": "GET"
-                },
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<div>\n<div>Initiating the import activity from {{vars.repo_name}} repository<\/div>\n<\/div>",
-                    "records": "",
-                    "parentstepid": "\/api\/3\/workflow_steps\/c0b41243-68bd-498d-8ffc-f9c6bd571694"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1800",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "18642cd2-7685-4de9-b0c9-abe3441f1ba8"
+            "uuid": "b4747b90-3981-457f-ae61-6d587bf5129a"
         },
         {
             "@type": "WorkflowStep",
@@ -798,7 +694,7 @@
                 "resource": {
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "people": [],
-                    "content": "<p>Terminated applying the latest content from the {{vars.repo_name}} repository task<\/p>",
+                    "content": "<p>The task of applying the latest content from the {{vars.repo_name}} repository has been aborted<\/p>",
                     "__replace": "",
                     "isImportant": false,
                     "peopleUpdated": false,
@@ -814,37 +710,14 @@
             },
             "status": null,
             "top": "1260",
-            "left": "480",
+            "left": "460",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "f572b130-3ba2-4b86-b88c-26aafbbf84d2"
+            "uuid": "3fb0fbb3-cb7f-4847-b498-bfcea32e59db"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Update Import Job",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/3\/import_jobs\/{{vars.steps.Create_Import_Job.data.uuid}}",
-                    "body": "{{vars.import_job_payload}}",
-                    "method": "PUT"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "2180",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "6972514d-e94f-4d24-b947-78b5588f963d"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Update Status",
+            "name": "Update Deployed Date",
             "description": null,
             "arguments": {
                 "message": {
@@ -852,35 +725,75 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "tenant": "",
                     "thread": false,
-                    "content": "<p>Latest content is applied successfully from the {{vars.repo_name}} repository.<\/p>",
-                    "records": "",
+                    "content": "<p>Applying the latest content from the {{vars.repo_name}} repository<\/p>",
+                    "records": "{{vars.steps.Find_Apply_Latest_Changes_Record | json_query(\"[*][\\\"@id\\\"][]\")}}",
                     "parentstepid": "\/api\/3\/workflow_steps\/a5c3262e-440b-4950-82bc-ad5f39e9bb93"
                 },
+                "for_each": {
+                    "item": "{{vars.steps.Find_Apply_Latest_Changes_Record}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
                 "resource": {
-                    "issues": "No new issues since the last applied change.",
-                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
                     "lastBuildDeployedOn": "{%if vars.repo_name == vars.cicd_config.content.split('\/')[-1] %}{{arrow.utcnow().int_timestamp}}{%else%}{{vars.input.records[0].lastBuildDeployedOn}}{%endif%}"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.item['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1820",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "e343e5e7-c917-4e1a-bd82-53a3d2859c50"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Status",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
                 },
                 "_showJson": false,
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
                 "__recommend": [],
                 "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
-            "top": "2580",
+            "top": "1460",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "4e6a1d69-4d34-4b23-b9ea-ff769361ef9f"
+            "uuid": "edbc6631-e44d-4bb6-a07d-d057aa5d0834"
         },
         {
             "@type": "WorkflowStep",
             "name": "Update Status as In Progress",
             "description": null,
             "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Initiating Task: Apply Latest Content<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}"
+                },
                 "resource": {
                     "status": "\/api\/3\/picklists\/7f0263bf-29ab-4453-aefe-41d20f0fe9c3"
                 },
@@ -888,15 +801,17 @@
                 "collection": "{{vars.input.records[0]['@id']}}",
                 "__recommend": [],
                 "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
-            "top": "300",
+            "top": "360",
             "left": "820",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "d6077c02-5b27-4d30-8b02-91177052d91f"
+            "uuid": "3fed066c-a883-49a8-81bc-8be588136f89"
         },
         {
             "@type": "WorkflowStep",
@@ -910,15 +825,17 @@
                 "collection": "{{vars.input.records[0]['@id']}}",
                 "__recommend": [],
                 "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
-            "top": "1380",
-            "left": "820",
+            "top": "1360",
+            "left": "1300",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "29a77e9d-ca7c-4be7-a010-ff6a8fae62c5"
+            "uuid": "9ddd19a2-5a0f-4186-a7d5-81f0462795d5"
         },
         {
             "@type": "WorkflowStep",
@@ -946,343 +863,293 @@
                 }
             },
             "status": null,
-            "top": "2440",
+            "top": "1700",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/6832e556-b9c7-497a-babe-feda3bd27dbf",
             "group": null,
-            "uuid": "219d653f-c562-4598-99d8-ddcaeabc4b27"
+            "uuid": "2f0328bd-2b74-427e-b2e8-099ab6f4edbf"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
             "name": "Abort Dev Env -> Update Status to Pending",
-            "targetStep": "\/api\/3\/workflow_steps\/29a77e9d-ca7c-4be7-a010-ff6a8fae62c5",
-            "sourceStep": "\/api\/3\/workflow_steps\/ae7fc75a-2fdc-41bb-97ff-dbfc88b56983",
+            "targetStep": "\/api\/3\/workflow_steps\/9ddd19a2-5a0f-4186-a7d5-81f0462795d5",
+            "sourceStep": "\/api\/3\/workflow_steps\/720c2c06-94e9-4666-9cba-3e4e4e67e88f",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "cd425c8b-1f65-4e8e-9e6b-862214d64ca6"
+            "uuid": "7ba2ed1b-6435-4c16-9b3d-46801ecb2719"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Abort Prod Env -> Update Status to Pending",
-            "targetStep": "\/api\/3\/workflow_steps\/29a77e9d-ca7c-4be7-a010-ff6a8fae62c5",
-            "sourceStep": "\/api\/3\/workflow_steps\/acb512a9-d43a-4d40-8a48-93ac557d6f46",
+            "targetStep": "\/api\/3\/workflow_steps\/9ddd19a2-5a0f-4186-a7d5-81f0462795d5",
+            "sourceStep": "\/api\/3\/workflow_steps\/c5889ca2-6cbb-439b-8e3d-0ffed3972b8f",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e0815174-d7c7-4a39-898e-27093af1d5ad"
+            "uuid": "82cb2958-7b23-49ff-bcbd-66398bf59e03"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Apply Latest Changes -> Clone Repository",
-            "targetStep": "\/api\/3\/workflow_steps\/22a8532b-b8cc-4fce-b292-03dc47127231",
-            "sourceStep": "\/api\/3\/workflow_steps\/4889ad4e-352a-4e12-9095-e7b493f7266f",
+            "name": "C -> Check Status",
+            "targetStep": "\/api\/3\/workflow_steps\/845c3ed3-b29d-4af1-8d2f-f9c5e98bcfc0",
+            "sourceStep": "\/api\/3\/workflow_steps\/2c1fa08e-4236-4130-a372-b3452d72ac5a",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "efa5d05c-0487-4473-8310-6e2dbdadce81"
+            "uuid": "f02dd351-2c3a-496a-a907-848e97280baf"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Check Status -> Playbook Is Active",
-            "targetStep": "\/api\/3\/workflow_steps\/3233a030-152a-49b0-84f6-c0c24286e053",
-            "sourceStep": "\/api\/3\/workflow_steps\/8bbc239e-62c3-4e40-ba36-7983f33207b9",
+            "name": "Check Status -> Add Comment Playbook Is Active",
+            "targetStep": "\/api\/3\/workflow_steps\/a23ccc91-bd8e-434a-a9ee-61eeddc4e2cb",
+            "sourceStep": "\/api\/3\/workflow_steps\/845c3ed3-b29d-4af1-8d2f-f9c5e98bcfc0",
             "label": "In Progress",
             "isExecuted": false,
             "group": null,
-            "uuid": "753c5496-0c17-4e91-a60a-ea742fc6d9fd"
+            "uuid": "49c009fe-0c6b-4e47-ac2c-99cf34b5e912"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Check Status -> Update Status as In Progress",
-            "targetStep": "\/api\/3\/workflow_steps\/d6077c02-5b27-4d30-8b02-91177052d91f",
-            "sourceStep": "\/api\/3\/workflow_steps\/8bbc239e-62c3-4e40-ba36-7983f33207b9",
+            "targetStep": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89",
+            "sourceStep": "\/api\/3\/workflow_steps\/845c3ed3-b29d-4af1-8d2f-f9c5e98bcfc0",
             "label": "Pending",
             "isExecuted": false,
             "group": null,
-            "uuid": "fd671f76-3f82-46ab-934c-edb7f52345e7"
+            "uuid": "e3e63583-f4ef-4957-a33c-c6c5d330e3f8"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Clone Repository -> Get Clone Repo Zip File",
-            "targetStep": "\/api\/3\/workflow_steps\/61839303-71b8-4d41-b0bc-d13aac96c92d",
-            "sourceStep": "\/api\/3\/workflow_steps\/22a8532b-b8cc-4fce-b292-03dc47127231",
+            "name": "Clone Repository -> Find Apply Latest Changes Record",
+            "targetStep": "\/api\/3\/workflow_steps\/b0caaefc-675c-41d8-b924-7c18f923dc3c",
+            "sourceStep": "\/api\/3\/workflow_steps\/d2a8a56c-dee8-44c3-8d20-e3a84533b1c8",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "1694e75b-d402-4dd6-bec6-1bd21a986f09"
+            "uuid": "fd5d24ee-49b2-4e5d-b645-7d688942b171"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Configuration -> Get User Conformation",
-            "targetStep": "\/api\/3\/workflow_steps\/7d0d744c-3657-4daa-9d8a-26e9cd5d35a4",
-            "sourceStep": "\/api\/3\/workflow_steps\/37d57671-f503-49ba-929f-3462ef9f6c2f",
+            "targetStep": "\/api\/3\/workflow_steps\/2360e578-052b-4f1a-9b3b-d9ccc0999936",
+            "sourceStep": "\/api\/3\/workflow_steps\/52a82349-5018-4ba9-95e6-dc8a86c71fe0",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "b98fec07-121b-4e87-ae98-65b70cf07236"
+            "uuid": "639aa29e-3363-4ee7-8477-dabbd6224d37"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Copy of Get Import Job -> Get Import Job",
-            "targetStep": "\/api\/3\/workflow_steps\/892ced53-f38a-4707-95a6-d05e92ad4890",
-            "sourceStep": "\/api\/3\/workflow_steps\/18642cd2-7685-4de9-b0c9-abe3441f1ba8",
-            "label": null,
+            "name": "Confirm Apply Latest Changes -> Clone Repository",
+            "targetStep": "\/api\/3\/workflow_steps\/d2a8a56c-dee8-44c3-8d20-e3a84533b1c8",
+            "sourceStep": "\/api\/3\/workflow_steps\/2360e578-052b-4f1a-9b3b-d9ccc0999936",
+            "label": "Yes",
             "isExecuted": false,
             "group": null,
-            "uuid": "532831ab-dd2c-40f2-bcd8-09079342dcbc"
+            "uuid": "0dd2b802-9933-469f-9931-2851baa2d593"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Create Import Job -> Copy of Get Import Job",
-            "targetStep": "\/api\/3\/workflow_steps\/18642cd2-7685-4de9-b0c9-abe3441f1ba8",
-            "sourceStep": "\/api\/3\/workflow_steps\/58f0f861-8cd6-4808-809b-16c977254c7a",
+            "name": "Copy of Update Status -> Import FortiSOAR Template",
+            "targetStep": "\/api\/3\/workflow_steps\/4b66de3f-03f2-4cfa-bfbc-00453548e2a4",
+            "sourceStep": "\/api\/3\/workflow_steps\/edbc6631-e44d-4bb6-a07d-d057aa5d0834",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "ddc96055-8485-492b-b336-774770b2d154"
+            "uuid": "98283a77-5f1a-4180-82e2-71d6e4c83524"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Dummy Step1 -> Update Status to Pending",
-            "targetStep": "\/api\/3\/workflow_steps\/29a77e9d-ca7c-4be7-a010-ff6a8fae62c5",
-            "sourceStep": "\/api\/3\/workflow_steps\/60d31122-69d2-446a-97e8-342385f1c58a",
+            "targetStep": "\/api\/3\/workflow_steps\/9ddd19a2-5a0f-4186-a7d5-81f0462795d5",
+            "sourceStep": "\/api\/3\/workflow_steps\/697bee6f-0ae5-4909-b131-13ff078007f5",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "72789e2a-a273-4baf-9646-dc8e1ae54aac"
+            "uuid": "69c74687-6f8f-4b15-b322-cac831f680c5"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Clone Repo Zip File -> Import Zip File Job",
-            "targetStep": "\/api\/3\/workflow_steps\/58f0f861-8cd6-4808-809b-16c977254c7a",
-            "sourceStep": "\/api\/3\/workflow_steps\/61839303-71b8-4d41-b0bc-d13aac96c92d",
+            "name": "Find Apply Latest Changes Record -> Copy of Update Status",
+            "targetStep": "\/api\/3\/workflow_steps\/edbc6631-e44d-4bb6-a07d-d057aa5d0834",
+            "sourceStep": "\/api\/3\/workflow_steps\/b0caaefc-675c-41d8-b924-7c18f923dc3c",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "f7fa6259-62a9-4e44-a1d4-210dc087fba9"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Import Job -> Modify Playbook Merge Option",
-            "targetStep": "\/api\/3\/workflow_steps\/5f1ce1f6-e8c3-4426-80d4-cdd01bb497fb",
-            "sourceStep": "\/api\/3\/workflow_steps\/892ced53-f38a-4707-95a6-d05e92ad4890",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "cb2e7b4f-8f99-4f14-b634-360043cf3db6"
+            "uuid": "32d8462c-e069-42b7-b3d3-92029d74d1fa"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Get Source Control Details -> Has Source Control Configure",
-            "targetStep": "\/api\/3\/workflow_steps\/dec44222-a71e-41d5-abd8-d1e16f7ce903",
-            "sourceStep": "\/api\/3\/workflow_steps\/14051544-1748-48d8-a66a-eb8f54f2357d",
+            "targetStep": "\/api\/3\/workflow_steps\/7196870f-c012-4ec4-a913-0f7ed5db3a50",
+            "sourceStep": "\/api\/3\/workflow_steps\/97bbbdf3-3802-4078-aeaa-229c9e3c75ab",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "b828fd47-e1ad-4417-a6f5-2ce38e7d9f33"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get User Confirmation -> Apply Latest Changes",
-            "targetStep": "\/api\/3\/workflow_steps\/4889ad4e-352a-4e12-9095-e7b493f7266f",
-            "sourceStep": "\/api\/3\/workflow_steps\/7d0d744c-3657-4daa-9d8a-26e9cd5d35a4",
-            "label": "Yes",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "1ae7285d-89df-48aa-902d-e67fabd77800"
+            "uuid": "9d0bc9fe-8d8d-4ca8-ad6a-78406d67f25e"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Get User Confirmation -> Terminate Apply Latest Changes",
-            "targetStep": "\/api\/3\/workflow_steps\/f572b130-3ba2-4b86-b88c-26aafbbf84d2",
-            "sourceStep": "\/api\/3\/workflow_steps\/7d0d744c-3657-4daa-9d8a-26e9cd5d35a4",
+            "targetStep": "\/api\/3\/workflow_steps\/3fb0fbb3-cb7f-4847-b498-bfcea32e59db",
+            "sourceStep": "\/api\/3\/workflow_steps\/2360e578-052b-4f1a-9b3b-d9ccc0999936",
             "label": "No",
             "isExecuted": false,
             "group": null,
-            "uuid": "14a30df5-931d-4c3c-b2b6-1bf000e9b74c"
+            "uuid": "29f8a3cd-689d-4ce2-a0e0-977fd4575f77"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Has Source Control Configure -> Is Prod or Dev Env",
-            "targetStep": "\/api\/3\/workflow_steps\/11e1cfb8-377e-40fc-b2a0-553d6d647bf6",
-            "sourceStep": "\/api\/3\/workflow_steps\/dec44222-a71e-41d5-abd8-d1e16f7ce903",
+            "targetStep": "\/api\/3\/workflow_steps\/94153c82-1139-4ca1-9f22-7933dc708cfc",
+            "sourceStep": "\/api\/3\/workflow_steps\/7196870f-c012-4ec4-a913-0f7ed5db3a50",
             "label": "Success",
             "isExecuted": false,
             "group": null,
-            "uuid": "2db95e2a-197c-4c6b-bc32-3e5fe34e0545"
+            "uuid": "282cac1c-9fb0-4024-9b07-be963d33162c"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Has Source Control Configure -> Source Control is not Config",
-            "targetStep": "\/api\/3\/workflow_steps\/09b9ee23-5fe7-4896-ab22-79e367784b46",
-            "sourceStep": "\/api\/3\/workflow_steps\/dec44222-a71e-41d5-abd8-d1e16f7ce903",
+            "name": "Has Source Control Configure -> Source Control is not Configured",
+            "targetStep": "\/api\/3\/workflow_steps\/43dbcd99-cb8e-47a8-84b0-7373c64230b8",
+            "sourceStep": "\/api\/3\/workflow_steps\/7196870f-c012-4ec4-a913-0f7ed5db3a50",
             "label": "Failed",
             "isExecuted": false,
             "group": null,
-            "uuid": "ed2161ed-16c1-4811-8d3e-8d9b5436b6a0"
+            "uuid": "be9af9f2-648d-4aff-a708-3279d6d9626d"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Import Zip File -> Wait",
-            "targetStep": "\/api\/3\/workflow_steps\/219d653f-c562-4598-99d8-ddcaeabc4b27",
-            "sourceStep": "\/api\/3\/workflow_steps\/55f479c9-c142-4dab-975a-6f693385bd58",
+            "name": "Import FortiSOAR Template -> Wait for Publish",
+            "targetStep": "\/api\/3\/workflow_steps\/2f0328bd-2b74-427e-b2e8-099ab6f4edbf",
+            "sourceStep": "\/api\/3\/workflow_steps\/4b66de3f-03f2-4cfa-bfbc-00453548e2a4",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "fad85d46-5555-424c-87e7-82a94081cf45"
+            "uuid": "dbbf9d04-d710-4bd7-b3b7-b60a941dfe17"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Prod or Dev Env -> Copy of Select Input For Prod Env",
-            "targetStep": "\/api\/3\/workflow_steps\/4df43ab6-f402-489f-a167-46b83ca05539",
-            "sourceStep": "\/api\/3\/workflow_steps\/11e1cfb8-377e-40fc-b2a0-553d6d647bf6",
+            "targetStep": "\/api\/3\/workflow_steps\/cdebd176-5fcd-4475-9b77-67ad0e3ddf5f",
+            "sourceStep": "\/api\/3\/workflow_steps\/94153c82-1139-4ca1-9f22-7933dc708cfc",
             "label": "Dev",
             "isExecuted": false,
             "group": null,
-            "uuid": "4302b4cd-f697-4c73-ac25-f0482c2b9dad"
+            "uuid": "0307678a-f593-48d4-a0e1-8cce0f105c1d"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Prod or Dev Env -> Select Settings or Content Repo",
-            "targetStep": "\/api\/3\/workflow_steps\/8946e9c5-c451-4d1e-8d62-45bc700ba81a",
-            "sourceStep": "\/api\/3\/workflow_steps\/11e1cfb8-377e-40fc-b2a0-553d6d647bf6",
+            "targetStep": "\/api\/3\/workflow_steps\/e9297606-11c0-4951-9844-a07b16ef20a1",
+            "sourceStep": "\/api\/3\/workflow_steps\/94153c82-1139-4ca1-9f22-7933dc708cfc",
             "label": "Prod",
             "isExecuted": false,
             "group": null,
-            "uuid": "98a5fc29-fb66-4afa-84f5-9e31d7ea0da0"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Modify Playbook Merge Option -> Update Import Job",
-            "targetStep": "\/api\/3\/workflow_steps\/6972514d-e94f-4d24-b947-78b5588f963d",
-            "sourceStep": "\/api\/3\/workflow_steps\/5f1ce1f6-e8c3-4426-80d4-cdd01bb497fb",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "76a84506-fff8-42f2-b393-162d438d477e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "No Source Control -> Update Status to Pending",
-            "targetStep": "\/api\/3\/workflow_steps\/29a77e9d-ca7c-4be7-a010-ff6a8fae62c5",
-            "sourceStep": "\/api\/3\/workflow_steps\/84efc4dc-a854-4afc-bc39-b1efdc06d27d",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "734637c4-e5e1-461c-8a6b-483de4c61d53"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Playbook Is Active -> No Operation",
-            "targetStep": "\/api\/3\/workflow_steps\/40372b9c-21d6-499a-81b5-4f87082f4399",
-            "sourceStep": "\/api\/3\/workflow_steps\/3233a030-152a-49b0-84f6-c0c24286e053",
-            "label": "Ok",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "fcda2610-245a-4451-b357-64dbbfdbbd55"
+            "uuid": "e41f8e21-63d8-4e0d-8c31-73aa7bcf5a19"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Select Input For Dev Env -> Abort Dev Env",
-            "targetStep": "\/api\/3\/workflow_steps\/ae7fc75a-2fdc-41bb-97ff-dbfc88b56983",
-            "sourceStep": "\/api\/3\/workflow_steps\/4df43ab6-f402-489f-a167-46b83ca05539",
+            "targetStep": "\/api\/3\/workflow_steps\/720c2c06-94e9-4666-9cba-3e4e4e67e88f",
+            "sourceStep": "\/api\/3\/workflow_steps\/cdebd176-5fcd-4475-9b77-67ad0e3ddf5f",
             "label": "Abort",
             "isExecuted": false,
             "group": null,
-            "uuid": "e968ccfb-1b8d-4023-b561-dc2214b7368b"
+            "uuid": "5af083f4-57ae-457b-8e8e-b7881919317f"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Select Input For Dev Env -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/37d57671-f503-49ba-929f-3462ef9f6c2f",
-            "sourceStep": "\/api\/3\/workflow_steps\/4df43ab6-f402-489f-a167-46b83ca05539",
+            "targetStep": "\/api\/3\/workflow_steps\/52a82349-5018-4ba9-95e6-dc8a86c71fe0",
+            "sourceStep": "\/api\/3\/workflow_steps\/cdebd176-5fcd-4475-9b77-67ad0e3ddf5f",
             "label": "Submit",
             "isExecuted": false,
             "group": null,
-            "uuid": "3b2accb7-63eb-408d-8081-2ada9d22d519"
+            "uuid": "7a2a5bca-e6b3-4346-8d1b-932a045f60ee"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Select Input For Prod Env -> Abort Step",
-            "targetStep": "\/api\/3\/workflow_steps\/acb512a9-d43a-4d40-8a48-93ac557d6f46",
-            "sourceStep": "\/api\/3\/workflow_steps\/8946e9c5-c451-4d1e-8d62-45bc700ba81a",
+            "targetStep": "\/api\/3\/workflow_steps\/c5889ca2-6cbb-439b-8e3d-0ffed3972b8f",
+            "sourceStep": "\/api\/3\/workflow_steps\/e9297606-11c0-4951-9844-a07b16ef20a1",
             "label": "Abort",
             "isExecuted": false,
             "group": null,
-            "uuid": "d831942f-2585-45a5-b0d4-6bf2d13317be"
+            "uuid": "73eaaffe-bd47-49cf-8fbf-68d9d2d0117f"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Select Input For Prod Env -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/37d57671-f503-49ba-929f-3462ef9f6c2f",
-            "sourceStep": "\/api\/3\/workflow_steps\/8946e9c5-c451-4d1e-8d62-45bc700ba81a",
+            "targetStep": "\/api\/3\/workflow_steps\/52a82349-5018-4ba9-95e6-dc8a86c71fe0",
+            "sourceStep": "\/api\/3\/workflow_steps\/e9297606-11c0-4951-9844-a07b16ef20a1",
             "label": "Submit",
             "isExecuted": false,
             "group": null,
-            "uuid": "0f072ec4-567d-45d1-9188-231d8566348e"
+            "uuid": "72a7431f-1168-4d68-b40a-e60d36940d7e"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Source Control is not Config -> No Source Control",
-            "targetStep": "\/api\/3\/workflow_steps\/84efc4dc-a854-4afc-bc39-b1efdc06d27d",
-            "sourceStep": "\/api\/3\/workflow_steps\/09b9ee23-5fe7-4896-ab22-79e367784b46",
-            "label": "Ok",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "d6296f78-3132-44ef-974e-1c9bcedd3b93"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Check Status",
-            "targetStep": "\/api\/3\/workflow_steps\/8bbc239e-62c3-4e40-ba36-7983f33207b9",
-            "sourceStep": "\/api\/3\/workflow_steps\/82d6e5e4-687e-4896-bbed-e3ec35aa0660",
+            "name": "Source Control is not Configured -> Update Status to Pending",
+            "targetStep": "\/api\/3\/workflow_steps\/9ddd19a2-5a0f-4186-a7d5-81f0462795d5",
+            "sourceStep": "\/api\/3\/workflow_steps\/43dbcd99-cb8e-47a8-84b0-7373c64230b8",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "8fd1d9cf-4485-4bfe-b954-636dced77c74"
+            "uuid": "d32034ef-1104-49a0-9174-bf67495ab6e2"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> C",
+            "targetStep": "\/api\/3\/workflow_steps\/2c1fa08e-4236-4130-a372-b3452d72ac5a",
+            "sourceStep": "\/api\/3\/workflow_steps\/b4747b90-3981-457f-ae61-6d587bf5129a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "ee07fdf7-8d9f-4691-871e-9e42aa6f8706"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Terminate Apply Latest Changes -> No User Confirmation",
-            "targetStep": "\/api\/3\/workflow_steps\/60d31122-69d2-446a-97e8-342385f1c58a",
-            "sourceStep": "\/api\/3\/workflow_steps\/f572b130-3ba2-4b86-b88c-26aafbbf84d2",
+            "targetStep": "\/api\/3\/workflow_steps\/697bee6f-0ae5-4909-b131-13ff078007f5",
+            "sourceStep": "\/api\/3\/workflow_steps\/3fb0fbb3-cb7f-4847-b498-bfcea32e59db",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "3f3b3bb9-a816-4a99-83f8-0b6144224dda"
+            "uuid": "5ad7030c-005e-4d8c-9f5a-baba0b720c33"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update Import Job -> Import Zip File",
-            "targetStep": "\/api\/3\/workflow_steps\/55f479c9-c142-4dab-975a-6f693385bd58",
-            "sourceStep": "\/api\/3\/workflow_steps\/6972514d-e94f-4d24-b947-78b5588f963d",
+            "name": "Update Deployed Date -> Create Comment",
+            "targetStep": "\/api\/3\/workflow_steps\/f183e6b1-7bc4-4fa1-bbe5-c78d383d64b0",
+            "sourceStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "dd904b39-c746-4b7b-a80a-cd16f72dc596"
+            "uuid": "c38028f2-fdeb-4627-ba88-89a8a36eb3dd"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Update Status as In Progress -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/14051544-1748-48d8-a66a-eb8f54f2357d",
-            "sourceStep": "\/api\/3\/workflow_steps\/d6077c02-5b27-4d30-8b02-91177052d91f",
+            "targetStep": "\/api\/3\/workflow_steps\/97bbbdf3-3802-4078-aeaa-229c9e3c75ab",
+            "sourceStep": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "8e4b84ab-af4c-4f0a-ba3e-0cbc562d991d"
+            "uuid": "e260e4bc-2451-4c6b-979f-d97b59040d3c"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Wait for Publish -> Update Status",
-            "targetStep": "\/api\/3\/workflow_steps\/4e6a1d69-4d34-4b23-b9ea-ff769361ef9f",
-            "sourceStep": "\/api\/3\/workflow_steps\/219d653f-c562-4598-99d8-ddcaeabc4b27",
+            "targetStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
+            "sourceStep": "\/api\/3\/workflow_steps\/2f0328bd-2b74-427e-b2e8-099ab6f4edbf",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "44239c03-244d-43d8-b758-e1eb2dff73a4"
+            "uuid": "f5b1815b-e5ba-42fe-85bd-8b0763ea69cb"
         }
     ],
     "groups": [],
@@ -1292,7 +1159,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "ManualTrigger",
-        "CICD"
+        "CICD",
+        "ManualTrigger"
     ]
 }

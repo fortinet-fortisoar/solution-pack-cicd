@@ -20,7 +20,7 @@
             "@type": "Picklist",
             "itemValue": "In-progress",
             "orderIndex": 1,
-            "color": "#66c588",
+            "color": "#D2AC1A",
             "icon": null,
             "listName": "\/api\/3\/picklist_names\/25dfa92c-a474-4dfb-9006-328b0053a030",
             "uuid": "7f0263bf-29ab-4453-aefe-41d20f0fe9c3"
@@ -30,7 +30,7 @@
             "@type": "Picklist",
             "itemValue": "Completed",
             "orderIndex": 2,
-            "color": "#4ae93f",
+            "color": "#28B35C",
             "icon": null,
             "listName": "\/api\/3\/picklist_names\/25dfa92c-a474-4dfb-9006-328b0053a030",
             "uuid": "eb7e156f-f599-4cf6-a12b-5484c1bc414d"

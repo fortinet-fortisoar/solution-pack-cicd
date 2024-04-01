@@ -1,0 +1,21 @@
+{
+    "CHANGE_MANAGEMENT": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "변경 관리",
+            "PLURAL_NAME": "변경 관리"
+        },
+        "FIELDS": {
+            "ISSUES": "이슈",
+            "LASTBUILDDEPLOYEDON": "최종 빌드 배포 일자",
+            "COMMENTS": "코멘트",
+            "TITLE": "제목",
+            "DESCRIPTION": "설명",
+            "RESULTS": "결과",
+            "STATUS": "상태",
+            "TYPE": "유형",
+            "ENVIRONMENT": "환경",
+            "SEQUENCE": "순서",
+            "RECORDICON": "기록 아이콘"
+        }
+    }
+}

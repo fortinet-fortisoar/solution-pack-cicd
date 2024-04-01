@@ -1,9 +1,7 @@
 [
     "CICD",
-    "GitHub",
     "ManualAction",
     "ManualTrigger",
-    "Repo",
     "Subroutine",
     "Wizard"
 ]

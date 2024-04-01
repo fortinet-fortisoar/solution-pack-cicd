@@ -1,0 +1,21 @@
+{
+    "CHANGE_MANAGEMENT": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "Change Management",
+            "PLURAL_NAME": "Change Management"
+        },
+        "FIELDS": {
+            "ISSUES": "Issues",
+            "LASTBUILDDEPLOYEDON": "Last Build Deployed On",
+            "COMMENTS": "Comments",
+            "TITLE": "Title",
+            "DESCRIPTION": "Description",
+            "RESULTS": "Results",
+            "STATUS": "Status",
+            "TYPE": "Type",
+            "ENVIRONMENT": "Environment",
+            "SEQUENCE": "Sequence",
+            "RECORDICON": "Record Icon"
+        }
+    }
+}

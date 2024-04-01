@@ -17,7 +17,7 @@
     "publisher": "Fortinet",
     "certified": "true",
     "description": "Setup Source Control and streamline content development lifecycle (CICD) across multiple FortiSOAR environments designated as Development, Staging and Production.",
-    "help": "https://github.com/fortinet-fortisoar/solution-pack-cicd/blob/release/2.0.0/README.md",
+    "help": "https://github.com/fortinet-fortisoar/solution-pack-cicd/blob/release/3.0.0/README.md",
     "category": [],
     "supportInfo": "Fortinet Customer Support",
     "iconLarge": "fsr-icon-large.png",
@@ -26,11 +26,10 @@
         "widgets": [
             {
                 "name": "cicdConfiguration",
-                "label": "CICD Configuration",
-                "version": "1.0.0",
+                "label": "CICD Configuration Wizard",
+                "version": "1.1.0",
                 "autoLaunch": true,
-                "buttonLabel": "Configure",
-                "autoLaunchTriggered": true
+                "buttonLabel": "Configure"
             }
         ]
     },
@@ -105,6 +104,10 @@
             {
                 "name": "GitHub",
                 "apiName": "github"
+            },
+            {
+                "name": "GitLab",
+                "apiName": "gitlab"
             }
         ],
         "widgets": [
@@ -123,6 +126,14 @@
             {
                 "apiName": "recordCard",
                 "name": "Record Card"
+            },
+            {
+                "apiName": "playbookExecutionWizard",
+                "name": "Playbook Execution Wizard"
+            },
+            {
+                "apiName": "playbookButtons",
+                "name": "Playbook Buttons"
             }
         ],
         "recordSets": [

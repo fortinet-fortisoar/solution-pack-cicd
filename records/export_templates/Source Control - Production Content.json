@@ -488,7 +488,6 @@
           "label": "Full App Permissions",
           "value": "/api/3/roles/21d7a7c6-9d68-438f-b732-e8950c5f745b",
           "include": true,
-          "_expanded": false,
           "_allChecked": true,
           "description": "Essentially the root user, use carefully",
           "modulePermissions": {
@@ -531,7 +530,8 @@
             "data_archival": true,
             "saved_reports": true,
             "solutionpacks": true,
-            "email_templates": true
+            "email_templates": true,
+            "leave_schedules": true
           },
           "modulePermissionDetails": {
             "hunt": {
@@ -969,6 +969,17 @@
               "canRead": true,
               "canCreate": true,
               "canDelete": true,
+              "canUpdate": true,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "leave_schedules": {
+              "@type": "ModulePermission",
+              "module": "leave_schedules",
+              "canRead": true,
+              "canCreate": true,
+              "canDelete": false,
               "canUpdate": true,
               "canExecute": false,
               "fieldPermissions": [],
@@ -1454,9 +1465,518 @@
               "_fieldPermissionChanged": false
             }
           }
+        },
+        {
+          "label": "Read-Only User",
+          "value": "/api/3/roles/7b56d139-7ee6-455e-8658-35727e202b8b",
+          "include": true,
+          "_allChecked": true,
+          "description": "Access with viewing rights only, no editing or modification capabilities.",
+          "modulePermissions": {
+            "hunt": true,
+            "keys": true,
+            "files": true,
+            "rules": true,
+            "tasks": true,
+            "agents": true,
+            "alerts": true,
+            "assets": true,
+            "events": true,
+            "people": true,
+            "shifts": true,
+            "routers": true,
+            "tenants": true,
+            "widgets": true,
+            "comments": true,
+            "security": true,
+            "warrooms": true,
+            "approvals": true,
+            "campaigns": true,
+            "companies": true,
+            "dashboard": true,
+            "incidents": true,
+            "reporting": true,
+            "schedules": true,
+            "workflows": true,
+            "activities": true,
+            "appliances": true,
+            "connectors": true,
+            "contentHub": true,
+            "fsr_queues": true,
+            "indicators": true,
+            "application": true,
+            "attachments": true,
+            "sla_template": true,
+            "announcements": true,
+            "communication": true,
+            "data_archival": true,
+            "saved_reports": true,
+            "solutionpacks": true,
+            "email_templates": true,
+            "leave_schedules": true
+          },
+          "modulePermissionDetails": {
+            "hunt": {
+              "@type": "ModulePermission",
+              "module": "hunt",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "keys": {
+              "@type": "ModulePermission",
+              "module": "keys",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "files": {
+              "@type": "ModulePermission",
+              "module": "files",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "rules": {
+              "@type": "ModulePermission",
+              "module": "rules",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "tasks": {
+              "@type": "ModulePermission",
+              "module": "tasks",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "agents": {
+              "@type": "ModulePermission",
+              "module": "agents",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "alerts": {
+              "@type": "ModulePermission",
+              "module": "alerts",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "assets": {
+              "@type": "ModulePermission",
+              "module": "assets",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "events": {
+              "@type": "ModulePermission",
+              "module": "events",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "people": {
+              "@type": "ModulePermission",
+              "module": "people",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "shifts": {
+              "@type": "ModulePermission",
+              "module": "shifts",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "routers": {
+              "@type": "ModulePermission",
+              "module": "routers",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "tenants": {
+              "@type": "ModulePermission",
+              "module": "tenants",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "widgets": {
+              "@type": "ModulePermission",
+              "module": "widgets",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": true,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "comments": {
+              "@type": "ModulePermission",
+              "module": "comments",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "security": {
+              "@type": "ModulePermission",
+              "module": "security",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "warrooms": {
+              "@type": "ModulePermission",
+              "module": "warrooms",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "approvals": {
+              "@type": "ModulePermission",
+              "module": "approvals",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "campaigns": {
+              "@type": "ModulePermission",
+              "module": "campaigns",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "companies": {
+              "@type": "ModulePermission",
+              "module": "companies",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "dashboard": {
+              "@type": "ModulePermission",
+              "module": "dashboard",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "incidents": {
+              "@type": "ModulePermission",
+              "module": "incidents",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "reporting": {
+              "@type": "ModulePermission",
+              "module": "reporting",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "schedules": {
+              "@type": "ModulePermission",
+              "module": "schedules",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "workflows": {
+              "@type": "ModulePermission",
+              "module": "workflows",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "activities": {
+              "@type": "ModulePermission",
+              "module": "activities",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "appliances": {
+              "@type": "ModulePermission",
+              "module": "appliances",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "connectors": {
+              "@type": "ModulePermission",
+              "module": "connectors",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "contentHub": {
+              "@type": "ModulePermission",
+              "module": "contentHub",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "fsr_queues": {
+              "@type": "ModulePermission",
+              "module": "fsr_queues",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "indicators": {
+              "@type": "ModulePermission",
+              "module": "indicators",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "application": {
+              "@type": "ModulePermission",
+              "module": "application",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "attachments": {
+              "@type": "ModulePermission",
+              "module": "attachments",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "sla_template": {
+              "@type": "ModulePermission",
+              "module": "sla_template",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "announcements": {
+              "@type": "ModulePermission",
+              "module": "announcements",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "communication": {
+              "@type": "ModulePermission",
+              "module": "communication",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "data_archival": {
+              "@type": "ModulePermission",
+              "module": "data_archival",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "saved_reports": {
+              "@type": "ModulePermission",
+              "module": "saved_reports",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "solutionpacks": {
+              "@type": "ModulePermission",
+              "module": "solutionpacks",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "email_templates": {
+              "@type": "ModulePermission",
+              "module": "email_templates",
+              "canRead": true,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            },
+            "leave_schedules": {
+              "@type": "ModulePermission",
+              "module": "leave_schedules",
+              "canRead": false,
+              "canCreate": false,
+              "canDelete": false,
+              "canUpdate": false,
+              "canExecute": false,
+              "fieldPermissions": [],
+              "_fieldPermissionChanged": false
+            }
+          }
         }
       ],
       "rules": [
+        {
+          "type": "rule",
+          "label": "Incident - Notify Creation",
+          "value": "d65a520b-76d4-4cfb-88e2-137ff7e4f6c5",
+          "include": true
+        },
         {
           "type": "rule",
           "label": "Alert - Notify Creation",
@@ -1471,14 +1991,14 @@
         },
         {
           "type": "rule",
-          "label": "Incident - Notify Creation",
-          "value": "d65a520b-76d4-4cfb-88e2-137ff7e4f6c5",
+          "label": "Incident - Notify Updates",
+          "value": "4c5e1e95-43a8-402d-9ec3-641842c40737",
           "include": true
         },
         {
           "type": "rule",
-          "label": "Incident - Notify Updates",
-          "value": "4c5e1e95-43a8-402d-9ec3-641842c40737",
+          "label": "Notify On Pending Internal Manual Input",
+          "value": "771875da-f111-46c3-ad26-e183f6b0ff74",
           "include": true
         }
       ],
@@ -1510,6 +2030,8 @@
           "includedAttributes": [
             "iPAddresses",
             "resolvedAutomatedly",
+            "rule",
+            "ticketID",
             "emailClassification",
             "fileHashes",
             "respSLApausedon",
@@ -1631,24 +2153,31 @@
           "value": "assets",
           "includedAttributes": [
             "assetRisk",
+            "sourceData",
             "emailId",
             "deviceUid",
             "name",
             "hostname",
             "macAddress",
+            "assetType",
             "ip",
             "description",
             "tag",
             "serialNumber",
             "registrationDate",
             "dateScanned",
+            "vendor",
+            "product",
             "propertyOf",
             "location",
             "operatingSystem",
+            "vulnerabilityRiskStatus",
             "managedBy",
             "criticality",
             "assetClass",
             "state",
+            "zone",
+            "level",
             "status",
             "category",
             "alerts",
@@ -1657,9 +2186,17 @@
             "companies",
             "attachments",
             "comments",
+            "eSPZone",
+            "facility",
             "uuid",
+            "network",
             "indicators",
-            "warrooms"
+            "protocol",
+            "warrooms",
+            "subnet",
+            "firmware",
+            "assets",
+            "bESCyberAssetCategory"
           ]
         },
         {
@@ -1719,22 +2256,6 @@
           ]
         },
         {
-          "value": "fsr_queues",
-          "includedAttributes": [
-            "assignmentMethod",
-            "name",
-            "description",
-            "members",
-            "currentRoundRobinIndex",
-            "leader",
-            "assignmentParameters",
-            "recordTypeRules",
-            "recordTypes",
-            "active",
-            "draft"
-          ]
-        },
-        {
           "value": "hunt",
           "includedAttributes": [
             "alerts",
@@ -1753,6 +2274,7 @@
           "value": "incidents",
           "includedAttributes": [
             "impactROI",
+            "ticketID",
             "incRemainingRespSLA",
             "incRemainingAckSLA",
             "respSLApausedon",
@@ -1874,7 +2396,9 @@
           "value": "keys",
           "includedAttributes": [
             "key",
-            "value"
+            "value",
+            "jSONValue",
+            "notes"
           ]
         },
         {
@@ -1923,35 +2447,168 @@
         }
       ],
       "reports": [
-        "c01a20f1-2cc8-4294-accf-9f93ad152ad0",
-        "4aa03e6e-5b6b-465a-a9b2-ab248f97c89a",
-        "515dec79-7800-44c8-a46d-e3230882baef",
-        "9f6f50df-7f0b-48b7-9fcc-bc07a1a832e0",
-        "d6d9fe68-f4cd-43c8-8049-0440496e90ad",
-        "9474953f-3196-4446-a356-1f68ae89dcf9",
-        "60f0c032-90e8-4026-b430-176efd5560b7",
-        "11ece146-396e-42f8-a2c4-358550c6f03f",
-        "f14dd5c1-3d1c-4336-b12d-443321de28c7",
-        "2bc7fd32-1dd6-48b0-bcfb-3a7c04938c4a"
+        {
+          "label": "High Impact Incidents",
+          "value": "c01a20f1-2cc8-4294-accf-9f93ad152ad0",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Incident Summary Report",
+          "value": "4aa03e6e-5b6b-465a-a9b2-ab248f97c89a",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Overdue Alerts Activities",
+          "value": "515dec79-7800-44c8-a46d-e3230882baef",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Overdue Incidents Activities",
+          "value": "9f6f50df-7f0b-48b7-9fcc-bc07a1a832e0",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Unhandled Activities",
+          "value": "d6d9fe68-f4cd-43c8-8049-0440496e90ad",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "War Room Summary",
+          "value": "9474953f-3196-4446-a356-1f68ae89dcf9",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "War Room Summary Report",
+          "value": "60f0c032-90e8-4026-b430-176efd5560b7",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Weekly Alert Report",
+          "value": "11ece146-396e-42f8-a2c4-358550c6f03f",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Weekly Incident Report",
+          "value": "f14dd5c1-3d1c-4336-b12d-443321de28c7",
+          "include": true,
+          "includeSchedules": true
+        },
+        {
+          "label": "Weekly IOC Report",
+          "value": "2bc7fd32-1dd6-48b0-bcfb-3a7c04938c4a",
+          "include": true,
+          "includeSchedules": true
+        }
       ],
       "widgets": [],
       "playbooks": {
         "collections": [
-          "4dc865c8-012e-4326-8be5-252b723ea734",
-          "59667fcc-7feb-4ba4-a5a2-e03a9287f857",
-          "deaa4d19-7444-4f3a-a80e-9577436f25ef",
-          "4a9adb3a-1a68-4b28-8096-ea12210dfeab",
-          "2d150b7b-ee6b-4686-a249-3c2cfa99f657",
-          "d18c85d8-4365-43a7-b1ff-48e65418aa6b",
-          "3c3b049e-5ecb-464a-83f6-5af6a230c0ed",
-          "d98add27-83c9-4f73-a370-16454398e317",
-          "e811949a-45b4-4189-b524-fdb64c417810",
-          "c9282ce9-1cef-4e0b-94da-3b84c32381ff",
-          "85f015e5-a252-4b5a-b55a-b885665056ec",
-          "20289298-cdd6-4052-8fa0-11e2603dca00"
+          {
+            "label": "01 - Drafts",
+            "value": "4dc865c8-012e-4326-8be5-252b723ea734",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "02 - Use Cases",
+            "value": "59667fcc-7feb-4ba4-a5a2-e03a9287f857",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "03 - Enrich",
+            "value": "deaa4d19-7444-4f3a-a80e-9577436f25ef",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "03 - Triage",
+            "value": "4a9adb3a-1a68-4b28-8096-ea12210dfeab",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "04 - Actions",
+            "value": "2d150b7b-ee6b-4686-a249-3c2cfa99f657",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "05 - Hunt",
+            "value": "d18c85d8-4365-43a7-b1ff-48e65418aa6b",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "06 - IRP - Case Management",
+            "value": "3c3b049e-5ecb-464a-83f6-5af6a230c0ed",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "06 - IRP - Communications Tracking",
+            "value": "d98add27-83c9-4f73-a370-16454398e317",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "06 - IRP - Reporting",
+            "value": "e811949a-45b4-4189-b524-fdb64c417810",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "06 - IRP - War Room",
+            "value": "c9282ce9-1cef-4e0b-94da-3b84c32381ff",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "07 - Incident Response Plan",
+            "value": "85f015e5-a252-4b5a-b55a-b885665056ec",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          },
+          {
+            "label": "08 - Utilities",
+            "value": "20289298-cdd6-4052-8fa0-11e2603dca00",
+            "include": true,
+            "includeVersions": false,
+            "includeSchedules": true,
+            "includeGlobalVariables": true
+          }
         ],
         "globalVariables": [
-          "Default_Email",
           "PB_Log_TTL",
           "Default_Indicator_TTL_Days",
           "Indicator_Type_Map",
@@ -1959,18 +2616,9 @@
           "Excludelist_IPs",
           "Excludelist_URLs",
           "Excludelist_Domains",
-          "Current_Date",
-          "Email_Enrichment_Playbooks_IRIs",
-          "URL_Enrichment_Playbooks_IRIs",
-          "File_Enrichment_Playbooks_IRIs",
-          "IP_Enrichment_Playbooks_IRIs",
-          "Domain_Enrichment_Playbooks_IRIs",
-          "FileHash_Enrichment_Playbooks_IRIs",
-          "User_Enrichment_Playbooks_IRIs",
-          "Demo_mode"
-        ],
-        "includeVersions": false,
-        "includeGlobalVariables": true
+          "Excludelist_Files",
+          "Excludelist_Ports"
+        ]
       },
       "connectors": [],
       "dashboards": [
@@ -2012,13 +2660,6 @@
           "includeCorrelations": false
         },
         {
-          "type": "fsr_queues",
-          "label": "Queues",
-          "query": null,
-          "include": true,
-          "includeCorrelations": false
-        },
-        {
           "name": "Export Templates",
           "type": "export_templates",
           "query": {
@@ -2054,9 +2695,14 @@
         "/api/3/picklist_names/520e35ae-c3c2-45f5-bc73-af6b9476cbeb",
         "/api/3/picklist_names/0042bf40-d0e6-4324-ab84-0c7b0703f681",
         "/api/3/picklist_names/54642443-1ab4-4f2b-968e-a0c43907fad0",
+        "/api/3/picklist_names/05eac573-e341-4722-9462-3eed045db2a5",
+        "/api/3/picklist_names/25a9006f-2555-4fad-abbf-41eb1163c84f",
         "/api/3/picklist_names/fc7c0b32-ce9f-4fb5-a0fe-6923fb1c0a2c",
         "/api/3/picklist_names/45de7d2e-8ef0-495e-a6e5-07fddfbd4749",
         "/api/3/picklist_names/3c57ea34-4866-4c8f-ba74-dc51806727a9",
+        "/api/3/picklist_names/4dc1437f-5fe6-4eb6-b378-3c514c26f22e",
+        "/api/3/picklist_names/05fa04bd-0069-4da7-b56e-7204c86656ee",
+        "/api/3/picklist_names/8b167004-257b-407c-86f7-ee65059176b0",
         "/api/3/picklist_names/95749529-b229-4fbd-ba14-01c51a4f21b5",
         "/api/3/picklist_names/5fa2741e-120d-430e-b796-e690901d8249",
         "/api/3/picklist_names/4ebacea1-88cd-4ea8-9dcc-385bea42cc59",
@@ -2080,6 +2726,7 @@
         "/api/3/picklist_names/98830189-afff-40e6-bed1-94012551dc67",
         "/api/3/picklist_names/fe36a8f2-fcba-4221-b4ab-1081f596b153",
         "/api/3/picklist_names/40f1345f-f679-43c0-9237-5b06edd8385f",
+        "/api/3/picklist_names/435b0a98-ebe1-4683-9cb3-bdfd0eabccce",
         "/api/3/picklist_names/ab8bbdb4-2cf9-4695-90ef-9f1f825d2b1f",
         "/api/3/picklist_names/7b348719-8ffc-4c94-8ce7-1812eae43d78"
       ],
@@ -2102,9 +2749,6 @@
         "modules-events-list",
         "modules-events-detail",
         "modules-events-form",
-        "modules-fsr_queues-list",
-        "modules-fsr_queues-detail",
-        "modules-fsr_queues-form",
         "modules-hunt-list",
         "modules-hunt-detail",
         "modules-hunt-form",
@@ -2163,10 +2807,10 @@
     "type": "Export Wizard",
     "solutionPack": null,
     "uuid": "49466255-50e3-4345-b1a8-0b2cd29bcc2f",
-    "id": 2,
+    "id": null,
     "createUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
     "createDate": 1681112238.742993,
-    "modifyUser": "/api/3/people/3451141c-bac6-467c-8d72-85e0fab569ce",
-    "modifyDate": 1681112321.618513
+    "modifyUser": null,
+    "modifyDate": null
   }
 ]

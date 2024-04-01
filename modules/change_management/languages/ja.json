@@ -1,0 +1,21 @@
+{
+    "CHANGE_MANAGEMENT": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "変更管理",
+            "PLURAL_NAME": "変更管理"
+        },
+        "FIELDS": {
+            "ISSUES": "問題",
+            "LASTBUILDDEPLOYEDON": "最終ビルドデプロイ日",
+            "COMMENTS": "コメント",
+            "TITLE": "タイトル",
+            "DESCRIPTION": "説明",
+            "RESULTS": "結果",
+            "STATUS": "ステータス",
+            "TYPE": "タイプ",
+            "ENVIRONMENT": "環境",
+            "SEQUENCE": "シーケンス",
+            "RECORDICON": "レコードアイコン"
+        }
+    }
+}

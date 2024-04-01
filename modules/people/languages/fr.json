@@ -1,0 +1,34 @@
+{
+    "PEOPLE": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "Personne",
+            "PLURAL_NAME": "Personnes"
+        },
+        "FIELDS": {
+            "FIRSTNAME": "Prénom",
+            "SOURCECONTROLUSERNAME": "Nom d'utilisateur du contrôle source",
+            "LASTNAME": "Nom de famille",
+            "TITLE": "Titre",
+            "DEPARTMENT": "Département",
+            "EMAIL": "Email",
+            "DESCRIPTION": "Description",
+            "PHONEFAX": "Fax",
+            "PHONEHOME": "Domicile",
+            "PHONEMOBILE": "Mobile",
+            "PHONEWORK": "Téléphone professionnel",
+            "COMPANYID": "Société",
+            "TYPE": "Type",
+            "TASKS": "Tâches",
+            "ATTACHMENTS": "Pièces jointes",
+            "COMMENTS": "Commentaires",
+            "ALERTS": "Alertes",
+            "UUID": "UUID",
+            "INCIDENTS": "Incidents",
+            "FSRQUEUES": "Files d'attente",
+            "INDICATORS": "Indicateurs",
+            "SHIFTS": "Équipes",
+            "CSACTIVE": "Actif",
+            "ACCESSTYPE": "Type d'accès"
+        }
+    }    
+}

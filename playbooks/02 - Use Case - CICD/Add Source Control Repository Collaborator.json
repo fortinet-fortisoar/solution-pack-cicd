@@ -1,10 +1,10 @@
 {
     "@type": "Workflow",
     "triggerLimit": null,
-    "name": "Add GitHub Repository Collaborator",
+    "name": "Add Source Control Repository Collaborator",
     "aliasName": null,
     "tag": null,
-    "description": "Add GitHub repository collaborator for specified repository",
+    "description": "Add Source Control repository collaborator for specified repository",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -12,12 +12,13 @@
     "parameters": [
         "repo_name",
         "org_name",
-        "git_username"
+        "git_username",
+        "connector_config_id"
     ],
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/399d9223-9cd9-4cd5-a27e-74e719765a3e",
+    "triggerStep": "\/api\/3\/workflow_steps\/b516af8c-10b0-49ae-a007-78d2bd5a7c23",
     "steps": [
         {
             "@type": "WorkflowStep",
@@ -26,22 +27,21 @@
             "arguments": {
                 "when": "{{(vars.is_collaborator_added | length == 0)}}",
                 "arguments": {
-                    "org_name": "{{vars.org_name}}",
-                    "username": "{{vars.git_username}}",
-                    "repo_name": "{{vars.repo_name}}"
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}",
+                    "add_repo_collaborator_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"username\": \"{{vars.git_username}}\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/24ce1642-3e71-43dd-b351-0c0673b36562"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"AddRepositoryCollaborator\"][\"@id\"]}}"
             },
             "status": null,
             "top": "300",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "edbc96db-15d9-4d5a-9f8d-2a2ea9bb6fa1"
+            "uuid": "bc245c14-8bf0-4723-a384-6d062e3cdf32"
         },
         {
             "@type": "WorkflowStep",
@@ -49,8 +49,8 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.org_name}}",
-                    "repo_name": "{{vars.repo_name}}"
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}",
+                    "list_repo_collaborator_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": {
@@ -58,54 +58,58 @@
                 },
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/f1131cb4-74d0-4ffe-8c1a-bf4c7cab3f0c"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"ListRepositoryCollaborator\"][\"@id\"]}}"
             },
             "status": null,
             "top": "165",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "ecca7235-9350-47de-a11c-a4fafdf54ddb"
+            "uuid": "2612ec27-ff6a-4a6a-a179-31fc79a9632a"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
+                "__triggerLimit": true,
                 "step_variables": {
                     "input": {
                         "params": []
-                    }
-                }
+                    },
+                    "cicd_env": "{{globalVars.cicd_env}}"
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
             },
             "status": null,
             "top": "30",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "399d9223-9cd9-4cd5-a27e-74e719765a3e"
+            "uuid": "b516af8c-10b0-49ae-a007-78d2bd5a7c23"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
             "name": "List Repository Collaborator -> Add Repository Collaborator",
-            "targetStep": "\/api\/3\/workflow_steps\/edbc96db-15d9-4d5a-9f8d-2a2ea9bb6fa1",
-            "sourceStep": "\/api\/3\/workflow_steps\/ecca7235-9350-47de-a11c-a4fafdf54ddb",
+            "targetStep": "\/api\/3\/workflow_steps\/bc245c14-8bf0-4723-a384-6d062e3cdf32",
+            "sourceStep": "\/api\/3\/workflow_steps\/2612ec27-ff6a-4a6a-a179-31fc79a9632a",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "cf6b7b55-35df-49c5-b668-50abfc4c4410"
+            "uuid": "a6b886a2-d208-4be8-b687-61f1eb86aa6c"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> List Repository Collaborator",
-            "targetStep": "\/api\/3\/workflow_steps\/ecca7235-9350-47de-a11c-a4fafdf54ddb",
-            "sourceStep": "\/api\/3\/workflow_steps\/399d9223-9cd9-4cd5-a27e-74e719765a3e",
+            "targetStep": "\/api\/3\/workflow_steps\/2612ec27-ff6a-4a6a-a179-31fc79a9632a",
+            "sourceStep": "\/api\/3\/workflow_steps\/b516af8c-10b0-49ae-a007-78d2bd5a7c23",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "6f6adeec-8b06-41bc-a39a-cd4103aa36ff"
+            "uuid": "b35024c4-a959-4a7d-93aa-a4d3ee06aed9"
         }
     ],
     "groups": [],
@@ -115,7 +119,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Subroutine",
-        "CICD"
+        "CICD",
+        "Subroutine"
     ]
 }

@@ -1,0 +1,21 @@
+{
+    "CHANGE_MANAGEMENT": {
+        "MODULE_DETAILS": {
+            "SINGULAR_NAME": "变更管理",
+            "PLURAL_NAME": "变更管理"
+        },
+        "FIELDS": {
+            "ISSUES": "问题",
+            "LASTBUILDDEPLOYEDON": "上次构建部署时间",
+            "COMMENTS": "评论",
+            "TITLE": "标题",
+            "DESCRIPTION": "描述",
+            "RESULTS": "结果",
+            "STATUS": "状态",
+            "TYPE": "类型",
+            "ENVIRONMENT": "环境",
+            "SEQUENCE": "序列",
+            "RECORDICON": "记录图标"
+        }
+    }
+}

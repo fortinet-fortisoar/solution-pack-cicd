@@ -4,7 +4,7 @@
     "name": "Merge Pull Request",
     "aliasName": null,
     "tag": null,
-    "description": "Marge the specified Pull Request if Pull Request is Approved.",
+    "description": "Merge the specified pull request upon approval",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -13,31 +13,58 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/569e877c-6671-41c4-abb7-de0dfc2d1837",
+    "triggerStep": "\/api\/3\/workflow_steps\/f4a19dea-e300-4787-85f7-61ee6335a9db",
     "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Add Comment Playbook Is Active",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tasks": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "people": [],
+                    "content": "<h5>Warning: Playbook is Active or Awaiting State<\/h5>\n<hr>\n<p>\"Merge Pull Request\" operation is in Active\/Awaiting state. Please wait while the previous operation is completed.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1800",
+            "left": "340",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "aae109fb-8473-4af5-b125-29f721835993"
+        },
         {
             "@type": "WorkflowStep",
             "name": "Add Pull Request Review",
             "description": null,
             "arguments": {
                 "arguments": {
-                    "state": "",
-                    "org_name": "{{vars.org_name}}",
-                    "repo_name": "{{vars.repo_name}}",
-                    "pull_number": "{{vars.pull_number}}"
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
+                    "add_pr_review_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"pull_number\": \"{{vars.pull_number}}\",\n\"state\": \"Approve\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/1e9d2d1b-59ea-4b8f-9ee0-e6fbd631f19f"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"AddPullRequestReview\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1000",
-            "left": "540",
+            "top": "1500",
+            "left": "920",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "da5c4698-523f-4d34-9354-0f86a25ce1e3"
+            "uuid": "e0ba9c6a-290d-4cf3-827a-c59822aaa07a"
         },
         {
             "@type": "WorkflowStep",
@@ -54,29 +81,46 @@
                 "workflowReference": "\/api\/3\/workflows\/2bf34362-0466-4590-9ce5-845ce08860bc"
             },
             "status": null,
-            "top": "165",
-            "left": "310",
+            "top": "570",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "f6d0dc1e-a31f-4b2c-9621-9b999442bcff"
+            "uuid": "bb1e4fbc-f5d2-42bd-9bca-fd4f874cbeb1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Source Control Connector Configuration",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
+            },
+            "status": null,
+            "top": "300",
+            "left": "660",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "09582d16-0a7f-4aa8-aec4-72a9795141bd"
         },
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
-                "issue_no": "{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
-                "org_name": "{{vars.input.records[0].cRNo.split(\"<a href='https:\/\/github.com\/\")[-1].split(\"\/\")[0]}}",
-                "repo_name": "{{(vars.input.records[0].repo_url.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
-                "new_branch": "CR-{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
-                "pull_number": "{{(vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0]).split(\"\/\")[-1]}}"
+                "cicd_env": "{{globalVars.cicd_env}}",
+                "cicd_config": "{{globalVars.cicd_config}}",
+                "source_control_type": "{{(globalVars.cicd_config | toDict)[\"source_control_web_url\"] }}"
             },
             "status": null,
-            "top": "380",
-            "left": "720",
+            "top": "435",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "f072491e-398c-41fc-bcf2-429c428799c1"
+            "uuid": "c49e159c-0791-45a9-8492-dd57bc2db820"
         },
         {
             "@type": "WorkflowStep",
@@ -84,22 +128,21 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.org_name}}",
-                    "repo_name": "{{vars.repo_name}}",
-                    "branch_name": "{{vars.new_branch}}"
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
+                    "delete_branch_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"branch_name\": \"{{vars.new_branch}}\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/049be50d-cdea-445c-8a6c-b054aba195de"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"DeleteBranch\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1120",
+            "top": "1740",
             "left": "920",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "be877e82-7aaf-47fe-8204-195db6eae3f8"
+            "uuid": "3be79dea-680a-47fe-8dd4-e0128f7cd8ab"
         },
         {
             "@type": "WorkflowStep",
@@ -109,24 +152,62 @@
                 "conditions": [
                     {
                         "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/f85a9f56-a002-414d-acc1-4b1b5476667c",
+                        "step_iri": "\/api\/3\/workflow_steps\/1ba3d0f3-6f3d-49a5-b308-522f5e211925",
                         "condition": "{{ (vars.pull_number | string) | length > 0 or (vars.input.records[0].pRStatus | length > 0 and vars.input.records[0].pRStatus==\"closed\") }}",
                         "step_name": "Get Pull Requests Reviews"
                     },
                     {
                         "option": "No",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/bbae426d-472e-457f-b306-050b8c9af732",
+                        "step_iri": "\/api\/3\/workflow_steps\/c6c7d07a-cda8-4a12-89a4-0e4d60b768ef",
                         "step_name": "Pull Request Does Not Exist"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
-            "top": "440",
-            "left": "380",
+            "top": "975",
+            "left": "835",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "63ced797-f2d3-4c96-af36-a03677bd051c"
+            "uuid": "1511cd33-7e15-4a27-8fd1-7993b4988eee"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Related Task",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "name",
+                            "value": "{{vars.input.records[0].uuid}}",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        }
+                    ]
+                },
+                "module": "tasks?$limit=30",
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Initiating Task: Approve and Merge Pull Request<\/p>",
+                    "records": "{{vars.steps.Find_Related_Task[0]['@id']}}"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "660",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "f2c59af5-9ff6-41c7-93ad-05dbf5113be7"
         },
         {
             "@type": "WorkflowStep",
@@ -134,23 +215,21 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "state": "",
-                    "org_name": "{{vars.org_name}}",
-                    "repo_name": "{{vars.repo_name}}",
-                    "pull_number": "{{vars.pull_number}}"
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
+                    "list_pr_reviews_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"pull_number\": \"{{vars.pull_number}}\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/20c4eb93-197f-4d66-92c7-b75c5251c093"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"ListPullRequestReviews\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "500",
-            "left": "720",
+            "top": "1120",
+            "left": "1020",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "f85a9f56-a002-414d-acc1-4b1b5476667c"
+            "uuid": "1ba3d0f3-6f3d-49a5-b308-522f5e211925"
         },
         {
             "@type": "WorkflowStep",
@@ -160,24 +239,25 @@
                 "conditions": [
                     {
                         "option": "Active\/Awaiting",
-                        "step_iri": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262",
+                        "step_iri": "\/api\/3\/workflow_steps\/aae109fb-8473-4af5-b125-29f721835993",
                         "condition": "{{ vars.steps.Check_Playbook_Active_or_Awaiting.playbook_status in [\"awaiting\", \"active\"] }}",
-                        "step_name": "No Operation"
+                        "step_name": "Add Comment Playbook Is Active"
                     },
                     {
                         "option": "Finished",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/f072491e-398c-41fc-bcf2-429c428799c1",
-                        "step_name": "Configuration"
+                        "step_iri": "\/api\/3\/workflow_steps\/e2746475-8dcc-4bac-9fd1-dd0c7935801c",
+                        "step_name": "Set Source Control Parameters"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
-            "top": "300",
-            "left": "310",
+            "top": "705",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "6ffef050-e9bc-4158-a8d7-70bc99d1b828"
+            "uuid": "db048767-1629-46c9-970b-5e62223a73ba"
         },
         {
             "@type": "WorkflowStep",
@@ -188,23 +268,24 @@
                     {
                         "option": "No",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/b7264d62-7c41-43ee-a14d-955c72a79c0b",
+                        "step_iri": "\/api\/3\/workflow_steps\/537a5ac6-872c-4490-903b-8bfe28174ffa",
                         "step_name": "Pull Request Is Not Approved"
                     },
                     {
                         "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/69441836-22a5-4fc5-967c-3298dffe602d",
+                        "step_iri": "\/api\/3\/workflow_steps\/1fa2fd67-4b54-4195-bc3b-4b0c90263cd1",
                         "condition": "{{ vars.steps.Get_Pull_Requests_Reviews.data | length > 0 and vars.steps.Get_Pull_Requests_Reviews.data[-1].state == \"APPROVED\" }}",
                         "step_name": "Placeholder"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
-            "top": "640",
-            "left": "720",
+            "top": "1260",
+            "left": "1020",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
-            "uuid": "8368a9d6-228f-496f-8c32-7edff0553c48"
+            "uuid": "0ee694df-f1be-411d-a0cb-1d5239d9e2d3"
         },
         {
             "@type": "WorkflowStep",
@@ -212,23 +293,21 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.org_name}}",
-                    "org_type": "Organization",
-                    "repo_name": "{{vars.repo_name}}",
-                    "pull_number": "{{vars.pull_number}}"
+                    "merge_pr_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"pull_number\": \"{{vars.pull_number}}\",\n\"org_type\": \"Organization\/Group\"\n}",
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
                 },
                 "apply_async": false,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/d9f53fdc-afee-4a62-885a-43fa945694d2"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"MergePullRequest\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1000",
+            "top": "1620",
             "left": "920",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "0f3cb590-79e5-4164-9564-7ebe12beead3"
+            "uuid": "f9c4f5fc-6672-431c-833e-0da14d27ae1b"
         },
         {
             "@type": "WorkflowStep",
@@ -236,18 +315,27 @@
             "description": null,
             "arguments": {
                 "params": [],
-                "version": "3.2.1",
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Completed Task: Approve and Merge Pull Request&nbsp;<\/p>",
+                    "records": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/f2c59af5-9ff6-41c7-93ad-05dbf5113be7"
+                },
+                "version": "3.3.0",
                 "connector": "cyops_utilities",
                 "operation": "no_op",
                 "operationTitle": "Utils: No Operation",
                 "step_variables": []
             },
             "status": null,
-            "top": "1120",
-            "left": "40",
+            "top": "1980",
+            "left": "620",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "f9f00611-ffd9-473d-9828-83607e702262"
+            "uuid": "6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4"
         },
         {
             "@type": "WorkflowStep",
@@ -255,103 +343,40 @@
             "description": null,
             "arguments": [],
             "status": null,
-            "top": "820",
-            "left": "920",
+            "top": "1360",
+            "left": "1340",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "69441836-22a5-4fc5-967c-3298dffe602d"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Populate PR Merged Details",
-            "description": null,
-            "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "Pull Request Merged Details",
-                        "description": "Pull Request {{vars.steps.Refine_Issue_Table.json_issue[0].pullRequest}} successfully merged.",
-                        "inputVariables": []
-                    }
-                },
-                "record": "",
-                "agent_id": null,
-                "resources": "change_requests",
-                "owner_detail": {
-                    "isAssigned": false
-                },
-                "isRecordLinked": false,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "OK",
-                            "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                },
-                "inline_channel_list": [],
-                "external_channel_list": [],
-                "unauthenticated_input": false
-            },
-            "status": null,
-            "top": "1120",
-            "left": "540",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
-            "group": null,
-            "uuid": "f20f064c-1a32-496c-83d6-9d01b8003d31"
+            "uuid": "1fa2fd67-4b54-4195-bc3b-4b0c90263cd1"
         },
         {
             "@type": "WorkflowStep",
             "name": "Pull Request Does Not Exist",
             "description": null,
             "arguments": {
-                "type": "InputBased",
-                "input": {
-                    "schema": {
-                        "title": "Validation Failed",
-                        "description": "{% if (vars.input.records[0].pRStatus | length > 0 and vars.input.records[0].pRStatus==\"closed\") %}\nSelected change request is already approved and merged. Correct them and rerun the task.\n{% else %}\nPull request not found. Ensure change were submitted for review. Correct them and rerun the task.\n{% endif %}\n",
-                        "inputVariables": []
-                    }
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tasks": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "people": [],
+                    "content": "<h5>Warning: Validation Failed<\/h5>\n<hr>\n<p>{% if (vars.input.records[0].pRStatus | length and vars.input.records[0].pRStatus==\"closed\") %}Selected change request is already approved and merged. Correct them and rerun the task.{% else %}Pull request not found. Ensure change were submitted for review. Correct them and rerun the task.{% endif %}<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
                 },
-                "record": "",
-                "agent_id": null,
-                "resources": "change_management",
-                "owner_detail": {
-                    "isAssigned": false
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
                 },
-                "isRecordLinked": false,
-                "step_variables": [],
-                "response_mapping": {
-                    "options": [
-                        {
-                            "option": "Ok",
-                            "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262"
-                        }
-                    ],
-                    "duplicateOption": false
-                },
-                "email_notification": {
-                    "enabled": false,
-                    "smtpParameters": []
-                },
-                "inline_channel_list": [],
-                "external_channel_list": [],
-                "unauthenticated_input": false
+                "step_variables": []
             },
             "status": null,
-            "top": "600",
-            "left": "380",
-            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "top": "1600",
+            "left": "520",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
-            "uuid": "bbae426d-472e-457f-b306-050b8c9af732"
+            "uuid": "c6c7d07a-cda8-4a12-89a4-0e4d60b768ef"
         },
         {
             "@type": "WorkflowStep",
@@ -361,54 +386,109 @@
                 "type": "InputBased",
                 "input": {
                     "schema": {
-                        "title": "Warning: Pull Request Merged Details",
-                        "description": "Pull Request {{vars.input.records[0].pullRequest}} is not approved.\nTo approve and merge click on \"Approve and Merge\" button or click on \"Abort\" button to approve manually and again perform the merge operation.\n",
+                        "title": "Pull Request Details",
+                        "description": "Pull Request {{vars.input.records[0].pullRequest}} is not approved.\n\nTo approve and merge, click \"Approve and Merge.\" Or, choose \"Abort\" to manually approve before merging again.",
                         "inputVariables": []
                     }
                 },
-                "record": "",
+                "record": "{{vars.steps.Find_Related_Task[0]['@id']}}",
                 "agent_id": null,
-                "resources": "change_requests",
+                "resources": "tasks",
+                "is_approval": false,
                 "owner_detail": {
-                    "isAssigned": false
+                    "isAssigned": false,
+                    "emailRecipients": ""
                 },
-                "isRecordLinked": false,
+                "isRecordLinked": true,
                 "step_variables": [],
                 "response_mapping": {
                     "options": [
                         {
                             "option": "Approve and Merge",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/da5c4698-523f-4d34-9354-0f86a25ce1e3"
+                            "step_iri": "\/api\/3\/workflow_steps\/e0ba9c6a-290d-4cf3-827a-c59822aaa07a"
                         },
                         {
                             "option": "Abort",
-                            "step_iri": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262"
+                            "step_iri": "\/api\/3\/workflow_steps\/6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4"
                         }
                     ],
-                    "duplicateOption": false
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
                 },
                 "email_notification": {
                     "enabled": false,
                     "smtpParameters": []
                 },
+                "customEmailExternal": false,
                 "inline_channel_list": [],
                 "external_channel_list": [],
-                "unauthenticated_input": false
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
             },
             "status": null,
-            "top": "820",
-            "left": "540",
+            "top": "1360",
+            "left": "720",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
-            "uuid": "b7264d62-7c41-43ee-a14d-955c72a79c0b"
+            "uuid": "537a5ac6-872c-4490-903b-8bfe28174ffa"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Pull Request Merged Details",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tasks": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "people": [],
+                    "content": "<p>Pull Request {{vars.steps.Refine_Issue_Table.json_issue[0].pullRequest}} successfully merged.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1860",
+            "left": "920",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "1a75b9ae-2943-4911-b72d-1304a821eec1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Set Source Control Parameters",
+            "description": null,
+            "arguments": {
+                "issue_no": "{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
+                "org_name": "{{vars.cicd_config[\"organizationName\"]}}",
+                "repo_name": "{{vars.cicd_config[\"contentRepoName\"]}}",
+                "new_branch": "CR-{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
+                "pull_number": "{{(vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0]).split(\"\/\")[-1]}}"
+            },
+            "status": null,
+            "top": "840",
+            "left": "835",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "e2746475-8dcc-4bac-9fd1-dd0c7935801c"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "1d7719b4-39d9-431f-91cf-a94267ea1d69",
+                "route": "d1c4d75c-1ca7-4409-aed9-4ba2b88ee7f7",
                 "title": "Approve & Merge",
                 "resources": [
                     "change_management"
@@ -467,192 +547,232 @@
             },
             "status": null,
             "top": "30",
-            "left": "310",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "569e877c-6671-41c4-abb7-de0dfc2d1837"
+            "uuid": "f4a19dea-e300-4787-85f7-61ee6335a9db"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Add Pull Request Review -> Merge Pull Request",
-            "targetStep": "\/api\/3\/workflow_steps\/0f3cb590-79e5-4164-9564-7ebe12beead3",
-            "sourceStep": "\/api\/3\/workflow_steps\/da5c4698-523f-4d34-9354-0f86a25ce1e3",
+            "name": "Add Comment Playbook Is Active -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4",
+            "sourceStep": "\/api\/3\/workflow_steps\/aae109fb-8473-4af5-b125-29f721835993",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "977585e7-b1c0-4fd7-a6cc-0103a6c0e387"
+            "uuid": "8d84b0e6-b40a-4735-87d4-7ab0884c8ac1"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Add Pull Request Review -> Merge Pull Request",
+            "targetStep": "\/api\/3\/workflow_steps\/f9c4f5fc-6672-431c-833e-0da14d27ae1b",
+            "sourceStep": "\/api\/3\/workflow_steps\/e0ba9c6a-290d-4cf3-827a-c59822aaa07a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "0cd6e653-7ab6-4b99-9627-db41000843d8"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Check Playbook Active or Awaiting -> Is Playbook Active or Awaiting",
-            "targetStep": "\/api\/3\/workflow_steps\/6ffef050-e9bc-4158-a8d7-70bc99d1b828",
-            "sourceStep": "\/api\/3\/workflow_steps\/f6d0dc1e-a31f-4b2c-9621-9b999442bcff",
+            "targetStep": "\/api\/3\/workflow_steps\/db048767-1629-46c9-970b-5e62223a73ba",
+            "sourceStep": "\/api\/3\/workflow_steps\/bb1e4fbc-f5d2-42bd-9bca-fd4f874cbeb1",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "c9d52f60-1a85-4d6a-8dfd-f1ed64dd6b35"
+            "uuid": "916e81d0-ff06-4d77-b311-c77d60fcdf3a"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Source Control Connector Configuration -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/c49e159c-0791-45a9-8492-dd57bc2db820",
+            "sourceStep": "\/api\/3\/workflow_steps\/09582d16-0a7f-4aa8-aec4-72a9795141bd",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "35ce3b45-4f69-4969-89da-3148b98fbefc"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration1 -> Check Playbook Active or Awaiting",
+            "targetStep": "\/api\/3\/workflow_steps\/bb1e4fbc-f5d2-42bd-9bca-fd4f874cbeb1",
+            "sourceStep": "\/api\/3\/workflow_steps\/c49e159c-0791-45a9-8492-dd57bc2db820",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "12a0284e-91f4-473c-8a49-ccf7f6b7a130"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Configuration -> Is Pull Request Exist",
-            "targetStep": "\/api\/3\/workflow_steps\/63ced797-f2d3-4c96-af36-a03677bd051c",
-            "sourceStep": "\/api\/3\/workflow_steps\/f072491e-398c-41fc-bcf2-429c428799c1",
+            "targetStep": "\/api\/3\/workflow_steps\/1511cd33-7e15-4a27-8fd1-7993b4988eee",
+            "sourceStep": "\/api\/3\/workflow_steps\/e2746475-8dcc-4bac-9fd1-dd0c7935801c",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "9803bf14-ebc3-4fd7-ba2f-9d7ef59c12d2"
+            "uuid": "5ff17f77-db81-45a9-b611-a105e7dc6cd8"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Delete Branch -> Populate PR Merged Details",
-            "targetStep": "\/api\/3\/workflow_steps\/f20f064c-1a32-496c-83d6-9d01b8003d31",
-            "sourceStep": "\/api\/3\/workflow_steps\/be877e82-7aaf-47fe-8204-195db6eae3f8",
+            "name": "Delete Branch -> Pull Request Merged Details",
+            "targetStep": "\/api\/3\/workflow_steps\/1a75b9ae-2943-4911-b72d-1304a821eec1",
+            "sourceStep": "\/api\/3\/workflow_steps\/3be79dea-680a-47fe-8dd4-e0128f7cd8ab",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "bea3c973-0bd7-4224-ab69-f8c1bb312338"
+            "uuid": "a2771e88-ddd7-4682-a9af-c5ffe362a60c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Does Pull Request Exist -> Pull Request Does Not Exist",
+            "targetStep": "\/api\/3\/workflow_steps\/c6c7d07a-cda8-4a12-89a4-0e4d60b768ef",
+            "sourceStep": "\/api\/3\/workflow_steps\/1511cd33-7e15-4a27-8fd1-7993b4988eee",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b209feb5-c939-4e3c-923b-1e20b3f3f8c6"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Dummy Step -> Merge Pull Request",
-            "targetStep": "\/api\/3\/workflow_steps\/0f3cb590-79e5-4164-9564-7ebe12beead3",
-            "sourceStep": "\/api\/3\/workflow_steps\/69441836-22a5-4fc5-967c-3298dffe602d",
+            "targetStep": "\/api\/3\/workflow_steps\/f9c4f5fc-6672-431c-833e-0da14d27ae1b",
+            "sourceStep": "\/api\/3\/workflow_steps\/1fa2fd67-4b54-4195-bc3b-4b0c90263cd1",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "7394cfc3-97e5-4f30-993a-269faebf9878"
+            "uuid": "af8ae167-90c5-427b-bf50-79036a764e4d"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Find Related Task -> Check Source Control Connector Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/09582d16-0a7f-4aa8-aec4-72a9795141bd",
+            "sourceStep": "\/api\/3\/workflow_steps\/f2c59af5-9ff6-41c7-93ad-05dbf5113be7",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "2b0926c7-a807-4bd0-ac7a-9541ecece5e7"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Get Pull Requests Reviews -> Is Pull Request Approved",
-            "targetStep": "\/api\/3\/workflow_steps\/8368a9d6-228f-496f-8c32-7edff0553c48",
-            "sourceStep": "\/api\/3\/workflow_steps\/f85a9f56-a002-414d-acc1-4b1b5476667c",
+            "targetStep": "\/api\/3\/workflow_steps\/0ee694df-f1be-411d-a0cb-1d5239d9e2d3",
+            "sourceStep": "\/api\/3\/workflow_steps\/1ba3d0f3-6f3d-49a5-b308-522f5e211925",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "3a09fe7a-edc9-45d9-95fb-24858aeea819"
+            "uuid": "6456737c-5979-439c-8fee-3ba8623f5585"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Playbook Active or Awaiting -> Add Comment Playbook Is Active",
+            "targetStep": "\/api\/3\/workflow_steps\/aae109fb-8473-4af5-b125-29f721835993",
+            "sourceStep": "\/api\/3\/workflow_steps\/db048767-1629-46c9-970b-5e62223a73ba",
+            "label": "Active\/Awaiting",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "cdc4e88d-ce54-4f47-a71a-fbb98a453b3b"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Playbook Active or Awaiting -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/f072491e-398c-41fc-bcf2-429c428799c1",
-            "sourceStep": "\/api\/3\/workflow_steps\/6ffef050-e9bc-4158-a8d7-70bc99d1b828",
+            "targetStep": "\/api\/3\/workflow_steps\/e2746475-8dcc-4bac-9fd1-dd0c7935801c",
+            "sourceStep": "\/api\/3\/workflow_steps\/db048767-1629-46c9-970b-5e62223a73ba",
             "label": "Finished",
             "isExecuted": false,
             "group": null,
-            "uuid": "48eee0b8-1f18-45b1-b44b-68d36f351cda"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Playbook Active or Awaiting -> No Operation",
-            "targetStep": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262",
-            "sourceStep": "\/api\/3\/workflow_steps\/6ffef050-e9bc-4158-a8d7-70bc99d1b828",
-            "label": "Active\/Awaiting",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "53408120-f814-4286-a5d7-62141d30719d"
+            "uuid": "b93abb71-acfb-4122-9b0e-295dc5554a9d"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Pull Request Approved -> Copy of Populate PR Merged Details",
-            "targetStep": "\/api\/3\/workflow_steps\/b7264d62-7c41-43ee-a14d-955c72a79c0b",
-            "sourceStep": "\/api\/3\/workflow_steps\/8368a9d6-228f-496f-8c32-7edff0553c48",
+            "targetStep": "\/api\/3\/workflow_steps\/537a5ac6-872c-4490-903b-8bfe28174ffa",
+            "sourceStep": "\/api\/3\/workflow_steps\/0ee694df-f1be-411d-a0cb-1d5239d9e2d3",
             "label": "No",
             "isExecuted": false,
             "group": null,
-            "uuid": "949a92c3-eda7-4ea9-aa54-907f5a1d467b"
+            "uuid": "d87d9f3f-635a-4135-9f10-b2256cda0b26"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Pull Request Approved -> Dummy Step",
-            "targetStep": "\/api\/3\/workflow_steps\/69441836-22a5-4fc5-967c-3298dffe602d",
-            "sourceStep": "\/api\/3\/workflow_steps\/8368a9d6-228f-496f-8c32-7edff0553c48",
+            "targetStep": "\/api\/3\/workflow_steps\/1fa2fd67-4b54-4195-bc3b-4b0c90263cd1",
+            "sourceStep": "\/api\/3\/workflow_steps\/0ee694df-f1be-411d-a0cb-1d5239d9e2d3",
             "label": "Yes",
             "isExecuted": false,
             "group": null,
-            "uuid": "43107b25-461d-4bfd-ba38-55c58efe2f7f"
+            "uuid": "9de3bccc-6ac6-49df-98e8-373f3e3d9f7f"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Is Pull Request Exist -> Get Pull Requests Reviews",
-            "targetStep": "\/api\/3\/workflow_steps\/f85a9f56-a002-414d-acc1-4b1b5476667c",
-            "sourceStep": "\/api\/3\/workflow_steps\/63ced797-f2d3-4c96-af36-a03677bd051c",
+            "targetStep": "\/api\/3\/workflow_steps\/1ba3d0f3-6f3d-49a5-b308-522f5e211925",
+            "sourceStep": "\/api\/3\/workflow_steps\/1511cd33-7e15-4a27-8fd1-7993b4988eee",
             "label": "Yes",
             "isExecuted": false,
             "group": null,
-            "uuid": "195fd336-f4f4-4e33-9f4f-b5959bb3ff68"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Is Pull Request Exist -> Pull Request Not Exist",
-            "targetStep": "\/api\/3\/workflow_steps\/bbae426d-472e-457f-b306-050b8c9af732",
-            "sourceStep": "\/api\/3\/workflow_steps\/63ced797-f2d3-4c96-af36-a03677bd051c",
-            "label": "No",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "a689392e-49ac-4162-a4b6-485ed001bcd4"
+            "uuid": "a13e4c10-f5c7-4794-bf71-91841552741b"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Merge Pull Request -> Delete Branch",
-            "targetStep": "\/api\/3\/workflow_steps\/be877e82-7aaf-47fe-8204-195db6eae3f8",
-            "sourceStep": "\/api\/3\/workflow_steps\/0f3cb590-79e5-4164-9564-7ebe12beead3",
+            "targetStep": "\/api\/3\/workflow_steps\/3be79dea-680a-47fe-8dd4-e0128f7cd8ab",
+            "sourceStep": "\/api\/3\/workflow_steps\/f9c4f5fc-6672-431c-833e-0da14d27ae1b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "57ac0da1-39a4-4768-b71b-5c52fafaf847"
+            "uuid": "ce904f2d-3a3c-46c1-b22e-37801f4e644e"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Populate PR Merged Details -> No Operation",
-            "targetStep": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262",
-            "sourceStep": "\/api\/3\/workflow_steps\/f20f064c-1a32-496c-83d6-9d01b8003d31",
-            "label": "OK",
+            "name": "Pull Request Does Not Exist -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4",
+            "sourceStep": "\/api\/3\/workflow_steps\/c6c7d07a-cda8-4a12-89a4-0e4d60b768ef",
+            "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "c258ee74-59b0-4d1f-b210-1f52d297a6a4"
+            "uuid": "1fc0ecdd-6d2f-4364-959f-a933456944f4"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Pull Request Is Not Approved -> Add Pull Request Review",
-            "targetStep": "\/api\/3\/workflow_steps\/da5c4698-523f-4d34-9354-0f86a25ce1e3",
-            "sourceStep": "\/api\/3\/workflow_steps\/b7264d62-7c41-43ee-a14d-955c72a79c0b",
+            "targetStep": "\/api\/3\/workflow_steps\/e0ba9c6a-290d-4cf3-827a-c59822aaa07a",
+            "sourceStep": "\/api\/3\/workflow_steps\/537a5ac6-872c-4490-903b-8bfe28174ffa",
             "label": "Approve and Merge",
             "isExecuted": false,
             "group": null,
-            "uuid": "04872874-c6a1-4733-a85b-9593371876bc"
+            "uuid": "37d2bbe6-48b4-4341-a752-90f37484dc88"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Pull Request Is Not Approved -> No Operation",
-            "targetStep": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262",
-            "sourceStep": "\/api\/3\/workflow_steps\/b7264d62-7c41-43ee-a14d-955c72a79c0b",
+            "targetStep": "\/api\/3\/workflow_steps\/6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4",
+            "sourceStep": "\/api\/3\/workflow_steps\/537a5ac6-872c-4490-903b-8bfe28174ffa",
             "label": "Abort",
             "isExecuted": false,
             "group": null,
-            "uuid": "00a8c92f-fc79-436d-a741-21d19a82f8f1"
+            "uuid": "ffb04afb-479b-48d7-912f-bec5709a4d2a"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Pull Request Not Exist -> No Operation",
-            "targetStep": "\/api\/3\/workflow_steps\/f9f00611-ffd9-473d-9828-83607e702262",
-            "sourceStep": "\/api\/3\/workflow_steps\/bbae426d-472e-457f-b306-050b8c9af732",
-            "label": "Ok",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "416df681-223f-4ae1-b2ee-f279f3ec60e2"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Start -> Check Playbook Active or Awaiting",
-            "targetStep": "\/api\/3\/workflow_steps\/f6d0dc1e-a31f-4b2c-9621-9b999442bcff",
-            "sourceStep": "\/api\/3\/workflow_steps\/569e877c-6671-41c4-abb7-de0dfc2d1837",
+            "name": "Pull Request Merged Details -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4",
+            "sourceStep": "\/api\/3\/workflow_steps\/1a75b9ae-2943-4911-b72d-1304a821eec1",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "9d22f4d4-42c8-4e17-83b5-9902f13e8d6d"
+            "uuid": "f74acbfb-67ef-48a5-b7c6-6a767c2f7987"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Find Related Task",
+            "targetStep": "\/api\/3\/workflow_steps\/f2c59af5-9ff6-41c7-93ad-05dbf5113be7",
+            "sourceStep": "\/api\/3\/workflow_steps\/f4a19dea-e300-4787-85f7-61ee6335a9db",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "1e343d26-0210-4302-89c3-c2a050be9e8a"
         }
     ],
     "groups": [],
@@ -662,7 +782,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "ManualTrigger",
-        "CICD"
+        "CICD",
+        "ManualTrigger"
     ]
 }

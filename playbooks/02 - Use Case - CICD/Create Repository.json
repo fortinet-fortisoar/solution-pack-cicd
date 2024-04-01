@@ -4,7 +4,7 @@
     "name": "Create Repository",
     "aliasName": null,
     "tag": null,
-    "description": "Create the Public Repository for the specified repository name and base branch name in GitHub",
+    "description": "Create the Public Repository for the specified repository name and base branch name in Source Control",
     "isActive": true,
     "debug": false,
     "singleRecordExecution": false,
@@ -12,26 +12,27 @@
     "parameters": [
         "repo_name",
         "organization_name",
-        "base_branch"
+        "base_branch",
+        "connector_config_id"
     ],
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/a3d1eeea-a6f4-4619-a94b-0727444bf39c",
+    "triggerStep": "\/api\/3\/workflow_steps\/cf1d39f5-99ea-4b90-b6c7-73deccc38aa8",
     "steps": [
         {
             "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
-                "repo_data": "[]"
+                "cicd_env": "{{globalVars.cicd_env}}"
             },
             "status": null,
             "top": "165",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "228fe521-d440-42a1-b466-f5fa6f5a1163"
+            "uuid": "11730755-fcd6-4f4e-b776-d627788ddfd5"
         },
         {
             "@type": "WorkflowStep",
@@ -39,57 +40,45 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "org_name": "{{vars.input.params['organization_name']}}",
-                    "file_name": "README.md",
-                    "repo_name": "{{vars.input.params['repo_name']}}",
-                    "branch_name": "{{vars.input.params['base_branch']}}",
-                    "file_content": "Please add the README.md details here",
-                    "commit_message": "Created README.md file"
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}",
+                    "create_update_file_content_params": "{\"repo_name\": \"{{vars.input.params['repo_name']}}\",\n\"org_name\": \"{{vars.input.params['organization_name']}}\",\n\"file_name\": \"README.md\",\n\"file_content\": \"Please add the README.md details here\",\n\"commit_message\": \"Created README.md file\",\n\"branch_name\": \"{{vars.input.params['base_branch']}}\"}"
                 },
                 "apply_async": false,
                 "ignore_errors": true,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/3465e8b3-08ad-4ffc-8711-2925ede11c2f"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateUpdateFileContent\"][\"@id\"]}}"
             },
             "status": null,
             "top": "435",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "27f8f48d-c111-430e-8c88-6ee55af30e46"
+            "uuid": "beb23bd3-2c82-4e5b-b7a6-16b3cee4928f"
         },
         {
             "@type": "WorkflowStep",
             "name": "Create Repository",
             "description": null,
             "arguments": {
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<p>{% if vars.steps.Create_Repository['Error message'] is defined %}{{vars.input.params['repo_name']}} creation failed.{% else %}Created Repository <a href=\"https:\/\/github.com\/{{vars.input.params['organization_name']}}\/{{vars.input.params['repo_name']}}\" target=\"_blank\" rel=\"noopener\">{{vars.input.params['repo_name']}}<\/a> with the base branch {{vars.input.params['base_branch']}}{% endif %}<\/p>",
-                    "records": ""
-                },
                 "arguments": {
-                    "org_name": "{{vars.input.params['organization_name']}}",
-                    "repo_name": "{{vars.input.params['repo_name']}}"
+                    "create_repo_params": "{\"repo_name\": \"{{vars.input.params['repo_name']}}\",\n\"org_name\": \"{{vars.input.params['organization_name']}}\"}",
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}"
                 },
                 "apply_async": false,
                 "ignore_errors": true,
                 "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
-                "workflowReference": "\/api\/3\/workflows\/42ecbf82-e892-495d-aba6-23e91757ea38"
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateRepository\"][\"@id\"]}}"
             },
             "status": null,
             "top": "300",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
-            "uuid": "bf0679c3-99e0-4bc8-941a-1361841f356b"
+            "uuid": "875d4c26-1e67-4dce-984f-00247a4ca8d7"
         },
         {
             "@type": "WorkflowStep",
@@ -104,67 +93,70 @@
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
-            "uuid": "a6fda2d9-f33f-424b-94fe-5498e61286a0"
+            "uuid": "508b7ff9-0c73-4790-aadc-151c0fedab0b"
         },
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
+                "__triggerLimit": true,
                 "step_variables": {
                     "input": {
                         "params": []
                     }
-                }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
             },
             "status": null,
             "top": "30",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "a3d1eeea-a6f4-4619-a94b-0727444bf39c"
+            "uuid": "cf1d39f5-99ea-4b90-b6c7-73deccc38aa8"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Crear",
-            "targetStep": "\/api\/3\/workflow_steps\/bf0679c3-99e0-4bc8-941a-1361841f356b",
-            "sourceStep": "\/api\/3\/workflow_steps\/228fe521-d440-42a1-b466-f5fa6f5a1163",
+            "name": "Configuration -> Create Repository",
+            "targetStep": "\/api\/3\/workflow_steps\/875d4c26-1e67-4dce-984f-00247a4ca8d7",
+            "sourceStep": "\/api\/3\/workflow_steps\/11730755-fcd6-4f4e-b776-d627788ddfd5",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "084449bf-d36b-43c9-b937-f5eb26c6fe31"
+            "uuid": "ad8780f0-2165-47d1-9e4e-664e84a14d5d"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Create Base Branch -> Return Output",
-            "targetStep": "\/api\/3\/workflow_steps\/a6fda2d9-f33f-424b-94fe-5498e61286a0",
-            "sourceStep": "\/api\/3\/workflow_steps\/27f8f48d-c111-430e-8c88-6ee55af30e46",
+            "targetStep": "\/api\/3\/workflow_steps\/508b7ff9-0c73-4790-aadc-151c0fedab0b",
+            "sourceStep": "\/api\/3\/workflow_steps\/beb23bd3-2c82-4e5b-b7a6-16b3cee4928f",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "9fa9a515-c652-4a47-ad47-d7e5d4ebe548"
+            "uuid": "9fe209a8-5ece-4845-8826-5be9bbccc0f2"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Create Repository -> Create Base Branch",
-            "targetStep": "\/api\/3\/workflow_steps\/27f8f48d-c111-430e-8c88-6ee55af30e46",
-            "sourceStep": "\/api\/3\/workflow_steps\/bf0679c3-99e0-4bc8-941a-1361841f356b",
+            "targetStep": "\/api\/3\/workflow_steps\/beb23bd3-2c82-4e5b-b7a6-16b3cee4928f",
+            "sourceStep": "\/api\/3\/workflow_steps\/875d4c26-1e67-4dce-984f-00247a4ca8d7",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "60b16d1d-c9bf-41b0-8df7-440bc7f282df"
+            "uuid": "3a83cefd-63a4-43fd-85d9-bd828af8b63a"
         },
         {
             "@type": "WorkflowRoute",
             "name": "Start -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/228fe521-d440-42a1-b466-f5fa6f5a1163",
-            "sourceStep": "\/api\/3\/workflow_steps\/a3d1eeea-a6f4-4619-a94b-0727444bf39c",
+            "targetStep": "\/api\/3\/workflow_steps\/11730755-fcd6-4f4e-b776-d627788ddfd5",
+            "sourceStep": "\/api\/3\/workflow_steps\/cf1d39f5-99ea-4b90-b6c7-73deccc38aa8",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "578dc178-6b53-4712-a493-bdb83a951d37"
+            "uuid": "8fff20f2-6d68-4a74-b191-7e3e30084e52"
         }
     ],
     "groups": [],
@@ -174,8 +166,7 @@
     "isPrivate": false,
     "deletedAt": null,
     "recordTags": [
-        "Subroutine",
         "CICD",
-        "Repo"
+        "Subroutine"
     ]
 }
