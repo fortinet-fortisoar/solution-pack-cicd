@@ -25,6 +25,11 @@ The following pointers help understand the various steps of this lifecycle:
 
 5. Content developer selects the CR again and clicks **Submit Changes for Review**.
 
+    <table>
+        <th>NOTE</th>
+        <td>It is strongly recommended not to rename the records <em>after</em> the changes have been pushed to your preferred source control platform. However, if you have to rename, refer to the section <a href="#recommended-action">Recommended actions</a>.</td>
+    </table>
+
 6. A PR is created on the source control platform with the title and reviewers added by the content developer.
 
 7. CRs with changes appear with a PR name under the column **Pull Request**.
@@ -264,3 +269,33 @@ Following section explains how to get a list of closed change requests (CRs) sin
 2. Click **Apply Latest Content** tile under the **Production** tab.
 
 3. Click **Fetch Latest Changes** button from the lower-left of the screen to get the list of issues resolved since the last applied change.
+
+## Recommended Actions
+
+Renaming a record or a playbook collection, after raising the PR, creates a duplicate file or a folder record with the same UUID when the changes are pushed through the PR. This action results in the import process (*Apply Latest Content*) failing.
+
+```
+409 Conflict response:
+{"type":"UniqueConstraintViolationException","message":"Failed to create the record.
+The system administrator has define (truncated...)
+```
+
+To avoid this error, delete after renaming the records or the playbook collection, and before pushing the changes for review.
+
+The old files or the folders, which are now renamed, have to be deleted from your preferred source control platform before applying latest content on FortiSOAR.
+
+Refer to [Deleting files in a repository - GitHub](https://docs.github.com/en/repositories/working-with-files/managing-files/deleting-files-in-a-repository) for deleting the file from GitHub.
+
+#### Deleting a file in GitLab
+
+You can delete an individual file in your repository from **GitLab**.
+
+1. Browse to the file in your repository that you want to delete.
+
+2. In the top-right corner, click the **Delete** button to delete file.
+
+3. In the **Commit message** field, type a short, meaningful commit message that describes the reasons to delete the file.
+
+4. In the **Target Branch** field, select the branch from where to delete the file.
+
+5. Click **Delete File** to delete the selected file.
