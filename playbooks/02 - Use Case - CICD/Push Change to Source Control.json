@@ -743,6 +743,8 @@
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
     "uuid": "8aebb84d-ef60-4617-a4c5-fbc8a656588c",
     "owners": [],
     "isPrivate": false,
