@@ -20,6 +20,7 @@
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "current_user_source_control_connector_username": "{% for connector_config in vars.steps.Get_Source_Control_Connector_Configurations.data.configuration %}{% if vars.logged_in_user_sc_name==connector_config.config.username %}{{connector_config.config.username}}{% break %}{% endif %}{% endfor %}",
                 "current_user_source_control_connector_config_id": "{% for connector_config in vars.steps.Get_Source_Control_Connector_Configurations.data.configuration %}{% if vars.logged_in_user_sc_name==connector_config.config.username %}{{connector_config.config_id}}{% break %}{% endif %}{% endfor %}"
             },
             "status": null,
@@ -39,7 +40,7 @@
                     "body": "",
                     "method": "POST"
                 },
-                "version": "3.2.6",
+                "version": "3.6.0",
                 "connector": "cyops_utilities",
                 "operation": "make_cyops_request",
                 "operationTitle": "FSR: Make FortiSOAR API Call",
@@ -119,7 +120,7 @@
                 "params": {
                     "msg": "{% if vars.logged_in_user_sc_name == None %}{{\"Logged in FortiSOAR User is not Mapped with Source Control Username\"}}{% else %}{{vars.cicd_env[\"source_control\"][\"label\"]}} connector is not configured for the logged in User.{% endif %}"
                 },
-                "version": "3.2.6",
+                "version": "3.6.0",
                 "connector": "cyops_utilities",
                 "operation": "raise_exception",
                 "operationTitle": "Utils: Raise Exception",
@@ -137,7 +138,8 @@
             "name": "Return Output",
             "description": null,
             "arguments": {
-                "config_id": "{{vars.current_user_source_control_connector_config_id}}"
+                "config_id": "{{vars.current_user_source_control_connector_config_id}}",
+                "source_control_username": "{{vars.current_user_source_control_connector_username}}"
             },
             "status": null,
             "top": "705",
@@ -211,7 +213,7 @@
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "80f24149-b4d0-4334-98f7-599135f2c3be"
+            "uuid": "43fe9296-5a2b-440b-977c-1dd13b331a47"
         },
         {
             "@type": "WorkflowRoute",

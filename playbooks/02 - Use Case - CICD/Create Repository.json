@@ -216,13 +216,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Repository Exist -> Return Result",
-            "targetStep": "\/api\/3\/workflow_steps\/a52ef549-4540-46f2-a08a-beebdc52f077",
-            "sourceStep": "\/api\/3\/workflow_steps\/3d9dbebc-de88-483c-929d-4c49fce3855f",
-            "label": "Yes",
+            "name": "Get Repository Details -> Is Repository Exist",
+            "targetStep": "\/api\/3\/workflow_steps\/3d9dbebc-de88-483c-929d-4c49fce3855f",
+            "sourceStep": "\/api\/3\/workflow_steps\/bf7f1c73-5a7a-45a2-9ead-643ec44ae7fe",
+            "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "dfdf3f7c-3a70-49e5-ab3e-1fccbcd2a377"
+            "uuid": "fafc3797-8c7e-4714-a51a-65903fa2bc9b"
         },
         {
             "@type": "WorkflowRoute",
@@ -233,6 +233,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "639f5941-036d-4865-a9b0-943028dd7ec1"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Repository Exist -> Return Result",
+            "targetStep": "\/api\/3\/workflow_steps\/a52ef549-4540-46f2-a08a-beebdc52f077",
+            "sourceStep": "\/api\/3\/workflow_steps\/3d9dbebc-de88-483c-929d-4c49fce3855f",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "dfdf3f7c-3a70-49e5-ab3e-1fccbcd2a377"
         },
         {
             "@type": "WorkflowRoute",
