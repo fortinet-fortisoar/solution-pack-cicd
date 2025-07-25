@@ -60,8 +60,8 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"AddPullRequestReview\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1500",
-            "left": "920",
+            "top": "1740",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "e0ba9c6a-290d-4cf3-827a-c59822aaa07a"
@@ -113,6 +113,7 @@
             "arguments": {
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "cicd_config": "{{globalVars.cicd_config}}",
+                "current_user": "{{vars.currentUser | fromIRI}}",
                 "source_control_type": "{{(globalVars.cicd_config | toDict)[\"source_control_web_url\"] }}"
             },
             "status": null,
@@ -138,8 +139,8 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"DeleteBranch\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1740",
-            "left": "920",
+            "top": "1980",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "3be79dea-680a-47fe-8dd4-e0128f7cd8ab"
@@ -152,9 +153,9 @@
                 "conditions": [
                     {
                         "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/1ba3d0f3-6f3d-49a5-b308-522f5e211925",
+                        "step_iri": "\/api\/3\/workflow_steps\/80cdd3b0-e7d8-4a46-b5b1-354dc31f80e9",
                         "condition": "{{ (vars.pull_number | string) | length > 0 or (vars.input.records[0].pRStatus | length > 0 and vars.input.records[0].pRStatus==\"closed\") }}",
-                        "step_name": "Get Pull Requests Reviews"
+                        "step_name": "Get Pull Request Details"
                     },
                     {
                         "option": "No",
@@ -211,6 +212,29 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get Pull Request Details",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "get_pr_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"pull_number\": \"{{vars.pull_number}}\"\n}",
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
+                },
+                "apply_async": false,
+                "ignore_errors": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetPullRequest\"][\"@id\"]}}"
+            },
+            "status": null,
+            "top": "1060",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "80cdd3b0-e7d8-4a46-b5b1-354dc31f80e9"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Get Pull Requests Reviews",
             "description": null,
             "arguments": {
@@ -225,8 +249,8 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"ListPullRequestReviews\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1120",
-            "left": "1020",
+            "top": "1380",
+            "left": "1220",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "1ba3d0f3-6f3d-49a5-b308-522f5e211925"
@@ -281,11 +305,45 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1260",
-            "left": "1020",
+            "top": "1500",
+            "left": "1220",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "0ee694df-f1be-411d-a0cb-1d5239d9e2d3"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is User Approving Own or Closed PR",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/34f283c0-1c9c-431b-b400-4ec19cc25194",
+                        "condition": "{{ vars.steps.Get_Pull_Request_Details.data.user.login == vars.steps.Check_Source_Control_Connector_Configuration.source_control_username }}",
+                        "step_name": "User Approve Own PR"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/1ba3d0f3-6f3d-49a5-b308-522f5e211925",
+                        "step_name": "Get Pull Requests Reviews"
+                    },
+                    {
+                        "option": "Closed",
+                        "step_iri": "\/api\/3\/workflow_steps\/afc1112e-9ad5-4c65-8092-3a6b6152623f",
+                        "condition": "{{ vars.steps.Get_Pull_Request_Details.data.state == \"closed\" }}",
+                        "step_name": "PR Closed"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1180",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "202dd7ea-9cd2-4380-8049-488a44a10aa8"
         },
         {
             "@type": "WorkflowStep",
@@ -303,8 +361,8 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"MergePullRequest\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1620",
-            "left": "920",
+            "top": "1860",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "f9c4f5fc-6672-431c-833e-0da14d27ae1b"
@@ -331,8 +389,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1980",
-            "left": "620",
+            "top": "1900",
+            "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "6beb7d0f-e4b2-4e66-aa77-1bbc1cae29d4"
@@ -343,11 +401,40 @@
             "description": null,
             "arguments": [],
             "status": null,
-            "top": "1360",
-            "left": "1340",
+            "top": "1600",
+            "left": "1420",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "1fa2fd67-4b54-4195-bc3b-4b0c90263cd1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "PR Closed",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tasks": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "people": [],
+                    "content": "<h5>Warning: Action Not Permitted<\/h5>\n<hr>\n<p>This pull request has already been closed.<br>To maintain proper workflow and ensure accurate tracking of changes, no further actions such as approvals or merges are allowed on closed pull requests.<br>If additional changes are needed, please open a new pull request.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1300",
+            "left": "1020",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "afc1112e-9ad5-4c65-8092-3a6b6152623f"
         },
         {
             "@type": "WorkflowStep",
@@ -430,8 +517,8 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "1360",
-            "left": "720",
+            "top": "1600",
+            "left": "920",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "537a5ac6-872c-4490-903b-8bfe28174ffa"
@@ -459,8 +546,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1860",
-            "left": "920",
+            "top": "2100",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "1a75b9ae-2943-4911-b72d-1304a821eec1"
@@ -474,7 +561,8 @@
                 "org_name": "{{vars.cicd_config[\"organizationName\"]}}",
                 "repo_name": "{{vars.cicd_config[\"contentRepoName\"]}}",
                 "new_branch": "CR-{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
-                "pull_number": "{{(vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0]).split(\"\/\")[-1]}}"
+                "pull_number": "{{(vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0]).split(\"\/\")[-1]}}",
+                "fsr_logged_in_user": "{{vars.currentUser | fromIRI}}"
             },
             "status": null,
             "top": "840",
@@ -551,6 +639,35 @@
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
             "uuid": "f4a19dea-e300-4787-85f7-61ee6335a9db"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "User Approve Own PR",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tasks": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "people": [],
+                    "content": "<h5>Warning: Approval Not Permitted<\/h5>\n<hr>\n<p>You are not allowed to approve your own pull request.<br>To maintain code review integrity and ensure objective feedback, pull requests must be reviewed and approved by another team member. Please assign a reviewer to proceed.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1400",
+            "left": "820",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "34f283c0-1c9c-431b-b400-4ec19cc25194"
         }
     ],
     "routes": [
@@ -596,13 +713,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration1 -> Check Playbook Active or Awaiting",
+            "name": "Configuration -> Check Playbook Active or Awaiting",
             "targetStep": "\/api\/3\/workflow_steps\/bb1e4fbc-f5d2-42bd-9bca-fd4f874cbeb1",
             "sourceStep": "\/api\/3\/workflow_steps\/c49e159c-0791-45a9-8492-dd57bc2db820",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "12a0284e-91f4-473c-8a49-ccf7f6b7a130"
+            "uuid": "2fc4c298-54bd-4855-b62f-4136a6688230"
         },
         {
             "@type": "WorkflowRoute",
@@ -623,6 +740,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "a2771e88-ddd7-4682-a9af-c5ffe362a60c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Does Pull Request Exist -> Get Pull Request Details",
+            "targetStep": "\/api\/3\/workflow_steps\/80cdd3b0-e7d8-4a46-b5b1-354dc31f80e9",
+            "sourceStep": "\/api\/3\/workflow_steps\/1511cd33-7e15-4a27-8fd1-7993b4988eee",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "fdf8fa1c-982f-4bde-b745-491e168c3bcb"
         },
         {
             "@type": "WorkflowRoute",
@@ -653,6 +780,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "2b0926c7-a807-4bd0-ac7a-9541ecece5e7"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Pull Request Details -> Is User Approve Own PR",
+            "targetStep": "\/api\/3\/workflow_steps\/202dd7ea-9cd2-4380-8049-488a44a10aa8",
+            "sourceStep": "\/api\/3\/workflow_steps\/80cdd3b0-e7d8-4a46-b5b1-354dc31f80e9",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "93b51f85-7e14-4a5c-bdff-be07086a7d5f"
         },
         {
             "@type": "WorkflowRoute",
@@ -706,13 +843,33 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Pull Request Exist -> Get Pull Requests Reviews",
+            "name": "Is User Approve Own PR -> Get Pull Requests Reviews",
             "targetStep": "\/api\/3\/workflow_steps\/1ba3d0f3-6f3d-49a5-b308-522f5e211925",
-            "sourceStep": "\/api\/3\/workflow_steps\/1511cd33-7e15-4a27-8fd1-7993b4988eee",
+            "sourceStep": "\/api\/3\/workflow_steps\/202dd7ea-9cd2-4380-8049-488a44a10aa8",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "16841b3a-ac78-47dc-bca9-a378bce25dfa"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is User Approve Own PR -> User Approve Own PR",
+            "targetStep": "\/api\/3\/workflow_steps\/34f283c0-1c9c-431b-b400-4ec19cc25194",
+            "sourceStep": "\/api\/3\/workflow_steps\/202dd7ea-9cd2-4380-8049-488a44a10aa8",
             "label": "Yes",
             "isExecuted": false,
             "group": null,
-            "uuid": "a13e4c10-f5c7-4794-bf71-91841552741b"
+            "uuid": "7f160de5-54a6-4e26-90f0-e3ab2c358b1b"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is User Approving Own PR OR PR Closed -> PR Closed",
+            "targetStep": "\/api\/3\/workflow_steps\/afc1112e-9ad5-4c65-8092-3a6b6152623f",
+            "sourceStep": "\/api\/3\/workflow_steps\/202dd7ea-9cd2-4380-8049-488a44a10aa8",
+            "label": "Closed",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "0e4c1600-ade3-4b96-abea-b580f6b0b66d"
         },
         {
             "@type": "WorkflowRoute",
@@ -778,7 +935,7 @@
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
     "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
-    "isEditable": false,
+    "isEditable": true,
     "uuid": "8de2d719-a90d-4b5e-ad2b-5ef0564fbb05",
     "owners": [],
     "isPrivate": false,
