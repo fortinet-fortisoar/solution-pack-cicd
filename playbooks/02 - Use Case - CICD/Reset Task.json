@@ -1,0 +1,121 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Reset Task",
+    "aliasName": null,
+    "tag": null,
+    "description": "Reset the CICD task to the Pending state.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/ed388093-b66f-45cc-a4f4-ea4dcb1418e7",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Set Task As Pending",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "95a2e727-b219-41bd-aa9e-a5cfda48b51f"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "route": "6e1e309d-6ef4-444d-8c38-8796bef09984",
+                "resources": [
+                    "change_management"
+                ],
+                "__triggerLimit": true,
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    }
+                },
+                "triggerOnSource": true,
+                "displayConditions": {
+                    "change_management": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "AND",
+                        "filters": [
+                            {
+                                "type": "object",
+                                "field": "status",
+                                "value": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                                "_value": {
+                                    "@id": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                                    "display": "Pending",
+                                    "itemValue": "Pending"
+                                },
+                                "operator": "neq"
+                            }
+                        ]
+                    }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": false,
+                "showToasterMessage": {
+                    "visible": false,
+                    "messageVisible": true
+                },
+                "triggerOnReplicate": false,
+                "singleRecordExecution": false
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "group": null,
+            "uuid": "ed388093-b66f-45cc-a4f4-ea4dcb1418e7"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Set Task As Pending",
+            "targetStep": "\/api\/3\/workflow_steps\/95a2e727-b219-41bd-aa9e-a5cfda48b51f",
+            "sourceStep": "\/api\/3\/workflow_steps\/ed388093-b66f-45cc-a4f4-ea4dcb1418e7",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a63dd3c8-9780-4337-90df-2a5728b93cf4"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
+    "uuid": "641bacc0-2c2e-4094-98b6-da436b9766a7",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CICD",
+        "ManualTrigger"
+    ]
+}

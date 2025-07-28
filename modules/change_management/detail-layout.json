@@ -96,9 +96,28 @@
                                                                                                     {
                                                                                                         "name": "description",
                                                                                                         "highlightMode": true,
+                                                                                                        "readOnly": true,
+                                                                                                        "linky": true
+                                                                                                    }
+                                                                                                ],
+                                                                                                "style": "col-lg-6"
+                                                                                            },
+                                                                                            {
+                                                                                                "fields": [
+                                                                                                    {
+                                                                                                        "name": "lastCommitID",
+                                                                                                        "highlightMode": true,
+                                                                                                        "linky": true,
+                                                                                                        "readOnly": true
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "name": "commitStatus",
+                                                                                                        "highlightMode": true,
+                                                                                                        "linky": true,
                                                                                                         "readOnly": true
                                                                                                     }
-                                                                                                ]
+                                                                                                ],
+                                                                                                "style": "col-lg-6"
                                                                                             }
                                                                                         ]
                                                                                     }
@@ -3025,11 +3044,25 @@
                 "_collapsed": false
             }
         ],
-        "actionButtons": [],
+        "actionButtons": [
+            {
+                "id": "\/api\/3\/workflows\/641bacc0-2c2e-4094-98b6-da436b9766a7",
+                "name": "Reset Task",
+                "icon": "icon icon-restore"
+            }
+        ],
         "wid": "2cb77b51-1f1e-4729-85c6-d03a61da3323",
         "metadata": [],
         "allowExecuteConnectorActionButton": false,
         "showCollabByDefault": false
     },
-    "uuid": "modules-change_management-detail"
+    "module": "change_management",
+    "filters": [],
+    "isDefault": true,
+    "visible": true,
+    "viewOptions": "detail",
+    "name": "Base Template",
+    "system": true,
+    "uuid": "modules-change_management-detail",
+    "newUuid": "174bc413-7670-4f57-9466-c049d29a5291"
 }

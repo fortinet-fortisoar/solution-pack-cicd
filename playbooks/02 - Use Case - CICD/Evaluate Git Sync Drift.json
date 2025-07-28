@@ -1,0 +1,355 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Evaluate Git Sync Drift",
+    "aliasName": null,
+    "tag": null,
+    "description": "Analyzes the commit history to determine how far the current environment has drifted from the latest state of the prod-content repository\u2014both ahead and behind in commits.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [
+        "cr_iri",
+        "lastCommitID",
+        "previousCommitID",
+        "org_name",
+        "repo_name"
+    ],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/c813cbb3-191e-4a0b-929f-5511c150947b",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Source Control Connector Configuration",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
+            },
+            "status": null,
+            "top": "165",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "162fb2f9-c370-4559-bc37-025ea8ad7fd3"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "cr_iri": "{{vars.input.records[0]['@id'] or vars.input.params['cr_iri']}}",
+                "cicd_env": "{{globalVars.cicd_env}}",
+                "cicd_config": "{{globalVars.cicd_config}}",
+                "lastCommitID": "{{vars.input.records[0].lastCommitID or vars.input.params.lastCommitID}}",
+                "previousCommitID": "{{vars.previous.data.lastCommitID or vars.input.params.previousCommitID}}"
+            },
+            "status": null,
+            "top": "300",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "8b0637f2-0293-4cae-b468-1566a8b17b1c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Fetch Commit Comparison",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "get_commit_params": "{\n\"org_name\": \"{{vars.cicd_config. organizationName}}\",\n\"repo_name\": \"{{vars.cicd_config. contentRepoName}}\",\n\"base\": \"{{vars.lastCommitID}}\",\n\"head\": \"{{vars.previousCommitID}}\"\n}",
+                    "connector_config_id": "aaa"
+                },
+                "apply_async": false,
+                "step_variables": {
+                    "comparisonLink": "{% set html_url = vars.steps.Fetch_Commit_Comparison.data.html_url.split('compare\/') %}{% set base_url = html_url[0] %}{% set last_commit =(vars.steps.Fetch_Commit_Comparison.data.html_url.split('compare\/')[-1]).split('...')[0] %}{% set pre_commit = (vars.steps.Fetch_Commit_Comparison.data.html_url.split('compare\/')[-1]).split('...')[-1] %}{% set new_html_url = base_url + \"compare\/\" + pre_commit + \"...\" + last_commit %}{{new_html_url}}"
+                },
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetCommitComparison\"][\"@id\"]}}"
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "805ac11c-d049-4494-af2e-c69070685c3c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is Last Commit ID Present",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "No",
+                        "step_iri": "\/api\/3\/workflow_steps\/d1b9d28d-a5f0-4b59-b569-f80e068cf754",
+                        "condition": "{{ vars.previousCommitID == None }}",
+                        "step_name": "No Operation"
+                    },
+                    {
+                        "option": "Yes",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/805ac11c-d049-4494-af2e-c69070685c3c",
+                        "step_name": "Fetch Commit Comparison"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "74b0f40e-d013-4183-9c58-5aa3ab8597f6"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "No Operation",
+            "description": null,
+            "arguments": {
+                "params": [],
+                "version": "3.6.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "d1b9d28d-a5f0-4b59-b569-f80e068cf754"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Send Notification",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Sync Required: Environment Behind",
+                        "description": "<h4 style=\"color: #ff9900;\">\u26a0\ufe0f Environment Drift Detected<\/h4>\n<p>This environment is currently&nbsp;<strong>{{ vars.steps.Fetch_Commit_Comparison.data.behind_by }} commit(s) behind<\/strong> the latest production content.<\/p>\n<p>To bring this environment <strong>up-to-date<\/strong>, apply the latest production content.<\/p>\n<br>\n\n**Environment Drift Report**\n* Status: {{ vars.steps.Fetch_Commit_Comparison.data.status }}\n* Ahead By: {{ vars.steps.Fetch_Commit_Comparison.data.ahead_by }}\n* Behind By: {{ vars.steps.Fetch_Commit_Comparison.data.behind_by }}\n* Total Commits Difference: {{ vars.steps.Fetch_Commit_Comparison.data.total_commits }}\n* Comparison: [View Comparison]({{vars.comparisonLink}})",
+                        "inputVariables": []
+                    }
+                },
+                "record": "{{vars.cr_iri}}",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": true,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Ok",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/d1b9d28d-a5f0-4b59-b569-f80e068cf754"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "840",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "9f775b6c-5b85-4586-8ff9-cb0d4dcfad2c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "resource": "change_management",
+                "resources": [
+                    "change_management"
+                ],
+                "__triggerLimit": true,
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": [
+                            "{{vars.input.records[0]}}"
+                        ]
+                    }
+                },
+                "triggerOnSource": true,
+                "fieldbasedtrigger": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Apply Latest Content",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "object",
+                            "field": "environment",
+                            "value": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                                "display": "Production",
+                                "itemValue": "Production"
+                            },
+                            "operator": "eq"
+                        },
+                        {
+                            "type": "primitive",
+                            "field": "lastCommitID",
+                            "value": "",
+                            "operator": "changed",
+                            "_operator": "changed"
+                        }
+                    ]
+                },
+                "triggerOnReplicate": false
+            },
+            "status": null,
+            "top": "30",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/9300bf69-5063-486d-b3a6-47eb9da24872",
+            "group": null,
+            "uuid": "c813cbb3-191e-4a0b-929f-5511c150947b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Record",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "commitStatus": "<h5 style=\"color: #ff9900;\">\u26a0\ufe0f Environment Drift Detected<\/h5>\n<p>This environment is currently&nbsp;<strong>{{ vars.steps.Fetch_Commit_Comparison.data.behind_by }} commit(s) behind<\/strong> the latest production content.<\/p>\n<p>To bring this environment <strong>up-to-date<\/strong>, apply the latest production content.<\/p>\n<p>&nbsp;<\/p>\n<p><strong>Environment Drift Report<\/strong><\/p>\n<p>- Status: {{ vars.steps.Fetch_Commit_Comparison.data.status }}<\/p>\n<p>- Ahead By: {{ vars.steps.Fetch_Commit_Comparison.data.ahead_by }}<\/p>\n<p>- Behind By: {{ vars.steps.Fetch_Commit_Comparison.data.behind_by }}<\/p>\n<p>- Comparison:&nbsp;<a href=\"{{vars.comparisonLink}}\" target=\"_blank\" rel=\"noopener\">View Comparison<\/a><\/p>"
+                },
+                "operation": "Append",
+                "collection": "{{vars.cr_iri}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "240a6220-7993-4a2e-b06f-6fd6ad2407af"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Source Control Connector Configuration -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/8b0637f2-0293-4cae-b468-1566a8b17b1c",
+            "sourceStep": "\/api\/3\/workflow_steps\/162fb2f9-c370-4559-bc37-025ea8ad7fd3",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "10049dce-f02a-4e7c-b09b-226a98bdafda"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Is Last Commit ID Present",
+            "targetStep": "\/api\/3\/workflow_steps\/74b0f40e-d013-4183-9c58-5aa3ab8597f6",
+            "sourceStep": "\/api\/3\/workflow_steps\/8b0637f2-0293-4cae-b468-1566a8b17b1c",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "195e96c0-49e1-4ca2-b522-595845856159"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Fetch Commit Comparison -> Update Record",
+            "targetStep": "\/api\/3\/workflow_steps\/240a6220-7993-4a2e-b06f-6fd6ad2407af",
+            "sourceStep": "\/api\/3\/workflow_steps\/805ac11c-d049-4494-af2e-c69070685c3c",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "044f186b-3fb3-4653-bf52-a527b3bf01ad"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Last Commit ID Present -> Fetch Commit Comparison",
+            "targetStep": "\/api\/3\/workflow_steps\/805ac11c-d049-4494-af2e-c69070685c3c",
+            "sourceStep": "\/api\/3\/workflow_steps\/74b0f40e-d013-4183-9c58-5aa3ab8597f6",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "6afa90cc-64c9-4ca4-a9b2-067d43d1817b"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Last Commit ID Present -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/d1b9d28d-a5f0-4b59-b569-f80e068cf754",
+            "sourceStep": "\/api\/3\/workflow_steps\/74b0f40e-d013-4183-9c58-5aa3ab8597f6",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b5f92211-7c5b-4c64-b514-f80f09e6156f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Check Source Control Connector Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/162fb2f9-c370-4559-bc37-025ea8ad7fd3",
+            "sourceStep": "\/api\/3\/workflow_steps\/c813cbb3-191e-4a0b-929f-5511c150947b",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a5324915-ecb0-4300-8e7e-79723daae76c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Record -> Send Notification",
+            "targetStep": "\/api\/3\/workflow_steps\/9f775b6c-5b85-4586-8ff9-cb0d4dcfad2c",
+            "sourceStep": "\/api\/3\/workflow_steps\/240a6220-7993-4a2e-b06f-6fd6ad2407af",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "47d89c15-85c3-4764-a8fb-15c51e1db02e"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
+    "uuid": "fce53c7e-778d-48aa-afb7-8f67830570ab",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CICD",
+        "PostUpdate"
+    ]
+}

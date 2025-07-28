@@ -188,7 +188,7 @@
             "description": null,
             "arguments": {
                 "arguments": {
-                    "get_commit_params": "{ \"org_name\": {{vars.steps.Get_Repositories_Detail.input.orgName}}, \"repo_name\": {{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}, \"commit_ref\": {{vars.steps.Get_Repositories_Detail.input.baseBranchName}} }",
+                    "get_commit_params": "{ \"org_name\": \"{{vars.steps.Get_Repositories_Detail.input.orgName}}\", \"repo_name\": \"{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}\", \"commit_ref\": \"{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}\" }",
                     "connector_config_id": "{{vars.input.params['connector_config_id']}}"
                 },
                 "apply_async": false,
