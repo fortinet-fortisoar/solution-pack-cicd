@@ -5,6 +5,8 @@
             "PLURAL_NAME": "Gestion du changement"
         },
         "FIELDS": {
+            "COMMITSTATUS": "Statut de validation",
+            "LASTCOMMITID": "Dernier ID de validation",
             "ISSUES": "Problèmes",
             "LASTBUILDDEPLOYEDON": "Dernière version déployée le",
             "COMMENTS": "Commentaires",
