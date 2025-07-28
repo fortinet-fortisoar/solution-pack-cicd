@@ -77,10 +77,38 @@
             },
             "status": null,
             "top": "570",
-            "left": "125",
+            "left": "135",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "805ac11c-d049-4494-af2e-c69070685c3c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is Last Commit Behind",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/9f775b6c-5b85-4586-8ff9-cb0d4dcfad2c",
+                        "condition": "{{ vars.steps.Fetch_Commit_Comparison.data.status == \"behind\" }}",
+                        "step_name": "Send Notification"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/d1b9d28d-a5f0-4b59-b569-f80e068cf754",
+                        "step_name": "No Operation"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "135",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "434fee56-88e6-4e8a-933d-89298bbb9d65"
         },
         {
             "@type": "WorkflowStep",
@@ -123,7 +151,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "570",
+            "top": "975",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
@@ -177,7 +205,7 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "840",
+            "top": "975",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -249,7 +277,7 @@
             "description": null,
             "arguments": {
                 "resource": {
-                    "commitStatus": "<h5 style=\"color: #ff9900;\">\u26a0\ufe0f Environment Drift Detected<\/h5>\n<p>This environment is currently&nbsp;<strong>{{ vars.steps.Fetch_Commit_Comparison.data.behind_by }} commit(s) behind<\/strong> the latest production content.<\/p>\n<p>To bring this environment <strong>up-to-date<\/strong>, apply the latest production content.<\/p>\n<p>&nbsp;<\/p>\n<p><strong>Environment Drift Report<\/strong><\/p>\n<p>- Status: {{ vars.steps.Fetch_Commit_Comparison.data.status }}<\/p>\n<p>- Ahead By: {{ vars.steps.Fetch_Commit_Comparison.data.ahead_by }}<\/p>\n<p>- Behind By: {{ vars.steps.Fetch_Commit_Comparison.data.behind_by }}<\/p>\n<p>- Comparison:&nbsp;<a href=\"{{vars.comparisonLink}}\" target=\"_blank\" rel=\"noopener\">View Comparison<\/a><\/p>"
+                    "commitStatus": "<p>{% if vars.steps.Fetch_Commit_Comparison.data.status == \"behind\" %}<\/p>\n<h5 class=\"margin-top-0\" style=\"color: #ff9900;\">\u26a0\ufe0f Environment Drift Detected<\/h5>\n<p>This environment is currently&nbsp;<strong>{{ vars.steps.Fetch_Commit_Comparison.data.behind_by }} commit(s) behind<\/strong> the latest production content.<\/p>\n<p>To bring this environment <strong>up-to-date<\/strong>, apply the latest production content.<\/p>\n<p>&nbsp;<\/p>\n<p><strong>Environment Drift Report<\/strong><\/p>\n<p>- Status: {{ vars.steps.Fetch_Commit_Comparison.data.status }}<\/p>\n<p>- Ahead By: {{ vars.steps.Fetch_Commit_Comparison.data.ahead_by }}<\/p>\n<p>- Behind By: {{ vars.steps.Fetch_Commit_Comparison.data.behind_by }}<\/p>\n<p>- Comparison:&nbsp;<a href=\"{{vars.comparisonLink}}\" target=\"_blank\" rel=\"noopener\">View Comparison<\/a><\/p>\n<p>{% else %}<\/p>\n<h5 class=\"margin-top-0\" style=\"color: #28a745;\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>\n<p>{% endif %}<\/p>"
                 },
                 "operation": "Append",
                 "collection": "{{vars.cr_iri}}",
@@ -262,7 +290,7 @@
             },
             "status": null,
             "top": "705",
-            "left": "125",
+            "left": "135",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "240a6220-7993-4a2e-b06f-6fd6ad2407af"
@@ -301,6 +329,26 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Is Last Commit Behind -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/d1b9d28d-a5f0-4b59-b569-f80e068cf754",
+            "sourceStep": "\/api\/3\/workflow_steps\/434fee56-88e6-4e8a-933d-89298bbb9d65",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f85f7a85-2246-43e1-a7ca-955758275a1a"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Last Commit Behind -> Send Notification",
+            "targetStep": "\/api\/3\/workflow_steps\/9f775b6c-5b85-4586-8ff9-cb0d4dcfad2c",
+            "sourceStep": "\/api\/3\/workflow_steps\/434fee56-88e6-4e8a-933d-89298bbb9d65",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "c29f87fa-8415-4b7f-b3e3-201c9a0be6ae"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Is Last Commit ID Present -> Fetch Commit Comparison",
             "targetStep": "\/api\/3\/workflow_steps\/805ac11c-d049-4494-af2e-c69070685c3c",
             "sourceStep": "\/api\/3\/workflow_steps\/74b0f40e-d013-4183-9c58-5aa3ab8597f6",
@@ -331,13 +379,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update Record -> Send Notification",
-            "targetStep": "\/api\/3\/workflow_steps\/9f775b6c-5b85-4586-8ff9-cb0d4dcfad2c",
+            "name": "Update Record -> Is Last Commit Behind",
+            "targetStep": "\/api\/3\/workflow_steps\/434fee56-88e6-4e8a-933d-89298bbb9d65",
             "sourceStep": "\/api\/3\/workflow_steps\/240a6220-7993-4a2e-b06f-6fd6ad2407af",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "47d89c15-85c3-4764-a8fb-15c51e1db02e"
+            "uuid": "37ee36e1-d959-47d2-8926-dc772c8659b3"
         }
     ],
     "groups": [],

@@ -441,7 +441,7 @@
                                 "title": "Dynamic List",
                                 "usable": true,
                                 "options": "{{vars.pr_reviewers}}",
-                                "tooltip": "Specify the comma-separated list of user names that you want to add as reviewers",
+                                "tooltip": "Select list of user names that you want to add as reviewers",
                                 "dataType": "dynamicList",
                                 "formType": "dynamicList",
                                 "required": false,
