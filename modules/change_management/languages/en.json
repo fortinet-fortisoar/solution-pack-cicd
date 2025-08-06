@@ -5,6 +5,8 @@
             "PLURAL_NAME": "Change Management"
         },
         "FIELDS": {
+            "COMMITSTATUS": "Commit Status",
+            "LASTCOMMITID": "Last Commit ID",
             "ISSUES": "Issues",
             "LASTBUILDDEPLOYEDON": "Last Build Deployed On",
             "COMMENTS": "Comments",

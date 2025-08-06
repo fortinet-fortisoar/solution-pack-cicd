@@ -31,7 +31,7 @@
                 }
             },
             "status": null,
-            "top": "1100",
+            "top": "1040",
             "left": "1000",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -53,7 +53,7 @@
                 }
             },
             "status": null,
-            "top": "1160",
+            "top": "1100",
             "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -151,7 +151,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CloneRepository\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1220",
+            "top": "1140",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -167,7 +167,7 @@
                 "base_branch_name": "{{vars.cicd_config.baseBranch}}"
             },
             "status": null,
-            "top": "960",
+            "top": "940",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -225,7 +225,7 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "1110",
+            "top": "1040",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -254,11 +254,40 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1940",
+            "top": "2180",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "f183e6b1-7bc4-4fa1-bbe5-c78d383d64b0"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Delete Pending Manual Inputs",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.steps.Get_Pending_Manual_Inputs.data['hydra:member'] | length > 0}}",
+                "params": {
+                    "iri": "\/api\/wf\/api\/manual-wf-input\/{{vars.item.id}}\/?format=json",
+                    "body": "",
+                    "method": "DELETE"
+                },
+                "version": "3.6.0",
+                "for_each": {
+                    "item": "{{vars.steps.Get_Pending_Manual_Inputs.data['hydra:member']}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1940",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "c99e76f8-69cb-4676-a6b9-fd7ddc2c9b65"
         },
         {
             "@type": "WorkflowStep",
@@ -283,11 +312,56 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1340",
+            "top": "1360",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "b0caaefc-675c-41d8-b924-7c18f923dc3c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Latest Commit",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "get_commit_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"commit_ref\": \"{{vars.base_branch_name}}\",\n\"repo_type\": \"Organization\"\n}",
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetCommit\"][\"@id\"]}}"
+            },
+            "status": null,
+            "top": "1240",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "3bbe4b2e-eb2a-43b5-9659-5630c4e95d67"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Pending Manual Inputs",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/manual-wf-input\/list_wfinput\/?format=json&limit=10&offset=0&ordering=-id&record=%2Fapi%2F3%2Fchange_management%2F4be084b9-c5fe-4d42-943f-6bb2161d7157&unauthenticated_input=false",
+                    "body": "{\"assigned_to\":\"all\",\"is_approval\":false}",
+                    "method": "POST"
+                },
+                "version": "3.6.0",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1820",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "06347ec2-e766-4463-a762-86b201c33a51"
         },
         {
             "@type": "WorkflowStep",
@@ -361,7 +435,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1580",
+            "top": "1600",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/0bfed618-0316-11e7-93ae-92361f002671",
             "group": null,
@@ -400,7 +474,7 @@
             "description": null,
             "arguments": [],
             "status": null,
-            "top": "1380",
+            "top": "1320",
             "left": "460",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -488,7 +562,7 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "960",
+            "top": "940",
             "left": "840",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -503,7 +577,7 @@
                 "input": {
                     "schema": {
                         "title": "Apply Latest Content",
-                        "description": "Select the repository you want to apply the changes from",
+                        "description": "Please verify the commit status in source control before applying the latest content:\n{{vars.input.records[0].commitStatus}}\n<br>\nSelect the repository from which you want to apply the changes.",
                         "inputVariables": [
                             {
                                 "name": "selectRepositoryType",
@@ -709,7 +783,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1260",
+            "top": "1200",
             "left": "460",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
@@ -737,6 +811,8 @@
                     "batch_size": 100
                 },
                 "resource": {
+                    "commitStatus": "<h5 style=\"color: #28a745;\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>",
+                    "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}",
                     "lastBuildDeployedOn": "{%if vars.repo_name == vars.cicd_config.content.split('\/')[-1] %}{{arrow.utcnow().int_timestamp}}{%else%}{{vars.input.records[0].lastBuildDeployedOn}}{%endif%}"
                 },
                 "_showJson": false,
@@ -750,7 +826,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1820",
+            "top": "2060",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -775,7 +851,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1460",
+            "top": "1480",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -831,8 +907,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1360",
-            "left": "1300",
+            "top": "1300",
+            "left": "1220",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "9ddd19a2-5a0f-4186-a7d5-81f0462795d5"
@@ -923,13 +999,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Clone Repository -> Find Apply Latest Changes Record",
-            "targetStep": "\/api\/3\/workflow_steps\/b0caaefc-675c-41d8-b924-7c18f923dc3c",
+            "name": "Clone Repository -> Get Latest Commit",
+            "targetStep": "\/api\/3\/workflow_steps\/3bbe4b2e-eb2a-43b5-9659-5630c4e95d67",
             "sourceStep": "\/api\/3\/workflow_steps\/d2a8a56c-dee8-44c3-8d20-e3a84533b1c8",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "fd5d24ee-49b2-4e5d-b645-7d688942b171"
+            "uuid": "9d608958-c651-4c19-b1b1-aff86782a8d5"
         },
         {
             "@type": "WorkflowRoute",
@@ -963,6 +1039,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Delete Pending Manual Inputs -> Update Deployed Date",
+            "targetStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
+            "sourceStep": "\/api\/3\/workflow_steps\/c99e76f8-69cb-4676-a6b9-fd7ddc2c9b65",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "2d11afaa-f6a9-487b-a2ba-b9c0b22225e2"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Dummy Step1 -> Update Status to Pending",
             "targetStep": "\/api\/3\/workflow_steps\/9ddd19a2-5a0f-4186-a7d5-81f0462795d5",
             "sourceStep": "\/api\/3\/workflow_steps\/697bee6f-0ae5-4909-b131-13ff078007f5",
@@ -980,6 +1066,26 @@
             "isExecuted": false,
             "group": null,
             "uuid": "32d8462c-e069-42b7-b3d3-92029d74d1fa"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Latest Commit -> Find Apply Latest Changes Record",
+            "targetStep": "\/api\/3\/workflow_steps\/b0caaefc-675c-41d8-b924-7c18f923dc3c",
+            "sourceStep": "\/api\/3\/workflow_steps\/3bbe4b2e-eb2a-43b5-9659-5630c4e95d67",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a48fb4a3-e33e-495c-bc32-1ec104a9241f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Pending Manual Inputs -> Delete Pending Manual Inputs",
+            "targetStep": "\/api\/3\/workflow_steps\/c99e76f8-69cb-4676-a6b9-fd7ddc2c9b65",
+            "sourceStep": "\/api\/3\/workflow_steps\/06347ec2-e766-4463-a762-86b201c33a51",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "9feea06a-0745-4ed9-9761-5958fd6d9b7f"
         },
         {
             "@type": "WorkflowRoute",
@@ -1143,13 +1249,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Wait for Publish -> Update Status",
-            "targetStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
+            "name": "Wait for Publish -> Get Pending Manual Inputs",
+            "targetStep": "\/api\/3\/workflow_steps\/06347ec2-e766-4463-a762-86b201c33a51",
             "sourceStep": "\/api\/3\/workflow_steps\/2f0328bd-2b74-427e-b2e8-099ab6f4edbf",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "f5b1815b-e5ba-42fe-85bd-8b0763ea69cb"
+            "uuid": "b98e49f3-475e-4ca7-9d42-4e3af4b9e667"
         }
     ],
     "groups": [],

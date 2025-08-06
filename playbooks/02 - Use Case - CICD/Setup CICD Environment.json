@@ -19,6 +19,29 @@
     "steps": [
         {
             "@type": "WorkflowStep",
+            "name": "Activate Source Control Sync Status Schedule",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/scheduled\/{{vars.steps.Get_Source_Control_Sync_Status_Schedule_Details.data['hydra:member'][0].id}}\/?format=json",
+                    "body": "{\n    \"id\": \"gAAAAABogL_f0z1Br_2VEIMqyq7kbg6BxCcPjgUkhluoH06hO1Zq-xwD97YR0rdjwJz_tGUS6YiT9_mFeJeS9JnOHcH_mFM5uQ==\",\n    \"crontab\": {\n        \"id\": 3,\n        \"minute\": \"0\",\n        \"hour\": \"*\/1\",\n        \"day_of_week\": \"*\",\n        \"day_of_month\": \"*\",\n        \"month_of_year\": \"*\",\n        \"timezone\": \"UTC\"\n    },\n    \"interval\": null,\n    \"name\": \"Ingest_Source-Control-Sync-Status(CICD)\",\n    \"task\": \"workflow.tasks.periodic_task\",\n    \"enabled\": true\n}",
+                    "method": "PUT"
+                },
+                "version": "3.6.0",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1650",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "7654b64e-acba-4cd9-a17f-5d473404c784"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
@@ -140,6 +163,29 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get Source Control Sync Status Schedule Details",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/wf\/api\/scheduled\/?depth=2&format=json&limit=5000&ordering=-modified&task=workflow.tasks.periodic_task&name=Ingest_Source-Control-Sync-Status(CICD)",
+                    "body": "",
+                    "method": "GET"
+                },
+                "version": "3.6.0",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1515",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "71c4410e-c4d8-47b2-8387-775da6d096bc"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Get Source Control Workflows",
             "description": null,
             "arguments": {
@@ -162,7 +208,7 @@
                 }
             },
             "status": null,
-            "top": "1240",
+            "top": "1245",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
@@ -323,6 +369,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Create CICD Env Global Variable -> Get Investigate Outbreak Alerts Schedule Details",
+            "targetStep": "\/api\/3\/workflow_steps\/71c4410e-c4d8-47b2-8387-775da6d096bc",
+            "sourceStep": "\/api\/3\/workflow_steps\/813442f4-8ab0-4a86-9af4-515fb8dc8985",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "28d72f0e-2e06-4f6a-bc67-a1fac7b0bcf4"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Create CICD FSR Environment -> Get Source Control Workflows",
             "targetStep": "\/api\/3\/workflow_steps\/b688e2d8-9214-4196-9952-5f623d8637eb",
             "sourceStep": "\/api\/3\/workflow_steps\/cdec3fcb-a5f8-48e3-9e4f-20c7db7fc3ca",
@@ -350,6 +406,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "0c7c72a3-fc8f-4d2f-b01f-2474ab37f98d"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Investigate Outbreak Alerts Schedule Details -> Activate Investigate Outbreak Alerts Schedule",
+            "targetStep": "\/api\/3\/workflow_steps\/7654b64e-acba-4cd9-a17f-5d473404c784",
+            "sourceStep": "\/api\/3\/workflow_steps\/71c4410e-c4d8-47b2-8387-775da6d096bc",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "366be41e-e487-46b0-87e2-91aa12bb6593"
         },
         {
             "@type": "WorkflowRoute",
