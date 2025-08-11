@@ -748,5 +748,13 @@
             "originalTemplateTitle": "Change Management"
         }
     },
-    "uuid": "modules-change_management-list"
+    "module": "change_management",
+    "filters": [],
+    "isDefault": true,
+    "visible": true,
+    "viewOptions": "list",
+    "name": "Base Template",
+    "system": true,
+    "uuid": "modules-change_management-list",
+    "newUuid": "55c907fa-23f2-4caa-b1b9-28b2c5e43bf1"
 }

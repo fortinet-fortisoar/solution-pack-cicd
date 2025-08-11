@@ -42,7 +42,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": {
                 "allow": false,
@@ -53,7 +54,29 @@
             "dataSourceFilters": null,
             "defaultValue": "",
             "tooltip": null,
-            "visibility": true,
+            "visibility": [
+                {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "commitStatus",
+                            "operator": "isnull",
+                            "_operator": "isnull",
+                            "value": "false",
+                            "type": "primitive"
+                        },
+                        {
+                            "field": "commitStatus",
+                            "operator": "isnull",
+                            "_operator": "isnull",
+                            "value": "null",
+                            "type": "primitive"
+                        }
+                    ]
+                }
+            ],
             "htmlEscape": false,
             "orphanRemoval": null,
             "readable": true,
@@ -97,7 +120,22 @@
             "dataSourceFilters": null,
             "defaultValue": "",
             "tooltip": null,
-            "visibility": true,
+            "visibility": [
+                {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "lastCommitID",
+                            "operator": "isnull",
+                            "_operator": "isnull",
+                            "value": "false",
+                            "type": "primitive"
+                        }
+                    ]
+                }
+            ],
             "htmlEscape": false,
             "orphanRemoval": null,
             "readable": true,
