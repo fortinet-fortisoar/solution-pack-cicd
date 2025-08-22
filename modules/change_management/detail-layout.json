@@ -3155,7 +3155,8 @@
                                                                                                                                 "itemValue": "Production",
                                                                                                                                 "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b"
                                                                                                                             },
-                                                                                                                            "type": "object"
+                                                                                                                            "type": "object",
+                                                                                                                            "display": "Production"
                                                                                                                         }
                                                                                                                     ]
                                                                                                                 }
@@ -3318,7 +3319,8 @@
                                                                                                                                 "itemValue": "Development",
                                                                                                                                 "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651"
                                                                                                                             },
-                                                                                                                            "type": "object"
+                                                                                                                            "type": "object",
+                                                                                                                            "display": "Development"
                                                                                                                         }
                                                                                                                     ]
                                                                                                                 }
@@ -3326,7 +3328,144 @@
                                                                                                         }
                                                                                                     }
                                                                                                 ],
-                                                                                                "style": "col-lg-12"
+                                                                                                "style": "col-lg-6"
+                                                                                            },
+                                                                                            {
+                                                                                                "widgets": [
+                                                                                                    {
+                                                                                                        "type": "sectionHeader",
+                                                                                                        "config": {
+                                                                                                            "wid": "00d3b28c-60ee-4301-a68a-899e559429b4",
+                                                                                                            "query": {
+                                                                                                                "filters": [],
+                                                                                                                "sort": [],
+                                                                                                                "limit": 10
+                                                                                                            },
+                                                                                                            "editorType": "html",
+                                                                                                            "sectionText": "<div style=\"font-family: Lato, sans-serif; font-size: 13px; font-weight: 400;\" class=\"muted-80\">\n<p><strong>Configuration Parameters<\/strong><\/p>\n<br>\n<p>Defines the source control configuration used during CICD setup, including base branch, repository names, and source control URL.<\/p>\n<p>It's recommended to verify these values before executing Git operations such as applying the latest content or pushing changes.<\/p>\n<\/div>",
+                                                                                                            "visibility": {
+                                                                                                                "conditionalVisibility": true,
+                                                                                                                "filter": {
+                                                                                                                    "sort": [],
+                                                                                                                    "limit": 30,
+                                                                                                                    "logic": "AND",
+                                                                                                                    "filters": [
+                                                                                                                        {
+                                                                                                                            "field": "title",
+                                                                                                                            "operator": "eq",
+                                                                                                                            "_operator": "eq",
+                                                                                                                            "value": "Source Control Settings",
+                                                                                                                            "type": "primitive"
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "field": "environment",
+                                                                                                                            "value": [
+                                                                                                                                "d4ff078d-7692-4737-b45b-00990e949651",
+                                                                                                                                "48b9f120-34bc-4884-b886-85e82321684b"
+                                                                                                                            ],
+                                                                                                                            "display": "",
+                                                                                                                            "operator": "in",
+                                                                                                                            "type": "object",
+                                                                                                                            "OPERATOR_KEY": "$",
+                                                                                                                            "displayTemplate": "",
+                                                                                                                            "module": "environment",
+                                                                                                                            "template": "multiselectpicklist",
+                                                                                                                            "previousOperator": "in",
+                                                                                                                            "previousTemplate": "multiselectpicklist",
+                                                                                                                            "useInOperator": true
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "editableFormGroup",
+                                                                                                        "config": {
+                                                                                                            "wid": "0e65ef15-37c0-4a62-b7cf-7fabffdd0836",
+                                                                                                            "rows": [
+                                                                                                                {
+                                                                                                                    "columns": [
+                                                                                                                        {
+                                                                                                                            "fields": [
+                                                                                                                                {
+                                                                                                                                    "name": "configurationParameters",
+                                                                                                                                    "highlightMode": true,
+                                                                                                                                    "linky": true,
+                                                                                                                                    "readOnly": true,
+                                                                                                                                    "renderWidget": "json",
+                                                                                                                                    "renderWidgetHeight": 250
+                                                                                                                                }
+                                                                                                                            ]
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            "visibility": {
+                                                                                                                "conditionalVisibility": true,
+                                                                                                                "filter": {
+                                                                                                                    "sort": [],
+                                                                                                                    "limit": 30,
+                                                                                                                    "logic": "AND",
+                                                                                                                    "filters": [
+                                                                                                                        {
+                                                                                                                            "field": "title",
+                                                                                                                            "operator": "eq",
+                                                                                                                            "_operator": "eq",
+                                                                                                                            "value": "Source Control Settings",
+                                                                                                                            "type": "primitive"
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "field": "environment",
+                                                                                                                            "value": [
+                                                                                                                                "d4ff078d-7692-4737-b45b-00990e949651",
+                                                                                                                                "48b9f120-34bc-4884-b886-85e82321684b"
+                                                                                                                            ],
+                                                                                                                            "display": "",
+                                                                                                                            "operator": "in",
+                                                                                                                            "type": "array",
+                                                                                                                            "OPERATOR_KEY": "$",
+                                                                                                                            "module": "environment",
+                                                                                                                            "template": "multiselectpicklist",
+                                                                                                                            "previousOperator": "in",
+                                                                                                                            "previousTemplate": "multiselectpicklist",
+                                                                                                                            "useInOperator": true
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
+                                                                                                            },
+                                                                                                            "usePlaceholder": true
+                                                                                                        }
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "playbookButtons-1.1.0",
+                                                                                                        "config": {
+                                                                                                            "wid": "97afe81f-c070-4479-bfab-f0a676679f64",
+                                                                                                            "widgetName": "Playbook Execution Wizard",
+                                                                                                            "selectedPlaybooksWithRecord": [
+                                                                                                                {
+                                                                                                                    "name": "Update Source Control Configuration",
+                                                                                                                    "uuid": "44b750e6-8606-4c48-8bb6-43beea85b09e",
+                                                                                                                    "actionTriggerName": "Update Source Control Configuration",
+                                                                                                                    "collectionName": "01 - Drafts",
+                                                                                                                    "icon": "icon icon-update-record"
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            "showExecutionProgress": true,
+                                                                                                            "selectedExecutionWizardPlaybooks": [
+                                                                                                                {
+                                                                                                                    "name": "Update Source Control Configuration",
+                                                                                                                    "uuid": "44b750e6-8606-4c48-8bb6-43beea85b09e",
+                                                                                                                    "actionTriggerName": "Update Source Control Configuration",
+                                                                                                                    "collectionName": "01 - Drafts",
+                                                                                                                    "icon": "icon icon-update-record"
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            "showPrimaryButton": true
+                                                                                                        }
+                                                                                                    }
+                                                                                                ],
+                                                                                                "style": "col-lg-6"
                                                                                             }
                                                                                         ],
                                                                                         "wid": "95d82eb2-1d9b-4e18-9c0c-52a4879d9d78",

@@ -33,7 +33,8 @@
                         "step_iri": "\/api\/3\/workflow_steps\/c3459965-6b06-40fe-8129-997bbd8b9c5b",
                         "step_name": "Return Blank Output"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
             "top": "435",
@@ -75,6 +76,59 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "deae7f44-95e7-47c6-bdb1-d23c5b1b0957"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Source Control Settings",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Source Control Settings",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "array",
+                            "field": "environment",
+                            "value": [
+                                "d4ff078d-7692-4737-b45b-00990e949651",
+                                "48b9f120-34bc-4884-b886-85e82321684b"
+                            ],
+                            "module": "environment",
+                            "display": "",
+                            "operator": "in",
+                            "template": "multiselectpicklist",
+                            "enableJinja": true,
+                            "OPERATOR_KEY": "$",
+                            "useInOperator": true,
+                            "previousOperator": "in",
+                            "previousTemplate": "multiselectpicklist"
+                        }
+                    ],
+                    "__selectFields": [
+                        "configurationParameters",
+                        "environment"
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "checkboxFields": true,
+                "step_variables": {
+                    "cicd_config": "{% set config_params = {} %}{% set prod_config = {} %}{% set dev_config = {} %}{% for item in vars.steps.Find_Source_Control_Settings %}{% if item.configurationParameters is not none %}{% if item.environment.itemValue == 'Production' %}{% set _ = prod_config.update(item.configurationParameters) %}{% elif item.environment.itemValue == 'Development' %}{% set _ = dev_config.update(item.configurationParameters) %}{% endif %}{% endif %}\n{% endfor %}{% if prod_config and dev_config %}{% set _ = config_params.update(prod_config) %}{% elif prod_config %}{% set _ = config_params.update(prod_config) %}{% elif dev_config %}{% set _ = config_params.update(dev_config) %}{% else %}{% set _ = config_params.update({}) %}{% endif %}{{config_params}}"
+                }
+            },
+            "status": null,
+            "top": "300",
+            "left": "300",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "c140578c-b082-47b6-9ca6-5554765648d9"
         },
         {
             "@type": "WorkflowStep",
@@ -135,31 +189,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "869c391c-fcff-4aae-81bb-9d52f5560786"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Source Control Details",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/wf\/api\/dynamic-variable\/?name=cicd_config",
-                    "body": "",
-                    "method": "GET"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": {
-                    "cicd_config": "{% if vars.result.data['hydra:member'] | length %}{{vars.result.data['hydra:member'][0].value | toDict }}{% else %}\"\"{% endif %}"
-                }
-            },
-            "status": null,
-            "top": "300",
-            "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "e190db03-961f-485f-a70d-91c88556cad4"
         },
         {
             "@type": "WorkflowStep",
@@ -272,13 +301,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Check Source Control Connector Configuration -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/e190db03-961f-485f-a70d-91c88556cad4",
+            "name": "Check Source Control Connector Configuration -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/c140578c-b082-47b6-9ca6-5554765648d9",
             "sourceStep": "\/api\/3\/workflow_steps\/a05e66b1-4d8e-4112-baf4-b4fe9e4a50a3",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e63b3cd1-cdd7-43e4-bb00-db28b5d93e16"
+            "uuid": "e1e32dfa-9bb3-415c-82ec-52e7dfcde04b"
         },
         {
             "@type": "WorkflowRoute",
@@ -302,13 +331,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Copy of Get Source Control Details -> Has Repositories Created",
+            "name": "Find Source Control Settings -> Are Repositories Created",
             "targetStep": "\/api\/3\/workflow_steps\/4073de99-9d80-45f9-84ac-6062a4ff3649",
-            "sourceStep": "\/api\/3\/workflow_steps\/e190db03-961f-485f-a70d-91c88556cad4",
+            "sourceStep": "\/api\/3\/workflow_steps\/c140578c-b082-47b6-9ca6-5554765648d9",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e09e6e4a-af27-4466-82ff-efcd40eeab8b"
+            "uuid": "b7d39421-776c-489f-a967-a42a8ae93c70"
         },
         {
             "@type": "WorkflowRoute",
@@ -384,7 +413,7 @@
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
     "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
-    "isEditable": true,
+    "isEditable": false,
     "uuid": "22ddd2f3-b2e5-4465-b8b8-86ca8a276a6a",
     "owners": [],
     "isPrivate": false,
