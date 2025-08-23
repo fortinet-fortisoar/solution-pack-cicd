@@ -5,7 +5,7 @@
             "PLURAL_NAME": "变更管理"
         },
         "FIELDS": {
-            "CONFIGURATIONPARAMETERS_ZH": "配置参数",
+            "CONFIGURATIONPARAMETERS": "配置参数",
             "COMMITSTATUS": "提交状态",
             "LASTCOMMITID": "最后提交ID",
             "ISSUES": "问题",
