@@ -5,6 +5,7 @@
             "PLURAL_NAME": "Change Management"
         },
         "FIELDS": {
+            "CONFIGURATIONPARAMETERS": "Configuration Parameters",
             "COMMITSTATUS": "Commit Status",
             "LASTCOMMITID": "Last Commit ID",
             "ISSUES": "Issues",

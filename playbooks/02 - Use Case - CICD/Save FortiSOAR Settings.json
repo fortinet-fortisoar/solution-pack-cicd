@@ -128,11 +128,11 @@
             "description": null,
             "arguments": {
                 "org_name": "{{vars.cicd_config.organizationName}}",
-                "repo_name": "{% if vars.input.records[0].title == \"Save Production Settings\" %}{{vars.cicd_config.productionSettings.split('\/')[-1]}}{% else %}{{vars.cicd_config.developmentSettings.split('\/')[-1]}}{% endif %}",
+                "repo_name": "{% if vars.input.records[0].title == \"Save Production Settings\" %}{{vars.cicd_config.prodSettingsRepoName}}{% else %}{{vars.cicd_config.devSettingsRepoName}}{% endif %}",
                 "base_branch": "{{vars.cicd_config.baseBranch}}",
                 "export_file_name": "{% if vars.input.records[0].title == \"Save Production Settings\" %}{{\"Source Control - Production Settings\"}}{% else %}{{\"Source Control - Development Settings\"}}{% endif %}",
                 "current_timestamp": "{{arrow.get((arrow.utcnow().int_timestamp  | int | abs)).format('YYYYMMDDHHmm')}}",
-                "source_control_type": "{{(globalVars.cicd_config | toDict)[\"source_control_web_url\"] }}",
+                "source_control_type": "{{vars.cicd_config.source_control_url}}",
                 "export_template_name": "{% if vars.input.records[0].title == \"Save Production Settings\" %}{{\"Source Control - Production Settings\"}}{% else %}{{\"Source Control - Development Settings\"}}{% endif %}"
             },
             "status": null,
@@ -144,29 +144,56 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Get Source Control Details",
+            "name": "Find Source Control Settings",
             "description": null,
             "arguments": {
-                "params": {
-                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_config",
-                    "body": "",
-                    "method": "GET"
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Source Control Settings",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "array",
+                            "field": "environment",
+                            "value": [
+                                "d4ff078d-7692-4737-b45b-00990e949651",
+                                "48b9f120-34bc-4884-b886-85e82321684b"
+                            ],
+                            "module": "environment",
+                            "display": "",
+                            "operator": "in",
+                            "template": "multiselectpicklist",
+                            "enableJinja": true,
+                            "OPERATOR_KEY": "$",
+                            "useInOperator": true,
+                            "previousOperator": "in",
+                            "previousTemplate": "multiselectpicklist"
+                        }
+                    ],
+                    "__selectFields": [
+                        "configurationParameters",
+                        "environment"
+                    ]
                 },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "ignore_errors": true,
-                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "module": "change_management?$limit=30",
+                "checkboxFields": true,
                 "step_variables": {
-                    "cicd_config": "{{vars.result.data['hydra:member'][0].value | toDict }}"
+                    "cicd_config": "{% set config_params = {} %}{% set prod_config = {} %}{% set dev_config = {} %}{% for item in vars.steps.Find_Source_Control_Settings %}{% if item.configurationParameters is not none %}{% if item.environment.itemValue == 'Production' %}{% set _ = prod_config.update(item.configurationParameters) %}{% elif item.environment.itemValue == 'Development' %}{% set _ = dev_config.update(item.configurationParameters) %}{% endif %}{% endif %}\n{% endfor %}{% if prod_config and dev_config %}{% set _ = config_params.update(prod_config) %}{% elif prod_config %}{% set _ = config_params.update(prod_config) %}{% elif dev_config %}{% set _ = config_params.update(dev_config) %}{% else %}{% set _ = config_params.update({}) %}{% endif %}{{config_params}}"
                 }
             },
             "status": null,
             "top": "570",
             "left": "475",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
-            "uuid": "12bd3091-2ff7-45d5-930e-be2d9fff5a37"
+            "uuid": "8e14101b-1f98-45b5-a4c0-1cbc2ea5e09e"
         },
         {
             "@type": "WorkflowStep",
@@ -177,7 +204,7 @@
                     {
                         "option": "Failed",
                         "step_iri": "\/api\/3\/workflow_steps\/5b88ad2b-3d04-45bc-a8e0-e1a3a40cdc4d",
-                        "condition": "{{ vars.steps.Get_Source_Control_Details.status==\"failed\" or vars.steps.Get_Source_Control_Details.data['hydra:member'] | length == 0 }}",
+                        "condition": "{{ vars.cicd_config | length == 0 }}",
                         "step_name": "Source Control is not Configured"
                     },
                     {
@@ -582,13 +609,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Source Control Details -> Has Source Control Configure",
+            "name": "Find Source Control Settings -> Has Source Control Configure",
             "targetStep": "\/api\/3\/workflow_steps\/eaf399ef-7920-41e5-bb94-cc37a2870203",
-            "sourceStep": "\/api\/3\/workflow_steps\/12bd3091-2ff7-45d5-930e-be2d9fff5a37",
+            "sourceStep": "\/api\/3\/workflow_steps\/8e14101b-1f98-45b5-a4c0-1cbc2ea5e09e",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "9e47c6ba-9464-4ae3-b59e-1d037dddce5e"
+            "uuid": "b8ff1748-c0f5-4902-8928-be6f830b61af"
         },
         {
             "@type": "WorkflowRoute",
@@ -662,13 +689,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update Status In Progress -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/12bd3091-2ff7-45d5-930e-be2d9fff5a37",
+            "name": "Update Status In Progress -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/8e14101b-1f98-45b5-a4c0-1cbc2ea5e09e",
             "sourceStep": "\/api\/3\/workflow_steps\/dfc0dbd2-46d2-4e21-8d06-4ab4dcf466fb",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "3198c2fb-5679-4f39-8fc8-33ca408064d3"
+            "uuid": "03205402-8ae0-4803-8d00-89460df0f943"
         }
     ],
     "groups": [],

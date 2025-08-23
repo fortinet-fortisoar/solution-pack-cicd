@@ -26,6 +26,69 @@
     "attributes": [
         {
             "@type": "AttributeMetadata",
+            "type": "object",
+            "name": "configurationParameters",
+            "length": null,
+            "formType": "object",
+            "dataSource": null,
+            "searchable": false,
+            "peerReplicable": true,
+            "system": false,
+            "encrypted": false,
+            "gridColumn": false,
+            "collection": false,
+            "inversedField": null,
+            "ownsRelationship": false,
+            "validation": {
+                "required": false,
+                "minlength": 0,
+                "maxlength": 10485761,
+                "_enableRange": false
+            },
+            "bulkAction": {
+                "allow": false,
+                "buttonText": "",
+                "buttonIcon": "",
+                "buttonClass": "btn btn-default btn-sm"
+            },
+            "dataSourceFilters": null,
+            "defaultValue": null,
+            "tooltip": null,
+            "visibility": [
+                {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "configurationParameters",
+                            "operator": "isnull",
+                            "value": "false",
+                            "_value": {
+                                "display": "",
+                                "itemValue": "",
+                                "@id": "false"
+                            },
+                            "type": "object"
+                        }
+                    ]
+                }
+            ],
+            "htmlEscape": false,
+            "orphanRemoval": null,
+            "readable": true,
+            "writeable": true,
+            "identifier": null,
+            "unique": false,
+            "recommend": false,
+            "skipSerialization": false,
+            "displayName": "{{ configurationParameters }}",
+            "descriptions": {
+                "singular": "Configuration Parameters"
+            }
+        },
+        {
+            "@type": "AttributeMetadata",
             "type": "string",
             "name": "commitStatus",
             "length": null,
@@ -65,13 +128,6 @@
                             "operator": "isnull",
                             "_operator": "isnull",
                             "value": "false",
-                            "type": "primitive"
-                        },
-                        {
-                            "field": "commitStatus",
-                            "operator": "isnull",
-                            "_operator": "isnull",
-                            "value": "null",
                             "type": "primitive"
                         }
                     ]
@@ -226,7 +282,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": {
                 "allow": false,
@@ -286,7 +343,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": [],
             "dataSourceFilters": null,
@@ -566,6 +624,7 @@
                             "operator": "eq",
                             "value": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c",
                             "_value": {
+                                "display": "Setup",
                                 "itemValue": "Setup",
                                 "@id": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c"
                             },
@@ -705,6 +764,10 @@
                     "262e570e-efe0-4eb0-aee9-e6e54b4ca3ef": {
                         "visibility": "visible",
                         "conditions": null
+                    },
+                    "5ec65649-9da5-4fcd-8198-48dcb548cf41": {
+                        "visibility": "visible",
+                        "conditions": null
                     }
                 }
             },
@@ -806,7 +869,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": {
                 "allow": false,

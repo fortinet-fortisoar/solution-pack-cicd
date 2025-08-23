@@ -38,8 +38,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2120",
-            "left": "120",
+            "top": "2190",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "4856e43d-b973-4da9-b2ca-cded60b2bc74"
@@ -67,8 +67,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2060",
-            "left": "820",
+            "top": "2190",
+            "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "66ef50d9-47db-4796-adb0-8c79f8098d13"
@@ -89,7 +89,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"PullRequestAddReviewers\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1920",
+            "top": "2055",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -143,11 +143,11 @@
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "issue_no": "{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
                 "repo_name": "{{(vars.input.records[0].repo_url.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}",
-                "cicdConfig": "{{globalVars.cicd_config | toDict}}",
+                "cicdConfig": "{% set config_params = {} %}{% set prod_config = {} %}{% set dev_config = {} %}{% for item in vars.steps.Find_Source_Control_Settings %}{% if item.configurationParameters is not none %}{% if item.environment.itemValue == 'Production' %}{% set _ = prod_config.update(item.configurationParameters) %}{% elif item.environment.itemValue == 'Development' %}{% set _ = dev_config.update(item.configurationParameters) %}{% endif %}{% endif %}\n{% endfor %}{% if prod_config and dev_config %}{% set _ = config_params.update(prod_config) %}{% elif prod_config %}{% set _ = config_params.update(prod_config) %}{% elif dev_config %}{% set _ = config_params.update(dev_config) %}{% else %}{% set _ = config_params.update({}) %}{% endif %}{{config_params}}",
                 "new_branch": "CR-{{(vars.input.records[0].cRNo.split(\"target='_blank'>\")[-1]).split(\"<\/a>\")[0]}}"
             },
             "status": null,
-            "top": "705",
+            "top": "840",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -169,7 +169,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateIssueComment\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1785",
+            "top": "1920",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -192,7 +192,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreatePullRequest\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1650",
+            "top": "1785",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -237,13 +237,64 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Find Source Control Settings",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Source Control Settings",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "array",
+                            "field": "environment",
+                            "value": [
+                                "d4ff078d-7692-4737-b45b-00990e949651",
+                                "48b9f120-34bc-4884-b886-85e82321684b"
+                            ],
+                            "module": "environment",
+                            "display": "",
+                            "operator": "in",
+                            "template": "multiselectpicklist",
+                            "enableJinja": true,
+                            "OPERATOR_KEY": "$",
+                            "useInOperator": true,
+                            "previousOperator": "in",
+                            "previousTemplate": "multiselectpicklist"
+                        }
+                    ],
+                    "__selectFields": [
+                        "configurationParameters",
+                        "environment"
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "checkboxFields": true,
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "afe0686a-8975-4774-a25b-decfa07e7deb"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Get All PR Reviewers",
             "description": null,
             "arguments": {
                 "pr_reviewers": "{% set login = [] %}{% for item in vars.steps.Get_Repo_Collaborators.data %}{% if (item.permissions.push or item.permissions.admin or item.permissions.maintain) and (vars.steps.Get_FSR_Current_User.data.sourceControlUsername != item.login) %}{% set _ = login.append(item.login) %}{% endif %}{% endfor %}{{login}}"
             },
             "status": null,
-            "top": "1110",
+            "top": "1245",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -266,7 +317,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "975",
+            "top": "1110",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
@@ -290,7 +341,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetPullRequest\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1380",
+            "top": "1515",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -313,7 +364,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"ListRepositoryCollaborator\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "840",
+            "top": "975",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -334,8 +385,8 @@
                     {
                         "option": "Finished",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/75987958-0371-463d-8160-6d25120a9711",
-                        "step_name": "Configuration"
+                        "step_iri": "\/api\/3\/workflow_steps\/afe0686a-8975-4774-a25b-decfa07e7deb",
+                        "step_name": "Find Source Control Settings"
                     }
                 ],
                 "step_variables": []
@@ -356,7 +407,7 @@
                     {
                         "option": "PR Already Exist",
                         "step_iri": "\/api\/3\/workflow_steps\/d59a0290-218d-4e2b-aa6f-784ef77b839e",
-                        "condition": "{{ (vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 1 }}",
+                        "condition": "{{ (vars.steps.Get_Pull_Request.data | length > 0) and (vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 1 }}",
                         "step_name": "PR Already Exist"
                     },
                     {
@@ -368,14 +419,14 @@
                     {
                         "option": "No Commits",
                         "step_iri": "\/api\/3\/workflow_steps\/0a9e48e7-7e6c-419b-afff-e4a452c5f896",
-                        "condition": "{{ (vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 0 }}",
+                        "condition": "{{ (vars.steps.Get_Pull_Request.data | length > 0) and (vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 0 }}",
                         "step_name": "No Commits Available"
                     }
                 ],
                 "step_variables": []
             },
             "status": null,
-            "top": "1515",
+            "top": "1650",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
@@ -404,8 +455,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2060",
-            "left": "1120",
+            "top": "2190",
+            "left": "1175",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "0a9e48e7-7e6c-419b-afff-e4a452c5f896"
@@ -432,8 +483,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2220",
-            "left": "820",
+            "top": "2325",
+            "left": "650",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "3089fac2-3c2a-43d9-871e-621889d80784"
@@ -461,8 +512,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2060",
-            "left": "520",
+            "top": "2190",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "d59a0290-218d-4e2b-aa6f-784ef77b839e"
@@ -556,7 +607,7 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "1245",
+            "top": "1380",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
@@ -724,6 +775,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Find Source Control Settings -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/75987958-0371-463d-8160-6d25120a9711",
+            "sourceStep": "\/api\/3\/workflow_steps\/afe0686a-8975-4774-a25b-decfa07e7deb",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "1b91e6ea-f4c1-4e18-ba0d-7f6f93359bbe"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Get All PR Reviewers -> Specify PR Title and Comments",
             "targetStep": "\/api\/3\/workflow_steps\/2b0bec0a-3363-46c6-96d7-da2756f7924a",
             "sourceStep": "\/api\/3\/workflow_steps\/4907717f-62d4-4f8e-9072-7f99b40a964d",
@@ -774,13 +835,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Playbook Active or Awaiting -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/75987958-0371-463d-8160-6d25120a9711",
+            "name": "Is Playbook Active or Awaiting -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/afe0686a-8975-4774-a25b-decfa07e7deb",
             "sourceStep": "\/api\/3\/workflow_steps\/3f55b0ad-6d3d-45ca-8412-f5458ad56c4a",
             "label": "Finished",
             "isExecuted": false,
             "group": null,
-            "uuid": "cc55a7d2-b32c-41c3-9a40-2c3c32a435e6"
+            "uuid": "e62eb823-69f6-47c6-89a9-3601a815d213"
         },
         {
             "@type": "WorkflowRoute",

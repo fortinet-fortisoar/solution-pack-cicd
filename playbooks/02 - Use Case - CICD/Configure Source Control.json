@@ -184,6 +184,46 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Find Source Control Settings",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Source Control Settings",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "object",
+                            "field": "environment",
+                            "value": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                                "display": "Production",
+                                "itemValue": "Production"
+                            },
+                            "operator": "eq"
+                        }
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1300",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "f8834aec-b964-4df6-99f6-35167ccff85e"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Get Base Branch Latest Commit",
             "description": null,
             "arguments": {
@@ -419,24 +459,6 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Repository Details",
-            "description": null,
-            "arguments": {
-                "base_branch": "{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}",
-                "content_repo": "{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}",
-                "dev_settings": "{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}",
-                "prod_settings": "{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}",
-                "organization_name": "{{vars.steps.Get_Repositories_Detail.input.orgName}}"
-            },
-            "status": null,
-            "top": "1280",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "56935f57-cf06-487f-8d0d-97ae8bc1b417"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Return Output",
             "description": null,
             "arguments": {
@@ -464,28 +486,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "c51caa0e-fe0c-4e01-9992-220317e48209"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Set CICD Config Global Variable",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "macro": "{{\"cicd_config\"}}",
-                    "value": "{{ ({\"source_control_web_url\": vars.source_control_base_url,\"organizationName\": vars.organization_name, \"content\": vars.content_repo, \"productionSettings\": vars.prod_settings, \"developmentSettings\": vars.dev_settings, \"baseBranch\": vars.base_branch,\"contentRepoName\": vars.steps.Get_Repositories_Detail.input.contentRepositoryName, \"prodSettingsRepoName\": vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName, \"devSettingsRepoName\": vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}) | toJSON }}"
-                },
-                "version": "3.3.0",
-                "connector": "cyops_utilities",
-                "operation": "updatemacro",
-                "operationTitle": "FSR: Create\/Update Global Variables",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1400",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "c9c6876f-56ec-464f-8759-e95de2d4d663"
         },
         {
             "@type": "WorkflowStep",
@@ -537,6 +537,37 @@
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "990ef5b3-56a4-4aa7-bd2d-9acb3b444e71"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Source Control Settings Config",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "configurationParameters": {
+                        "baseBranch": "{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}",
+                        "contentRepoName": "{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}",
+                        "organizationName": "{{vars.steps.Get_Repositories_Detail.input.orgName}}",
+                        "source_control_url": "{{vars.source_control_base_url}}",
+                        "devSettingsRepoName": "{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}",
+                        "prodSettingsRepoName": "{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.steps.Find_Source_Control_Settings[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1420",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "9f621f13-3f19-4caa-b9b6-cb84d45bbfc4"
         },
         {
             "@type": "WorkflowStep",
@@ -661,13 +692,23 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Base Branch Latest Commit -> Repository Details",
-            "targetStep": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417",
+            "name": "Find Source Control Settings -> Update Source Control Settings Config",
+            "targetStep": "\/api\/3\/workflow_steps\/9f621f13-3f19-4caa-b9b6-cb84d45bbfc4",
+            "sourceStep": "\/api\/3\/workflow_steps\/f8834aec-b964-4df6-99f6-35167ccff85e",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "39929ef9-bdd0-412d-8e75-ff53e22ce70f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Base Branch Latest Commit -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/f8834aec-b964-4df6-99f6-35167ccff85e",
             "sourceStep": "\/api\/3\/workflow_steps\/fe6d5d55-94fd-4863-962c-767d46e9fdbd",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "d722115f-fdae-46dd-92d2-86abb8c918aa"
+            "uuid": "127eb0f5-1844-46b3-8856-1862029a5bd0"
         },
         {
             "@type": "WorkflowRoute",
@@ -731,26 +772,6 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Repository Details -> Set CICD Config Global Variable",
-            "targetStep": "\/api\/3\/workflow_steps\/c9c6876f-56ec-464f-8759-e95de2d4d663",
-            "sourceStep": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "b7978088-2a8a-411d-a96b-150117aaf017"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Set CICD Config Global Variable -> Find Previous Result",
-            "targetStep": "\/api\/3\/workflow_steps\/66f26ebf-cfbb-4678-94f7-a64d94f2827f",
-            "sourceStep": "\/api\/3\/workflow_steps\/c9c6876f-56ec-464f-8759-e95de2d4d663",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "1634611d-5895-47a6-8f97-773c40dc5cba"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Start -> Get Source Control Details",
             "targetStep": "\/api\/3\/workflow_steps\/f8a73194-eca6-4b60-a614-3da740ad9667",
             "sourceStep": "\/api\/3\/workflow_steps\/601f718e-64a7-4e5f-a022-dac1423b613f",
@@ -768,6 +789,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "6c14084e-0dce-4c80-ab84-17f8741d94c2"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Source Control Settings Config -> Find Previous Result",
+            "targetStep": "\/api\/3\/workflow_steps\/66f26ebf-cfbb-4678-94f7-a64d94f2827f",
+            "sourceStep": "\/api\/3\/workflow_steps\/9f621f13-3f19-4caa-b9b6-cb84d45bbfc4",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "7b5c392f-78c3-43bb-8fa4-d89cf07c555f"
         },
         {
             "@type": "WorkflowRoute",

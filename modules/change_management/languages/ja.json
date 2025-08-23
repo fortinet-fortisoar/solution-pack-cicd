@@ -5,6 +5,7 @@
             "PLURAL_NAME": "変更管理"
         },
         "FIELDS": {
+            "CONFIGURATIONPARAMETERS": "設定パラメーター",
             "COMMITSTATUS": "コミットステータス",
             "LASTCOMMITID": "最終コミットID",
             "ISSUES": "問題",

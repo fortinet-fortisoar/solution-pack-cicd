@@ -5,6 +5,7 @@
             "PLURAL_NAME": "Gestion du changement"
         },
         "FIELDS": {
+            "CONFIGURATIONPARAMETERS": "Paramètres de configuration",
             "COMMITSTATUS": "Statut de validation",
             "LASTCOMMITID": "Dernier ID de validation",
             "ISSUES": "Problèmes",

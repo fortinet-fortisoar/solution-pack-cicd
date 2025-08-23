@@ -23,11 +23,11 @@
             "description": null,
             "arguments": {
                 "org_name": "{{vars.cicd_config.organizationName}}",
-                "repo_name": "{{vars.cicd_config.content.split('\/')[-1]}}",
+                "repo_name": "{{vars.cicd_config.contentRepoName}}",
                 "base_branch": "{{vars.cicd_config.baseBranch}}",
                 "export_file_name": "Source Control - Production Content",
                 "current_timestamp": "{{arrow.get((arrow.utcnow().int_timestamp  | int | abs)).format('YYYYMMDDHHmm')}}",
-                "source_control_type": "{{(globalVars.cicd_config | toDict)[\"source_control_web_url\"] }}",
+                "source_control_type": "{{vars.cicd_config.source_control_url}}",
                 "export_template_name": "Source Control - Production Content"
             },
             "status": null,
@@ -36,6 +36,51 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "b901b9f1-3b1c-4d58-9d15-64278a39d3ba"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Source Control Settings",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Source Control Settings",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "object",
+                            "field": "environment",
+                            "value": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                                "itemValue": "Production"
+                            },
+                            "operator": "eq"
+                        }
+                    ],
+                    "__selectFields": [
+                        "configurationParameters"
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "checkboxFields": true,
+                "step_variables": {
+                    "cicd_config": "{{vars.steps.Find_Source_Control_Settings[0].configurationParameters}}"
+                }
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "5f5c0764-0b2f-405c-954a-fe723b47a8b0"
         },
         {
             "@type": "WorkflowStep",
@@ -76,31 +121,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "0f474223-ce80-4f51-a50d-e5a1d3f2469a"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Source Control Details",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/wf\/api\/dynamic-variable\/?limit=50&name=cicd_config",
-                    "body": "",
-                    "method": "GET"
-                },
-                "version": "3.2.3",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": {
-                    "cicd_config": "{{vars.result.data['hydra:member'][0].value | toDict }}"
-                }
-            },
-            "status": null,
-            "top": "165",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "e5ceedee-4195-4cf5-81fa-5a1bffb8a291"
         },
         {
             "@type": "WorkflowStep",
@@ -154,7 +174,7 @@
             "description": null,
             "arguments": {
                 "resource": {
-                    "lastCommitID": "{{vars.steps.Push_Content_to_Source_Control.data.commit}}"
+                    "lastCommitID": "{{vars.steps.Push_Content_to_Source_Control.data.commit_sha}}"
                 },
                 "operation": "Append",
                 "collection": "{{vars.steps.Get_Apply_Latest_Content_Record[0]['@id']}}",
@@ -206,13 +226,23 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Push Export Config",
+            "name": "Configuration -> Push Content to Source Control",
             "targetStep": "\/api\/3\/workflow_steps\/fcf56774-db2c-4f8b-9595-1715ebbeefe8",
             "sourceStep": "\/api\/3\/workflow_steps\/b901b9f1-3b1c-4d58-9d15-64278a39d3ba",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "185c1f3b-3104-4bfb-a792-03d44e712988"
+            "uuid": "1069a890-06fb-4f68-9a08-2bd5424ec89c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Find Source Control Settings -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/b901b9f1-3b1c-4d58-9d15-64278a39d3ba",
+            "sourceStep": "\/api\/3\/workflow_steps\/5f5c0764-0b2f-405c-954a-fe723b47a8b0",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b6d2bf42-3dda-4d30-82cf-fed35ef455cc"
         },
         {
             "@type": "WorkflowRoute",
@@ -226,16 +256,6 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Source Control Details -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/b901b9f1-3b1c-4d58-9d15-64278a39d3ba",
-            "sourceStep": "\/api\/3\/workflow_steps\/e5ceedee-4195-4cf5-81fa-5a1bffb8a291",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "eaede2a9-131b-4da8-bb69-daff4b900a72"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Push Export Config -> Update Record",
             "targetStep": "\/api\/3\/workflow_steps\/30cc2aaf-5dcc-4681-bf6d-13ee6ba536d9",
             "sourceStep": "\/api\/3\/workflow_steps\/fcf56774-db2c-4f8b-9595-1715ebbeefe8",
@@ -246,13 +266,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Start -> Get Source Control Details",
-            "targetStep": "\/api\/3\/workflow_steps\/e5ceedee-4195-4cf5-81fa-5a1bffb8a291",
+            "name": "Start -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/5f5c0764-0b2f-405c-954a-fe723b47a8b0",
             "sourceStep": "\/api\/3\/workflow_steps\/6b26f5cb-2ab1-4bc7-a1b1-b5b6e1ac3d01",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "3eee7a22-d62b-48c7-8c28-79836f9173fc"
+            "uuid": "e16c2ba8-d3b8-4a88-8671-5fa3609ab41b"
         },
         {
             "@type": "WorkflowRoute",
@@ -268,7 +288,7 @@
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
     "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
-    "isEditable": true,
+    "isEditable": false,
     "uuid": "50d8f3e9-11e6-4331-892a-dbddaefbbd3b",
     "owners": [],
     "isPrivate": false,
