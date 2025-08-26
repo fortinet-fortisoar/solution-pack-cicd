@@ -3365,14 +3365,24 @@
                                                                                                                             ],
                                                                                                                             "display": "",
                                                                                                                             "operator": "in",
-                                                                                                                            "type": "object",
+                                                                                                                            "type": "array",
                                                                                                                             "OPERATOR_KEY": "$",
-                                                                                                                            "displayTemplate": "",
                                                                                                                             "module": "environment",
                                                                                                                             "template": "multiselectpicklist",
                                                                                                                             "previousOperator": "in",
                                                                                                                             "previousTemplate": "multiselectpicklist",
                                                                                                                             "useInOperator": true
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "field": "configurationParameters",
+                                                                                                                            "operator": "isnull",
+                                                                                                                            "value": "false",
+                                                                                                                            "_value": {
+                                                                                                                                "display": "",
+                                                                                                                                "itemValue": "",
+                                                                                                                                "@id": "false"
+                                                                                                                            },
+                                                                                                                            "type": "object"
                                                                                                                         }
                                                                                                                     ]
                                                                                                                 }
@@ -3444,21 +3454,35 @@
                                                                                                             "widgetName": "Playbook Execution Wizard",
                                                                                                             "selectedPlaybooksWithRecord": [
                                                                                                                 {
-                                                                                                                    "name": "Update Source Control Configuration",
-                                                                                                                    "uuid": "44b750e6-8606-4c48-8bb6-43beea85b09e",
-                                                                                                                    "actionTriggerName": "Update Source Control Configuration",
-                                                                                                                    "collectionName": "01 - Drafts",
-                                                                                                                    "icon": "icon icon-update-record"
+                                                                                                                    "name": "Update Production Source Control Configuration",
+                                                                                                                    "uuid": "45557956-7964-4c15-9e59-84ec546839d3",
+                                                                                                                    "actionTriggerName": "Update Configuration Parameters",
+                                                                                                                    "collectionName": "02 - Use Case - CICD",
+                                                                                                                    "icon": "icon icon-update"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "name": "Update Development Source Control Configuration",
+                                                                                                                    "uuid": "7ca4fdef-5a73-402b-9d42-30ca803a52a1",
+                                                                                                                    "actionTriggerName": "Update Configuration Parameters",
+                                                                                                                    "collectionName": "02 - Use Case - CICD",
+                                                                                                                    "icon": "icon icon-update"
                                                                                                                 }
                                                                                                             ],
                                                                                                             "showExecutionProgress": true,
                                                                                                             "selectedExecutionWizardPlaybooks": [
                                                                                                                 {
-                                                                                                                    "name": "Update Source Control Configuration",
-                                                                                                                    "uuid": "44b750e6-8606-4c48-8bb6-43beea85b09e",
-                                                                                                                    "actionTriggerName": "Update Source Control Configuration",
-                                                                                                                    "collectionName": "01 - Drafts",
-                                                                                                                    "icon": "icon icon-update-record"
+                                                                                                                    "name": "Update Development Source Control Configuration",
+                                                                                                                    "uuid": "7ca4fdef-5a73-402b-9d42-30ca803a52a1",
+                                                                                                                    "actionTriggerName": "Update Configuration Parameters",
+                                                                                                                    "collectionName": "02 - Use Case - CICD",
+                                                                                                                    "icon": "icon icon-update"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "name": "Update Production Source Control Configuration",
+                                                                                                                    "uuid": "45557956-7964-4c15-9e59-84ec546839d3",
+                                                                                                                    "actionTriggerName": "Update Configuration Parameters",
+                                                                                                                    "collectionName": "02 - Use Case - CICD",
+                                                                                                                    "icon": "icon icon-update"
                                                                                                                 }
                                                                                                             ],
                                                                                                             "showPrimaryButton": true

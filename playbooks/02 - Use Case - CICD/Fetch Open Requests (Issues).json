@@ -24,7 +24,7 @@
                     {
                         "option": "Yes",
                         "step_iri": "\/api\/3\/workflow_steps\/deae7f44-95e7-47c6-bdb1-d23c5b1b0957",
-                        "condition": "{{ vars.cicd_config | length > 0 }}",
+                        "condition": "{{ vars.cicd_config | length > 0 and vars.steps.Check_Source_Control_Connector_Configuration.config_id != None }}",
                         "step_name": "Configuration"
                     },
                     {

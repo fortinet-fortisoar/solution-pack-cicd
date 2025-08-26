@@ -13,7 +13,7 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/6c412126-9186-44a4-b8b9-ae1ea35de86b",
+    "triggerStep": "\/api\/3\/workflow_steps\/f8bc7877-d55b-4df9-b292-bbf7ca18136b",
     "steps": [
         {
             "@type": "WorkflowStep",
@@ -198,75 +198,21 @@
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "b0dd85ad-d5a7-4a2c-a415-ad333af98a82",
-                "title": "Update Configuration Parameters",
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<p><strong>Initiating Tasks:<\/strong> Update Source Control Configuration<\/p>",
-                    "records": "{{vars.input.records[0]['@id']}}"
-                },
-                "resources": [
-                    "change_management"
-                ],
                 "__triggerLimit": true,
-                "inputVariables": [],
                 "step_variables": {
                     "input": {
-                        "params": [],
-                        "records": "{{vars.input.records}}"
+                        "params": []
                     }
                 },
                 "triggerOnSource": true,
-                "displayConditions": {
-                    "change_management": {
-                        "sort": [],
-                        "limit": 30,
-                        "logic": "AND",
-                        "filters": [
-                            {
-                                "type": "primitive",
-                                "field": "title",
-                                "value": "Source Control Settings",
-                                "operator": "eq",
-                                "_operator": "eq"
-                            },
-                            {
-                                "type": "array",
-                                "field": "environment",
-                                "value": [
-                                    "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
-                                    "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b"
-                                ],
-                                "module": "environment",
-                                "display": "",
-                                "operator": "in",
-                                "template": "multiselectpicklist",
-                                "OPERATOR_KEY": "$",
-                                "useInOperator": true,
-                                "previousOperator": "in",
-                                "previousTemplate": "multiselectpicklist"
-                            }
-                        ]
-                    }
-                },
-                "executeButtonText": "Execute",
-                "noRecordExecution": false,
-                "showToasterMessage": {
-                    "visible": false,
-                    "messageVisible": true
-                },
-                "triggerOnReplicate": false,
-                "singleRecordExecution": false
+                "triggerOnReplicate": false
             },
             "status": null,
             "top": "30",
             "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
-            "uuid": "6c412126-9186-44a4-b8b9-ae1ea35de86b"
+            "uuid": "f8bc7877-d55b-4df9-b292-bbf7ca18136b"
         },
         {
             "@type": "WorkflowStep",
@@ -352,11 +298,11 @@
             "@type": "WorkflowRoute",
             "name": "Start -> Update Status as In Progress",
             "targetStep": "\/api\/3\/workflow_steps\/5cc5744b-6e90-47d6-b470-81a74c2966d7",
-            "sourceStep": "\/api\/3\/workflow_steps\/6c412126-9186-44a4-b8b9-ae1ea35de86b",
+            "sourceStep": "\/api\/3\/workflow_steps\/f8bc7877-d55b-4df9-b292-bbf7ca18136b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "1cd3306a-1ac3-4aa8-9d2b-032c19ae2088"
+            "uuid": "aa49fc08-268d-47f1-820d-d218f470e893"
         },
         {
             "@type": "WorkflowRoute",
@@ -379,6 +325,6 @@
     "deletedAt": null,
     "recordTags": [
         "CICD",
-        "ManualTrigger"
+        "Subroutine"
     ]
 }
