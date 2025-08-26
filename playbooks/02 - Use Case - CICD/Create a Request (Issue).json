@@ -310,7 +310,7 @@
                     {
                         "option": "No",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/d338e85f-8c98-426d-a981-7a864650d6c8",
+                        "step_iri": "\/api\/3\/workflow_steps\/745176f5-8c7b-435f-933e-fdc0f8734563",
                         "step_name": "Raise Exception"
                     }
                 ],
@@ -347,21 +347,53 @@
             "name": "Raise Exception",
             "description": null,
             "arguments": {
-                "params": {
-                    "msg": "Logged in FortiSOAR User is not Mapped with Source Control Username\""
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Action Required: Map Username",
+                        "description": "You must map the logged-in FortiSOAR user to a Source Control username using the \"Map Source Control Username\" operation before performing CI\/CD actions.",
+                        "inputVariables": []
+                    }
                 },
-                "version": "3.6.0",
-                "connector": "cyops_utilities",
-                "operation": "raise_exception",
-                "operationTitle": "Utils: Raise Exception",
-                "step_variables": []
+                "record": "",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": false,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Ok",
+                            "primary": true
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
             },
             "status": null,
             "top": "570",
             "left": "650",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
-            "uuid": "d338e85f-8c98-426d-a981-7a864650d6c8"
+            "uuid": "745176f5-8c7b-435f-933e-fdc0f8734563"
         },
         {
             "@type": "WorkflowStep",
@@ -498,12 +530,12 @@
         {
             "@type": "WorkflowRoute",
             "name": "Is User Mapped -> Raise Exception",
-            "targetStep": "\/api\/3\/workflow_steps\/d338e85f-8c98-426d-a981-7a864650d6c8",
+            "targetStep": "\/api\/3\/workflow_steps\/745176f5-8c7b-435f-933e-fdc0f8734563",
             "sourceStep": "\/api\/3\/workflow_steps\/ff7783bb-a3c2-4166-b4c3-df670c79ee87",
             "label": "No",
             "isExecuted": false,
             "group": null,
-            "uuid": "51089c76-47b7-4ada-8d06-46cbbd4586ce"
+            "uuid": "a8b7cc31-eee9-44fa-b223-fa7272053e31"
         },
         {
             "@type": "WorkflowRoute",
