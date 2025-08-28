@@ -22,15 +22,13 @@
             "arguments": {
                 "arguments": [],
                 "apply_async": false,
-                "step_variables": {
-                    "USER_MAPPING": "{% set user_mapping = {} %}{% for user in vars.steps.Get_Users.data['hydra:member'] %}{% if user['sourceControlUsername'] != None %}{% set _=user_mapping.update({user.firstname + \" \"+ (user.lastname or \"\") : user.sourceControlUsername }) %}{% endif %}{% endfor %}{{user_mapping}}"
-                },
+                "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
                 "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
             },
             "status": null,
-            "top": "435",
+            "top": "300",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -46,7 +44,7 @@
                 "assigneeUsername": "{{vars.USER_MAPPING.get(vars.steps.Get_Change_Request_Details.input.assignee)}}"
             },
             "status": null,
-            "top": "705",
+            "top": "975",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -69,7 +67,7 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateBranch\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "975",
+            "top": "1245",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
@@ -93,39 +91,11 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"CreateIssue\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "840",
+            "top": "1110",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "142799f7-839a-4e01-b9a1-962a8d7a826d"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Delete Pending Manual Inputs",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/wf\/api\/manual-wf-input\/{{vars.item.id}}\/?format=json",
-                    "body": "",
-                    "method": "DELETE"
-                },
-                "version": "3.6.0",
-                "for_each": {
-                    "item": "{{vars.steps.Get_Pending_Manual_Inputs.data['hydra:member']}}",
-                    "parallel": false,
-                    "condition": "{{vars.item.title == \"Create New Request\"}}"
-                },
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "570",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "04cff439-8526-4426-9ddb-e1d06a942dc3"
         },
         {
             "@type": "WorkflowStep",
@@ -173,7 +143,7 @@
                 }
             },
             "status": null,
-            "top": "570",
+            "top": "840",
             "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
@@ -270,11 +240,11 @@
                         {
                             "option": "Submit",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/85cba27a-af44-4e37-a0c9-9fddf9598f16"
+                            "step_iri": "\/api\/3\/workflow_steps\/8127bc24-2e58-40bb-ad91-4d695a80acff"
                         },
                         {
                             "option": "Abort",
-                            "step_iri": "\/api\/3\/workflow_steps\/1e550c25-0714-436d-bbf1-d5b6ba376506"
+                            "step_iri": "\/api\/3\/workflow_steps\/6dec9935-1ec9-4c68-b262-760442250fcd"
                         }
                     ],
                     "duplicateOption": false,
@@ -294,34 +264,11 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "300",
+            "top": "570",
             "left": "300",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "f87d6e93-7ed0-4a73-b3a8-0dba10b70241"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Get Pending Manual Inputs",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "iri": "\/api\/wf\/api\/manual-wf-input\/list_wfinput\/?format=json&limit=10&offset=0&ordering=-id&unauthenticated_input=false",
-                    "body": "{\"assigned_to\":\"all\",\"is_approval\":false}",
-                    "method": "POST"
-                },
-                "version": "3.6.0",
-                "connector": "cyops_utilities",
-                "operation": "make_cyops_request",
-                "operationTitle": "FSR: Make FortiSOAR API Call",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "435",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "1e550c25-0714-436d-bbf1-d5b6ba376506"
         },
         {
             "@type": "WorkflowStep",
@@ -343,10 +290,110 @@
             },
             "status": null,
             "top": "165",
-            "left": "300",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "902690e1-0853-48a8-8244-a10801612e20"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is User Mapped",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Yes",
+                        "step_iri": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
+                        "condition": "{{ vars.steps.Check_Source_Control_Connector_Configuration.config_id != None }}",
+                        "step_name": "Get Change Request Details"
+                    },
+                    {
+                        "option": "No",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/745176f5-8c7b-435f-933e-fdc0f8734563",
+                        "step_name": "Raise Exception"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "435",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "ff7783bb-a3c2-4166-b4c3-df670c79ee87"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "No Operation",
+            "description": null,
+            "arguments": {
+                "params": [],
+                "version": "3.6.0",
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "operationTitle": "Utils: No Operation",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "705",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "6dec9935-1ec9-4c68-b262-760442250fcd"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Raise Exception",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Action Required: Map Username",
+                        "description": "You must map the logged-in FortiSOAR user to a Source Control username using the \"Map Source Control Username\" operation before performing CI\/CD actions.",
+                        "inputVariables": []
+                    }
+                },
+                "record": "",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": false,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Ok",
+                            "primary": true
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "570",
+            "left": "650",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "745176f5-8c7b-435f-933e-fdc0f8734563"
         },
         {
             "@type": "WorkflowStep",
@@ -379,22 +426,36 @@
             },
             "status": null,
             "top": "30",
-            "left": "300",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
             "uuid": "9b3eba7c-8cc9-4c39-aea5-05b2df668ae4"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "User Mapping",
+            "description": null,
+            "arguments": {
+                "USER_MAPPING": "{% set user_mapping = {} %}{% for user in vars.steps.Get_Users.data['hydra:member'] %}{% if user['sourceControlUsername'] != None %}{% set _=user_mapping.update({user.firstname + \" \"+ (user.lastname or \"\") : user.sourceControlUsername }) %}{% endif %}{% endfor %}{{user_mapping}}"
+            },
+            "status": null,
+            "top": "705",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "8127bc24-2e58-40bb-ad91-4d695a80acff"
         }
     ],
     "routes": [
         {
             "@type": "WorkflowRoute",
-            "name": "Check Source Control Connector Configuration -> Find Source Control Settings",
-            "targetStep": "\/api\/3\/workflow_steps\/0d2f7957-7c7b-42df-87b6-d68b1a0f01d9",
+            "name": "Check Source Control Connector Configuration -> Is User Mapped",
+            "targetStep": "\/api\/3\/workflow_steps\/ff7783bb-a3c2-4166-b4c3-df670c79ee87",
             "sourceStep": "\/api\/3\/workflow_steps\/85cba27a-af44-4e37-a0c9-9fddf9598f16",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "d6627cab-8cf3-41ae-9b7e-e5680db2bac1"
+            "uuid": "5e80441b-56c2-4330-a1c5-699b3a34f6b6"
         },
         {
             "@type": "WorkflowRoute",
@@ -428,43 +489,53 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Change Request Details -> Check Source Control Connector Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/85cba27a-af44-4e37-a0c9-9fddf9598f16",
-            "sourceStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
-            "label": "Submit",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "b459aa88-708d-4700-adbb-7f1e3c6c3300"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Get Change Request Details -> Get Pending Manual Inputs",
-            "targetStep": "\/api\/3\/workflow_steps\/1e550c25-0714-436d-bbf1-d5b6ba376506",
+            "name": "Get Change Request Details -> No Operation",
+            "targetStep": "\/api\/3\/workflow_steps\/6dec9935-1ec9-4c68-b262-760442250fcd",
             "sourceStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
             "label": "Abort",
             "isExecuted": false,
             "group": null,
-            "uuid": "43daa352-5ff1-423c-bf73-f5ae52c7f63b"
+            "uuid": "88b2d124-aebb-481c-a9c6-bd0da1601b41"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Pending Manual Inputs -> Delete Pending Manual Inputs",
-            "targetStep": "\/api\/3\/workflow_steps\/04cff439-8526-4426-9ddb-e1d06a942dc3",
-            "sourceStep": "\/api\/3\/workflow_steps\/1e550c25-0714-436d-bbf1-d5b6ba376506",
-            "label": null,
+            "name": "Get Change Request Details -> User Mapping",
+            "targetStep": "\/api\/3\/workflow_steps\/8127bc24-2e58-40bb-ad91-4d695a80acff",
+            "sourceStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
+            "label": "Submit",
             "isExecuted": false,
             "group": null,
-            "uuid": "6ee547c7-6d84-40ab-9938-f520f5dbcb70"
+            "uuid": "a071b34b-489e-47e4-93db-5126a4720c90"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Users -> hgvh",
-            "targetStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
+            "name": "Get Users -> Check Source Control Connector Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/85cba27a-af44-4e37-a0c9-9fddf9598f16",
             "sourceStep": "\/api\/3\/workflow_steps\/902690e1-0853-48a8-8244-a10801612e20",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "7405cc1b-cc6f-43e3-930b-e651e7a9a141"
+            "uuid": "f6d63cf0-e598-45af-82e6-1f1e5c9d351f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is User Mapped -> Get Change Request Details",
+            "targetStep": "\/api\/3\/workflow_steps\/f87d6e93-7ed0-4a73-b3a8-0dba10b70241",
+            "sourceStep": "\/api\/3\/workflow_steps\/ff7783bb-a3c2-4166-b4c3-df670c79ee87",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "e4bac109-4991-4c5d-9951-28b8fea33b1a"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is User Mapped -> Raise Exception",
+            "targetStep": "\/api\/3\/workflow_steps\/745176f5-8c7b-435f-933e-fdc0f8734563",
+            "sourceStep": "\/api\/3\/workflow_steps\/ff7783bb-a3c2-4166-b4c3-df670c79ee87",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a8b7cc31-eee9-44fa-b223-fa7272053e31"
         },
         {
             "@type": "WorkflowRoute",
@@ -475,6 +546,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "8f215850-4af2-46c1-92f3-8d785ebab096"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "User Mapping -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/0d2f7957-7c7b-42df-87b6-d68b1a0f01d9",
+            "sourceStep": "\/api\/3\/workflow_steps\/8127bc24-2e58-40bb-ad91-4d695a80acff",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "d5272c66-a1cc-4fed-8f33-2d6342fed5af"
         }
     ],
     "groups": [],

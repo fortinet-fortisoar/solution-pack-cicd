@@ -134,6 +134,14 @@
             {
                 "apiName": "playbookButtons",
                 "name": "Playbook Buttons"
+            },
+            {
+                "apiName": "cicdContentImport",
+                "name": "CICD Content Import"
+            },
+            {
+                "apiName": "exportTemplateWizard",
+                "name": "Export Template Wizard"
             }
         ],
         "recordSets": [

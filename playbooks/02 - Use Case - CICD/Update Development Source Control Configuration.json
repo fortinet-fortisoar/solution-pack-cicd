@@ -1,0 +1,163 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Update Development Source Control Configuration",
+    "aliasName": null,
+    "tag": null,
+    "description": "Update development source control settings including the base branch, repository names, organization, and source control URL.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/9ad6e38c-5eb0-48b0-ac2d-80aafa47e5e7",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "route": "a1b19f9d-2387-4ce8-acf2-ef23c2c249aa",
+                "title": "Update Configuration Parameters",
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p><strong>Initiating Tasks:<\/strong> Update Source Control Configuration<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}"
+                },
+                "resources": [
+                    "change_management"
+                ],
+                "__triggerLimit": true,
+                "inputVariables": [],
+                "step_variables": {
+                    "input": {
+                        "params": [],
+                        "records": "{{vars.input.records}}"
+                    }
+                },
+                "triggerOnSource": true,
+                "displayConditions": {
+                    "change_management": {
+                        "sort": [],
+                        "limit": 30,
+                        "logic": "AND",
+                        "filters": [
+                            {
+                                "type": "primitive",
+                                "field": "title",
+                                "value": "Source Control Settings",
+                                "operator": "eq",
+                                "_operator": "eq"
+                            },
+                            {
+                                "type": "array",
+                                "field": "environment",
+                                "value": {
+                                    "id": 465,
+                                    "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
+                                    "icon": null,
+                                    "uuid": "d4ff078d-7692-4737-b45b-00990e949651",
+                                    "@type": "Picklist",
+                                    "color": "#11c1e5",
+                                    "display": "Development",
+                                    "listName": "\/api\/3\/picklist_names\/6b216e0d-c167-4cfd-a772-97fe1be0f52d",
+                                    "itemValue": "Development",
+                                    "importedBy": [],
+                                    "orderIndex": 0
+                                },
+                                "_value": {
+                                    "id": 465,
+                                    "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
+                                    "icon": null,
+                                    "uuid": "d4ff078d-7692-4737-b45b-00990e949651",
+                                    "@type": "Picklist",
+                                    "color": "#11c1e5",
+                                    "display": "Development",
+                                    "listName": "\/api\/3\/picklist_names\/6b216e0d-c167-4cfd-a772-97fe1be0f52d",
+                                    "itemValue": "Development",
+                                    "importedBy": [],
+                                    "orderIndex": 0
+                                },
+                                "operator": "eq"
+                            },
+                            {
+                                "type": "object",
+                                "field": "configurationParameters",
+                                "value": "false",
+                                "_value": {
+                                    "@id": "false",
+                                    "display": "",
+                                    "itemValue": ""
+                                },
+                                "operator": "isnull"
+                            }
+                        ]
+                    }
+                },
+                "executeButtonText": "Execute",
+                "noRecordExecution": false,
+                "showToasterMessage": {
+                    "visible": false,
+                    "messageVisible": true
+                },
+                "triggerOnReplicate": false,
+                "singleRecordExecution": false
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
+            "group": null,
+            "uuid": "9ad6e38c-5eb0-48b0-ac2d-80aafa47e5e7"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Source Control Settings",
+            "description": null,
+            "arguments": {
+                "arguments": [],
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": true,
+                "workflowReference": "\/api\/3\/workflows\/44b750e6-8606-4c48-8bb6-43beea85b09e"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "8463f750-1d32-4006-b7ba-810dc6b46c68"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Update Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/8463f750-1d32-4006-b7ba-810dc6b46c68",
+            "sourceStep": "\/api\/3\/workflow_steps\/9ad6e38c-5eb0-48b0-ac2d-80aafa47e5e7",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "c7b24a2d-8e5c-4775-9f42-ce1727408b76"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
+    "uuid": "7ca4fdef-5a73-402b-9d42-30ca803a52a1",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CICD",
+        "ManualTrigger"
+    ]
+}
