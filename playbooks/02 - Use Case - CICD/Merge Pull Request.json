@@ -111,6 +111,7 @@
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "web_url": "{% set url= \"\" %}{% if vars.cicd_env.source_control.name == \"github\" %}{% do url = \"pull\" %}{% else %}{% do url = \"-\/merge_requests\" %}{% endif %}{{vars.cicd_config.source_control_url}}\/{{vars.cicd_config[\"organizationName\"]}}\/{{vars.cicd_config[\"contentRepoName\"]}}\/url\/{{(vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0]).split(\"\/\")[-1]}}",
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "current_user": "{{vars.currentUser | fromIRI}}",
                 "source_control_type": "{{vars.cicd_config.source_control_url}}"
@@ -307,6 +308,14 @@
             "name": "Get Pull Request Details",
             "description": null,
             "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Below are the Pull Request details<\/p>\n<ul>\n<li>\n<p>Source Control Organization: {{vars.cicd_config[\"organizationName\"]}}<\/p>\n<\/li>\n<li>\n<p>Repository Name: {{vars.cicd_config[\"contentRepoName\"]}}<\/p>\n<\/li>\n<li>\n<p>Pull Request: <a href=\"{{vars.web_url}}\" target=\"_blank\" rel=\"noopener\">View Pull Request<\/a><\/p>\n<\/li>\n<\/ul>",
+                    "records": "{{vars.steps.Find_Related_Task[0]['@id']}}"
+                },
                 "arguments": {
                     "get_pr_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"pull_number\": \"{{vars.pull_number}}\"\n}",
                     "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"

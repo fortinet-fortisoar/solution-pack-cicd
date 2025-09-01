@@ -48,8 +48,8 @@
                 "cr_iri": "{{vars.input.records[0]['@id'] or vars.input.params['cr_iri']}}",
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "cicd_config": "{% set config_params = {} %}{% set prod_config = {} %}{% set dev_config = {} %}{% for item in vars.steps.Find_Source_Control_Settings %}{% if item.configurationParameters is not none %}{% if item.environment.itemValue == 'Production' %}{% set _ = prod_config.update(item.configurationParameters) %}{% elif item.environment.itemValue == 'Development' %}{% set _ = dev_config.update(item.configurationParameters) %}{% endif %}{% endif %}\n{% endfor %}{% if prod_config and dev_config %}{% set _ = config_params.update(prod_config) %}{% elif prod_config %}{% set _ = config_params.update(prod_config) %}{% elif dev_config %}{% set _ = config_params.update(dev_config) %}{% else %}{% set _ = config_params.update({}) %}{% endif %}{{config_params}}",
-                "lastCommitID": "{{vars.input.records[0].lastCommitID or vars.input.params.lastCommitID}}",
-                "previousCommitID": "{{vars.previous.data.lastCommitID or vars.input.params.previousCommitID}}"
+                "lastCommitID": "{{vars.input.records[0].lastCommitID or vars.input.params.lastCommitID or None}}",
+                "previousCommitID": "{{vars.previous.data.lastCommitID or vars.input.params.previousCommitID or None}}"
             },
             "status": null,
             "top": "435",
@@ -68,9 +68,7 @@
                     "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
                 },
                 "apply_async": false,
-                "step_variables": {
-                    "comparisonLink": "{% set html_url = vars.steps.Fetch_Commit_Comparison.data.html_url.split('compare\/') %}{% set base_url = html_url[0] %}{% set last_commit =(vars.steps.Fetch_Commit_Comparison.data.html_url.split('compare\/')[-1]).split('...')[0] %}{% set pre_commit = (vars.steps.Fetch_Commit_Comparison.data.html_url.split('compare\/')[-1]).split('...')[-1] %}{% set new_html_url = base_url + \"compare\/\" + pre_commit + \"...\" + last_commit %}{{new_html_url}}"
-                },
+                "step_variables": [],
                 "pass_parent_env": false,
                 "pass_input_record": true,
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetCommitComparison\"][\"@id\"]}}"
@@ -246,7 +244,7 @@
             "description": null,
             "arguments": {
                 "resource": {
-                    "commitStatus": "<p>{% if vars.steps.Fetch_Commit_Comparison.data.status == \"behind\" %}<\/p>\n<h5 class=\"margin-top-0\" style=\"color: #ff9900;\">\u26a0\ufe0f Environment Drift Detected<\/h5>\n<p>This environment is currently&nbsp;<strong>{{ vars.steps.Fetch_Commit_Comparison.data.behind_by }} commit(s) behind<\/strong> the latest production content.<\/p>\n<p>To bring this environment <strong>up-to-date<\/strong>, apply the latest production content.<\/p>\n<p>&nbsp;<\/p>\n<p><strong>Environment Drift Report<\/strong><\/p>\n<p>- Status: {{ vars.steps.Fetch_Commit_Comparison.data.status }}<\/p>\n<p>- Ahead By: {{ vars.steps.Fetch_Commit_Comparison.data.ahead_by }}<\/p>\n<p>- Behind By: {{ vars.steps.Fetch_Commit_Comparison.data.behind_by }}<\/p>\n<p>- Comparison:&nbsp;<a href=\"{{vars.comparisonLink}}\" target=\"_blank\" rel=\"noopener\">View Comparison<\/a><\/p>\n<p>{% else %}<\/p>\n<h5 class=\"margin-top-0\" style=\"color: #28a745;\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>\n<p>{% endif %}<\/p>"
+                    "commitStatus": "<p>{% if vars.steps.Fetch_Commit_Comparison.data.status == \"behind\" %}<\/p>\n<h5 class=\"margin-top-0\" style=\"color: #ff9900;\">\u26a0\ufe0f Environment Drift Detected<\/h5>\n<p>This environment is currently&nbsp;<strong>{{ vars.steps.Fetch_Commit_Comparison.data.behind_by }} commit(s) behind<\/strong> the latest production content.<\/p>\n<p>To bring this environment <strong>up-to-date<\/strong>, apply the latest production content.<\/p>\n<p>&nbsp;<\/p>\n<p><strong>Environment Drift Report<\/strong><\/p>\n<p>- Status: {{ vars.steps.Fetch_Commit_Comparison.data.status }}<\/p>\n<p>- Ahead By: {{ vars.steps.Fetch_Commit_Comparison.data.ahead_by }}<\/p>\n<p>- Behind By: {{ vars.steps.Fetch_Commit_Comparison.data.behind_by }}<\/p>\n<p>- Comparison: <a href=\"{{vars.steps.Fetch_Commit_Comparison.data.web_url}}\" target=\"_blank\" rel=\"noopener\">View Comparison<\/a><\/p>\n<p>{% else %}<\/p>\n<h5 class=\"margin-top-0\" style=\"color: #28a745;\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>\n<p>{% endif %}<\/p>"
                 },
                 "operation": "Append",
                 "collection": "{{vars.cr_iri}}",
