@@ -109,7 +109,7 @@
                 "operation": "make_cyops_request",
                 "operationTitle": "FSR: Make FortiSOAR API Call",
                 "step_variables": {
-                    "is_schedule_triggered": "{% if (vars.currentUser or vars.request['currentUser'] ) == None %}true{% else %}false{% endif %}"
+                    "is_schedule_triggered": "{% if (vars.currentUser == None or vars.request['currentUser'] == None) %}true{% else %}{% if \"\/api\/3\/appliances\/\" in vars.currentUser %}true{% else %}false{% endif %}{% endif %}"
                 }
             },
             "status": null,

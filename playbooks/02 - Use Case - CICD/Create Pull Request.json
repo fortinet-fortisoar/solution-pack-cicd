@@ -334,7 +334,7 @@
                 },
                 "apply_async": false,
                 "step_variables": {
-                    "pr_number": "{{(vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"'].number\"))[0]}}"
+                    "pull_request_details": "{% if vars.steps.Get_Pull_Request.data is mapping %}[{{vars.steps.Get_Pull_Request.data}}]{% else %}{{vars.steps.Get_Pull_Request.data}}{% endif %}"
                 },
                 "pass_parent_env": false,
                 "pass_input_record": false,
@@ -407,7 +407,7 @@
                     {
                         "option": "PR Already Exist",
                         "step_iri": "\/api\/3\/workflow_steps\/d59a0290-218d-4e2b-aa6f-784ef77b839e",
-                        "condition": "{{ (vars.steps.Get_Pull_Request.data | length > 0) and (vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 1 }}",
+                        "condition": "{{ (vars.pull_request_details | length > 0) and (vars.pull_request_details | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 1 }}",
                         "step_name": "PR Already Exist"
                     },
                     {
@@ -419,7 +419,7 @@
                     {
                         "option": "No Commits",
                         "step_iri": "\/api\/3\/workflow_steps\/0a9e48e7-7e6c-419b-afff-e4a452c5f896",
-                        "condition": "{{ (vars.steps.Get_Pull_Request.data | length > 0) and (vars.steps.Get_Pull_Request.data | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 0 }}",
+                        "condition": "{{ (vars.pull_request_details | length > 0) and (vars.pull_request_details | json_query(\"[?head.ref == '\"+vars.input.records[0].new_branch+\"']\")) | length == 0 }}",
                         "step_name": "No Commits Available"
                     }
                 ],
