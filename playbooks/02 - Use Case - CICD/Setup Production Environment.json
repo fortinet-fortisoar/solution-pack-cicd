@@ -372,6 +372,7 @@
                     "batch_size": 100
                 },
                 "resource": {
+                    "lastCommitID": "{{vars.steps.Push_Initial_Production_Environment_Content.data.sha}}",
                     "lastBuildDeployedOn": "{{arrow.utcnow().int_timestamp}}"
                 },
                 "operation": "Append",

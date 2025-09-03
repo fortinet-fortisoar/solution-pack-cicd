@@ -22,6 +22,7 @@
             "name": "Configuration",
             "description": null,
             "arguments": {
+                "cicd_env": "{{globalVars.cicd_env}}",
                 "org_name": "{{vars.cicd_config.organizationName}}",
                 "repo_name": "{{vars.cicd_config.contentRepoName}}",
                 "base_branch": "{{vars.cicd_config.baseBranch}}",
@@ -124,6 +125,28 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get Latest Commit",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "get_commit_params": "{ \"org_name\": \"{{vars.org_name}}\", \"repo_name\": \"{{vars.repo_name}}\", \"commit_ref\": \"{{vars.base_branch}}\", \"repo_type\": \"Organization\" }",
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetCommit\"][\"@id\"]}}"
+            },
+            "status": null,
+            "top": "975",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "4337f549-b7df-4785-b5a7-2c5603c77c51"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Push Content to Source Control",
             "description": null,
             "arguments": {
@@ -134,6 +157,8 @@
                     "branch_name": "{{vars.base_branch}}",
                     "commit_message": "Initial Production Environment Content",
                     "export_file_name": "{{vars.export_file_name}}",
+                    "related_task_iri": "",
+                    "commit_description": "",
                     "connector_config_id": "{{vars.input.params['connector_config_id']}}",
                     "export_template_name": "{{vars.export_template_name}}"
                 },
@@ -273,6 +298,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "e16c2ba8-d3b8-4a88-8671-5fa3609ab41b"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Last Commit ID -> Get Latest Commit",
+            "targetStep": "\/api\/3\/workflow_steps\/4337f549-b7df-4785-b5a7-2c5603c77c51",
+            "sourceStep": "\/api\/3\/workflow_steps\/ac25321e-6e8b-4bf7-94f1-cf03579b7758",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "8ad6ad76-fa7a-4d5b-9091-f7a53268a8e7"
         },
         {
             "@type": "WorkflowRoute",

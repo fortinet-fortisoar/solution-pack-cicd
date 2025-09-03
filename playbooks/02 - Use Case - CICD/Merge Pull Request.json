@@ -111,8 +111,7 @@
             "name": "Configuration",
             "description": null,
             "arguments": {
-                "web_url": "{% set url= \"\" %}{% if vars.cicd_env.source_control.name == \"github\" %}{% do url = \"pull\" %}{% else %}{% do url = \"-\/merge_requests\" %}{% endif %}{{vars.cicd_config.source_control_url}}\/{{vars.cicd_config[\"organizationName\"]}}\/{{vars.cicd_config[\"contentRepoName\"]}}\/url\/{{(vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0]).split(\"\/\")[-1]}}",
-                "cicd_env": "{{globalVars.cicd_env}}",
+                "web_url": "{% if vars.cicd_env.source_control.name == \"github\" %}{% set url = \"pull\" %}{% else %}{% set url = \"-\/merge_requests\" %}{% endif %}{{ vars.cicd_config.source_control_url }}\/{{ vars.cicd_config[\"organizationName\"] }}\/{{ vars.cicd_config[\"contentRepoName\"] }}\/{{ url }}\/{{ vars.input.records[0].pullRequest.split(\"' target='_blank'\")[0].split('\/')[-1] }}",
                 "current_user": "{{vars.currentUser | fromIRI}}",
                 "source_control_type": "{{vars.cicd_config.source_control_url}}"
             },
@@ -253,6 +252,7 @@
                 "module": "change_management?$limit=30",
                 "checkboxFields": true,
                 "step_variables": {
+                    "cicd_env": "{{globalVars.cicd_env}}",
                     "cicd_config": "{% set config_params = {} %}{% set prod_config = {} %}{% set dev_config = {} %}{% for item in vars.steps.Find_Source_Control_Settings %}{% if item.configurationParameters is not none %}{% if item.environment.itemValue == 'Production' %}{% set _ = prod_config.update(item.configurationParameters) %}{% elif item.environment.itemValue == 'Development' %}{% set _ = dev_config.update(item.configurationParameters) %}{% endif %}{% endif %}\n{% endfor %}{% if prod_config and dev_config %}{% set _ = config_params.update(prod_config) %}{% elif prod_config %}{% set _ = config_params.update(prod_config) %}{% elif dev_config %}{% set _ = config_params.update(dev_config) %}{% else %}{% set _ = config_params.update({}) %}{% endif %}{{config_params}}"
                 }
             },
