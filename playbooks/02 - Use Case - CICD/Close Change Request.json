@@ -222,7 +222,7 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "tenant": "",
                     "thread": false,
-                    "content": "<p>Below are the Change Request details<\/p>\n<ul>\n<li>\n<p>Source Control Organization: {{vars.org_name}}<\/p>\n<\/li>\n<li>\n<p>Repository Name: {{vars.repo_name}}<\/p>\n<\/li>\n<li>\n<p>Pull Request: <a href=\"{{vars.web_url}}\" target=\"_blank\" rel=\"noopener\">View Change Request<\/a><\/p>\n<\/li>\n<\/ul>",
+                    "content": "<p>Below are the Change Request details<\/p>\n<ul>\n<li>\n<p>Source Control Organization: {{vars.org_name}}<\/p>\n<\/li>\n<li>\n<p>Repository Name: {{vars.repo_name}}<\/p>\n<\/li>\n<li>\n<p>Change Request: <a href=\"{{vars.web_url}}\" target=\"_blank\" rel=\"noopener\">View Change Request<\/a><\/p>\n<\/li>\n<\/ul>",
                     "records": "{{vars.steps.Find_Related_Task[0]['@id']}}",
                     "parentstepid": "\/api\/3\/workflow_steps\/ebb21f34-3043-4f40-a92f-eec106fb4202"
                 },
