@@ -34,11 +34,45 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1515",
-            "left": "125",
+            "top": "1520",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "7654b64e-acba-4cd9-a17f-5d473404c784"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Environment Type",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Prod & Dev",
+                        "step_iri": "\/api\/3\/workflow_steps\/990eb8db-3c12-4144-bcda-9ba15717e849",
+                        "condition": "{{ vars.cicd_config.env_config | length == 2 }}",
+                        "step_name": "Set Prod Dev Environment Type"
+                    },
+                    {
+                        "option": "Production",
+                        "step_iri": "\/api\/3\/workflow_steps\/efe72595-6dd7-42e0-9c0d-829b19126877",
+                        "condition": "{{ vars.cicd_config.env_config[0].itemValue == \"Production\" }}",
+                        "step_name": "Set Production Environment Type"
+                    },
+                    {
+                        "option": "Development",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/09e37b88-4466-4104-87c4-a4c8b3640696",
+                        "step_name": "Copy of Copy of Set Default Environment Type"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "700",
+            "left": "480",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "7aeabc30-3990-4b2f-933c-ca56a2c29028"
         },
         {
             "@type": "WorkflowStep",
@@ -50,8 +84,8 @@
                 "source_control_operations": "{% set filtered = [] %}{% for item in ((vars.steps.Get_Source_Control_Playbooks.data['hydra:member'] | json_query(\"[?isActive==`true`].recordTags\")) | flatten(levels=1)) %}{% if '-' in item %}{% do filtered.append(item) %}{% endif %}{% endfor %}{{filtered}}"
             },
             "status": null,
-            "top": "435",
-            "left": "125",
+            "top": "440",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "72d4a7bd-82d9-45ce-8092-de138c20189b"
@@ -72,8 +106,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1245",
-            "left": "125",
+            "top": "1240",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "813442f4-8ab0-4a86-9af4-515fb8dc8985"
@@ -101,8 +135,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "570",
-            "left": "125",
+            "top": "580",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "0aded246-f9d5-48f2-829c-37952fe60070"
@@ -124,8 +158,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "165",
-            "left": "125",
+            "top": "160",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "fc39f306-f324-47bc-a307-3d0bb2a2bbee"
@@ -148,7 +182,7 @@
             },
             "status": null,
             "top": "300",
-            "left": "125",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "d5836224-b1bc-485b-b5d8-4f251df39d05"
@@ -171,7 +205,7 @@
             },
             "status": null,
             "top": "1380",
-            "left": "125",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "71c4410e-c4d8-47b2-8387-775da6d096bc"
@@ -199,22 +233,22 @@
                 }
             },
             "status": null,
-            "top": "1110",
-            "left": "125",
+            "top": "1100",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "b688e2d8-9214-4196-9952-5f623d8637eb"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Set Default Environment Type",
+            "name": "Set Development Environment Type",
             "description": null,
             "arguments": {
                 "for_each": {
                     "item": "{{vars.steps.Find_Setup_Environment}}",
                     "__bulk": true,
                     "parallel": false,
-                    "condition": "",
+                    "condition": "{{\"Development\" in vars.item.title}}",
                     "batch_size": 100
                 },
                 "resource": {
@@ -222,7 +256,7 @@
                     "__link": {
                         "recordTags": []
                     },
-                    "environment": "{% if \"Production\" in vars.item.title %}{{\"Change Management Environment\" | picklist(\"Production\", \"@id\")}}{% else %}{{\"Change Management Environment\" | picklist(\"Development\", \"@id\")}}{% endif %}"
+                    "environment": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651"
                 },
                 "operation": "Append",
                 "collection": "{{vars.item[\"@id\"]}}",
@@ -234,25 +268,81 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "705",
-            "left": "125",
+            "top": "840",
+            "left": "140",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "09e37b88-4466-4104-87c4-a4c8b3640696"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Set Prod Dev Environment Type",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.steps.Find_Setup_Environment}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "type": "{% if \"Production\" in vars.item.title %}{{\"Change Management Type\" | picklist(\"Setup\", \"@id\")}}{% endif %}",
+                    "__link": {
+                        "recordTags": []
+                    },
+                    "environment": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b"
+                },
+                "operation": "Append",
+                "collection": "{{vars.item[\"@id\"]}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "920",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "990eb8db-3c12-4144-bcda-9ba15717e849"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Set Setup Environment",
+            "name": "Set Production Environment Type",
             "description": null,
             "arguments": {
-                "setup_type": "{% if vars.cicd_config.env_config | length == 2 %}{{vars.steps.Set_Default_Environment_Type | json_query(\"[? environment.itemValue == 'Development']\")}}{% else %}{% for setup in vars.steps.Set_Default_Environment_Type %}{% if setup.environment.itemValue in vars.cicd_config.env_config[0].itemValue %}{{vars.steps.Set_Default_Environment_Type | json_query(\"[? environment.itemValue != '\"+vars.cicd_config.env_config[0].itemValue+\"']\")}}{% endif %}{% endfor %}{% endif %}"
+                "for_each": {
+                    "item": "{{vars.steps.Find_Setup_Environment}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "{{\"Production\" in vars.item.title}}",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "type": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c",
+                    "__link": {
+                        "recordTags": []
+                    },
+                    "environment": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b"
+                },
+                "operation": "Append",
+                "collection": "{{vars.item[\"@id\"]}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
             },
             "status": null,
             "top": "840",
-            "left": "125",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
-            "uuid": "559b2359-c7ca-40e3-8acc-06ff977dfad0"
+            "uuid": "efe72595-6dd7-42e0-9c0d-829b19126877"
         },
         {
             "@type": "WorkflowStep",
@@ -266,36 +356,108 @@
                 }
             },
             "status": null,
-            "top": "30",
-            "left": "125",
+            "top": "40",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
             "uuid": "e3243c1a-daf7-4bf1-901a-8cc380e797f2"
         },
         {
             "@type": "WorkflowStep",
-            "name": "Update Setup Environment",
+            "name": "Update Development Environment",
             "description": null,
             "arguments": {
-                "resource": {
-                    "environment": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41"
+                "for_each": {
+                    "item": "{{vars.steps.Find_Setup_Environment}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
                 },
+                "resource": {
+                    "environment": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651"
+                },
+                "_showJson": false,
                 "operation": "Append",
-                "collection": "{{vars.setup_type[0][\"@id\"]}}",
+                "collection": "{{vars.item[\"@id\"]}}",
                 "__recommend": [],
                 "collectionType": "\/api\/3\/change_management",
-                "fieldOperation": [],
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "980",
+            "left": "140",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "a84c99ad-f48e-405d-a1df-4100fc01f7a3"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Production Environment",
+            "description": null,
+            "arguments": {
+                "for_each": {
+                    "item": "{{vars.steps.Find_Setup_Environment}}",
+                    "__bulk": true,
+                    "parallel": false,
+                    "condition": "",
+                    "batch_size": 100
+                },
+                "resource": {
+                    "environment": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b"
+                },
+                "_showJson": false,
+                "operation": "Append",
+                "collection": "{{vars.item[\"@id\"]}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
                 "step_variables": []
             },
             "status": null,
             "top": "975",
-            "left": "125",
+            "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "b0ab255f-5db5-41f2-be7e-10f2160e850b"
         }
     ],
     "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Environment Type -> Copy of Copy of Set Default Environment Type",
+            "targetStep": "\/api\/3\/workflow_steps\/09e37b88-4466-4104-87c4-a4c8b3640696",
+            "sourceStep": "\/api\/3\/workflow_steps\/7aeabc30-3990-4b2f-933c-ca56a2c29028",
+            "label": "Development",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "283f8e72-8af0-45da-a046-1b9879a99aff"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Environment Type -> Copy of Set Default Environment Type",
+            "targetStep": "\/api\/3\/workflow_steps\/efe72595-6dd7-42e0-9c0d-829b19126877",
+            "sourceStep": "\/api\/3\/workflow_steps\/7aeabc30-3990-4b2f-933c-ca56a2c29028",
+            "label": "Production",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a26ecd8a-0062-45e7-94d5-1ac7f39d40da"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Environment Type -> Set Default Environment Type",
+            "targetStep": "\/api\/3\/workflow_steps\/990eb8db-3c12-4144-bcda-9ba15717e849",
+            "sourceStep": "\/api\/3\/workflow_steps\/7aeabc30-3990-4b2f-933c-ca56a2c29028",
+            "label": "Prod & Dev",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "c65815cb-19f3-42dd-ab72-ef433b2c2883"
+        },
         {
             "@type": "WorkflowRoute",
             "name": "Configuration -> Find Setup Environment",
@@ -318,13 +480,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Find Setup Environment -> Set Default Environment Type",
-            "targetStep": "\/api\/3\/workflow_steps\/990eb8db-3c12-4144-bcda-9ba15717e849",
+            "name": "Find Setup Environment -> Check Environment Type",
+            "targetStep": "\/api\/3\/workflow_steps\/7aeabc30-3990-4b2f-933c-ca56a2c29028",
             "sourceStep": "\/api\/3\/workflow_steps\/0aded246-f9d5-48f2-829c-37952fe60070",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "0c7c72a3-fc8f-4d2f-b01f-2474ab37f98d"
+            "uuid": "e7440aef-8bfb-40c4-bb0a-a1168499bb10"
         },
         {
             "@type": "WorkflowRoute",
@@ -368,23 +530,33 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Set Default Environment Type -> Set Setup Environment",
-            "targetStep": "\/api\/3\/workflow_steps\/559b2359-c7ca-40e3-8acc-06ff977dfad0",
+            "name": "Set Development Environment Type -> Update Development Environment",
+            "targetStep": "\/api\/3\/workflow_steps\/a84c99ad-f48e-405d-a1df-4100fc01f7a3",
+            "sourceStep": "\/api\/3\/workflow_steps\/09e37b88-4466-4104-87c4-a4c8b3640696",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "c34daa91-1760-4484-b522-552f7b138216"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Set Prod Dev Environment Type -> Get Source Control Workflows",
+            "targetStep": "\/api\/3\/workflow_steps\/b688e2d8-9214-4196-9952-5f623d8637eb",
             "sourceStep": "\/api\/3\/workflow_steps\/990eb8db-3c12-4144-bcda-9ba15717e849",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "efb9c530-26ce-43e3-b5c0-56e88c229e4d"
+            "uuid": "e6fb40b7-7012-4a29-afc8-1ee6444db86d"
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Set Setup Environment -> Update Setup Environment",
+            "name": "Set Production Environment Type -> Update Production Environment",
             "targetStep": "\/api\/3\/workflow_steps\/b0ab255f-5db5-41f2-be7e-10f2160e850b",
-            "sourceStep": "\/api\/3\/workflow_steps\/559b2359-c7ca-40e3-8acc-06ff977dfad0",
+            "sourceStep": "\/api\/3\/workflow_steps\/efe72595-6dd7-42e0-9c0d-829b19126877",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "0676cb97-55b0-43b8-bd15-ee91b67ebe72"
+            "uuid": "5fa855bd-617a-4f3e-a296-b6f2e3d860bd"
         },
         {
             "@type": "WorkflowRoute",
@@ -398,19 +570,29 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update Setup Environment -> Get Source Control Workflows",
+            "name": "Update Development Environment -> Get Source Control Workflows",
+            "targetStep": "\/api\/3\/workflow_steps\/b688e2d8-9214-4196-9952-5f623d8637eb",
+            "sourceStep": "\/api\/3\/workflow_steps\/a84c99ad-f48e-405d-a1df-4100fc01f7a3",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "17af4c94-0839-4823-8048-a7b752729bbd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Production Environment -> Get Source Control Workflows",
             "targetStep": "\/api\/3\/workflow_steps\/b688e2d8-9214-4196-9952-5f623d8637eb",
             "sourceStep": "\/api\/3\/workflow_steps\/b0ab255f-5db5-41f2-be7e-10f2160e850b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "b2dd0f48-69b2-4724-8c59-5dca15f14564"
+            "uuid": "e206a0a4-6747-427c-99d2-84f5ce0f0c6e"
         }
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
     "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
-    "isEditable": true,
+    "isEditable": false,
     "uuid": "936a5236-e7ca-4c44-b3cf-cce8937df365",
     "owners": [],
     "isPrivate": false,

@@ -89,8 +89,8 @@
                 }
             },
             "status": null,
-            "top": "1520",
-            "left": "440",
+            "top": "1515",
+            "left": "218",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "99743434-451f-4875-80a0-97015a247b59"
@@ -122,7 +122,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2595",
+            "top": "2460",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
@@ -294,7 +294,7 @@
             },
             "status": null,
             "top": "1380",
-            "left": "440",
+            "left": "218",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "908ec37d-cb1f-4c45-955a-11324893b0d3"
@@ -431,7 +431,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2730",
+            "top": "2595",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -456,7 +456,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2460",
+            "top": "2325",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -637,8 +637,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1660",
-            "left": "440",
+            "top": "1650",
+            "left": "218",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "a30e093b-ac0a-4a95-9e17-2141c7fd8037"
@@ -669,7 +669,7 @@
                 }
             },
             "status": null,
-            "top": "2325",
+            "top": "2730",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/6832e556-b9c7-497a-babe-feda3bd27dbf",
             "group": null,
@@ -706,16 +706,6 @@
             "isExecuted": false,
             "group": null,
             "uuid": "e4143d74-77e8-41b3-84f1-cc65411a0ef7"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "d -> Wait for Publish",
-            "targetStep": "\/api\/3\/workflow_steps\/892ed89d-53eb-42a3-8228-fa7f2d1b124a",
-            "sourceStep": "\/api\/3\/workflow_steps\/2ed5ac1b-7bbe-4353-a2e3-dad9dd3de464",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "69de796a-7254-4fcd-9848-94abce775f81"
         },
         {
             "@type": "WorkflowRoute",
@@ -799,6 +789,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Import FortiSOAR Template -> Set Status as Complete",
+            "targetStep": "\/api\/3\/workflow_steps\/bd53e719-1993-4ebf-b7d4-439aa0d16ef5",
+            "sourceStep": "\/api\/3\/workflow_steps\/2ed5ac1b-7bbe-4353-a2e3-dad9dd3de464",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "e04ff411-3327-408c-b78b-cb619f92d6b0"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Map Source Control Username -> Check Source Control Connector Configuration",
             "targetStep": "\/api\/3\/workflow_steps\/ff9d7102-e5eb-422f-a0fd-f1fde6ce92a1",
             "sourceStep": "\/api\/3\/workflow_steps\/c743714d-a718-4aef-9e2e-f98d86501c21",
@@ -816,6 +816,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "193a96eb-7b6c-42f3-9489-23f28ee20746"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Set Latest Deployed Date -> Wait for Publish",
+            "targetStep": "\/api\/3\/workflow_steps\/892ed89d-53eb-42a3-8228-fa7f2d1b124a",
+            "sourceStep": "\/api\/3\/workflow_steps\/a20d0c91-0db4-4716-acb2-5ef1fb5f501a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "17cb684d-a014-4ec4-a4ec-debb896cd53b"
         },
         {
             "@type": "WorkflowRoute",
@@ -876,16 +886,6 @@
             "isExecuted": false,
             "group": null,
             "uuid": "7485634b-faaa-45fe-9063-8a3d04871241"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Wait for Publish -> Update Status as Complete",
-            "targetStep": "\/api\/3\/workflow_steps\/bd53e719-1993-4ebf-b7d4-439aa0d16ef5",
-            "sourceStep": "\/api\/3\/workflow_steps\/892ed89d-53eb-42a3-8228-fa7f2d1b124a",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "85561b26-5b53-4272-a54d-d2e77a851828"
         }
     ],
     "groups": [],
