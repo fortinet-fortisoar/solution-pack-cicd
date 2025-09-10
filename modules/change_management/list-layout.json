@@ -41,7 +41,7 @@
                                                                         {
                                                                             "type": "sectionHeader",
                                                                             "config": {
-                                                                                "wid": "11ffe634-0470-495a-991f-98e31d4bb236",
+                                                                                "wid": "f5ba6b49-6b27-4ac3-ba69-0d379ebd353b",
                                                                                 "query": {
                                                                                     "filters": [],
                                                                                     "sort": [],
@@ -57,21 +57,16 @@
                                                                                         "logic": "AND",
                                                                                         "filters": [
                                                                                             {
-                                                                                                "field": "type",
-                                                                                                "value": [
-                                                                                                    "b43deb65-1edc-482b-b20e-1fed06bbc01c",
-                                                                                                    "409b289f-33f5-423f-9174-24bc8628cc4a",
-                                                                                                    "dc57442c-3d52-43a0-aa19-ed2898e30ff7"
-                                                                                                ],
-                                                                                                "display": "Setup",
-                                                                                                "operator": "nin",
-                                                                                                "type": "array",
-                                                                                                "OPERATOR_KEY": "$",
-                                                                                                "displayTemplate": "",
-                                                                                                "module": "type",
-                                                                                                "template": "multiselectpicklist",
-                                                                                                "previousOperator": "nin",
-                                                                                                "previousTemplate": "multiselectpicklist"
+                                                                                                "field": "environment",
+                                                                                                "operator": "eq",
+                                                                                                "value": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41",
+                                                                                                "_value": {
+                                                                                                    "display": "Undefined",
+                                                                                                    "itemValue": "Undefined",
+                                                                                                    "@id": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41"
+                                                                                                },
+                                                                                                "type": "object",
+                                                                                                "display": "Undefined"
                                                                                             }
                                                                                         ]
                                                                                     },
@@ -723,15 +718,26 @@
                                                                 "field": "title",
                                                                 "operator": "eq",
                                                                 "_operator": "eq",
-                                                                "value": "Setup the Source Control for Production Environment",
+                                                                "value": "Setup the Development Environment",
                                                                 "type": "primitive"
+                                                            },
+                                                            {
+                                                                "field": "environment",
+                                                                "operator": "eq",
+                                                                "value": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
+                                                                "_value": {
+                                                                    "display": "Development",
+                                                                    "itemValue": "Development",
+                                                                    "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651"
+                                                                },
+                                                                "type": "object",
+                                                                "display": "Development"
                                                             },
                                                             {
                                                                 "field": "status",
                                                                 "operator": "eq",
                                                                 "value": "\/api\/3\/picklists\/eb7e156f-f599-4cf6-a12b-5484c1bc414d",
                                                                 "_value": {
-                                                                    "display": "Completed",
                                                                     "itemValue": "Completed",
                                                                     "@id": "\/api\/3\/picklists\/eb7e156f-f599-4cf6-a12b-5484c1bc414d"
                                                                 },
@@ -749,6 +755,18 @@
                                                                 "_operator": "eq",
                                                                 "value": "Setup the Development Environment",
                                                                 "type": "primitive"
+                                                            },
+                                                            {
+                                                                "field": "environment",
+                                                                "operator": "eq",
+                                                                "value": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                                                                "_value": {
+                                                                    "display": "Production",
+                                                                    "itemValue": "Production",
+                                                                    "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b"
+                                                                },
+                                                                "type": "object",
+                                                                "display": "Production"
                                                             },
                                                             {
                                                                 "field": "status",
