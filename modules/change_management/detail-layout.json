@@ -3326,6 +3326,78 @@
                                                                                                                 }
                                                                                                             }
                                                                                                         }
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "sectionHeader",
+                                                                                                        "config": {
+                                                                                                            "wid": "37a516c2-4f29-4d47-8b68-3183620da175",
+                                                                                                            "query": {
+                                                                                                                "filters": [],
+                                                                                                                "sort": [],
+                                                                                                                "limit": 10
+                                                                                                            },
+                                                                                                            "editorType": "html",
+                                                                                                            "sectionText": "<p class=\"font-size-14  muted-80\"><strong>Reset CI\/CD Configuration<\/strong><\/p>\n<p class=\"font-size-13  muted-80\"><strong>Reset the current CI\/CD setup to its original base state.<\/strong><br>This will clear any existing production and\/or development environment configurations. After resetting, you can re-run the configuration wizard to set up your environments correctly.<\/p>",
+                                                                                                            "visibility": {
+                                                                                                                "conditionalVisibility": true,
+                                                                                                                "filter": {
+                                                                                                                    "sort": [],
+                                                                                                                    "limit": 30,
+                                                                                                                    "logic": "AND",
+                                                                                                                    "filters": [
+                                                                                                                        {
+                                                                                                                            "field": "type",
+                                                                                                                            "operator": "eq",
+                                                                                                                            "value": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c",
+                                                                                                                            "_value": {
+                                                                                                                                "display": "Setup",
+                                                                                                                                "itemValue": "Setup",
+                                                                                                                                "@id": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c"
+                                                                                                                            },
+                                                                                                                            "type": "object"
+                                                                                                                        },
+                                                                                                                        {
+                                                                                                                            "field": "status",
+                                                                                                                            "operator": "eq",
+                                                                                                                            "value": "\/api\/3\/picklists\/eb7e156f-f599-4cf6-a12b-5484c1bc414d",
+                                                                                                                            "_value": {
+                                                                                                                                "display": "Completed",
+                                                                                                                                "itemValue": "Completed",
+                                                                                                                                "@id": "\/api\/3\/picklists\/eb7e156f-f599-4cf6-a12b-5484c1bc414d"
+                                                                                                                            },
+                                                                                                                            "type": "object"
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    },
+                                                                                                    {
+                                                                                                        "type": "playbookButtons-1.1.1",
+                                                                                                        "config": {
+                                                                                                            "wid": "5966d203-8784-495c-9411-16d5366c0e92",
+                                                                                                            "widgetName": "Playbook Execution Wizard",
+                                                                                                            "selectedPlaybooksWithRecord": [
+                                                                                                                {
+                                                                                                                    "name": "Reset Environment",
+                                                                                                                    "uuid": "16b34080-5f0a-42dc-828e-9529735e3f42",
+                                                                                                                    "actionTriggerName": "Reset Environment",
+                                                                                                                    "collectionName": "01 - Drafts",
+                                                                                                                    "icon": "icon icon-resolve"
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            "showPrimaryButton": true,
+                                                                                                            "showExecutionProgress": true,
+                                                                                                            "selectedExecutionWizardPlaybooks": [
+                                                                                                                {
+                                                                                                                    "name": "Reset Environment",
+                                                                                                                    "uuid": "16b34080-5f0a-42dc-828e-9529735e3f42",
+                                                                                                                    "actionTriggerName": "Reset Environment",
+                                                                                                                    "collectionName": "01 - Drafts",
+                                                                                                                    "icon": "icon icon-resolve"
+                                                                                                                }
+                                                                                                            ]
+                                                                                                        }
                                                                                                     }
                                                                                                 ],
                                                                                                 "style": "col-lg-6"
