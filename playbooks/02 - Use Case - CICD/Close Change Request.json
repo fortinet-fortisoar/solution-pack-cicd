@@ -90,8 +90,9 @@
             "description": null,
             "arguments": {
                 "arguments": {
+                    "issue_contents": "{{vars.issue_description}}",
                     "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}",
-                    "update_issue_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"issue_no\": \"{{vars.issue_no}}\",\n\"state\": \"close\",\n\"contents\": \"{{vars.issue_description}}\",\n\"state_reason\": \"completed\"\n}"
+                    "update_issue_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"issue_no\": \"{{vars.issue_no}}\",\n\"state\": \"close\",\n\"state_reason\": \"completed\"\n}"
                 },
                 "apply_async": false,
                 "step_variables": [],
