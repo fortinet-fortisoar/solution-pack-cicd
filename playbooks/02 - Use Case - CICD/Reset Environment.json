@@ -406,7 +406,9 @@
                     "batch_size": 100
                 },
                 "resource": {
-                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                    "results": "<p>{{null}}<\/p>",
+                    "lastCommitID": "{{null}}"
                 },
                 "_showJson": true,
                 "operation": "Append",
@@ -437,7 +439,9 @@
                     "batch_size": 100
                 },
                 "resource": {
-                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                    "results": "<p>{{null}}<\/p>",
+                    "lastCommitID": "{{null}}"
                 },
                 "operation": "Append",
                 "collection": "{{vars.item['@id']}}",
@@ -470,7 +474,9 @@
                 "resource": {
                     "type": "{{null}}",
                     "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
-                    "environment": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41"
+                    "results": "<p>{{null}}<\/p>",
+                    "environment": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41",
+                    "lastCommitID": "{{null}}"
                 },
                 "_showJson": false,
                 "operation": "Append",
