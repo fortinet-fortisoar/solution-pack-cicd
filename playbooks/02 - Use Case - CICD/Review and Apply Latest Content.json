@@ -167,7 +167,7 @@
                     "recordTags": "Overwrite"
                 },
                 "step_variables": {
-                    "repo_name": "{% if vars.steps.Select_Input_For_Dev_Env.input.selectRepositoryType == \"Dev Settings\" %}{{vars.cicd_config.devSettingsRepoName}}{% else %}{{vars.cicd_config.contentRepoName}}{% endif %}"
+                    "repo_name": "{% if vars.request.selectedRepository == \"Development Settings\" %}{{vars.cicd_config.devSettingsRepoName}}{% else %}{{vars.cicd_config.contentRepoName}}{% endif %}"
                 }
             },
             "status": null,
@@ -301,7 +301,7 @@
                     {
                         "option": "Prod",
                         "step_iri": "\/api\/3\/workflow_steps\/8c579dc8-32b0-4e59-a147-1f41a2825549",
-                        "condition": "{{ vars.request.selectedRepository\t== \"Production Content\" }}",
+                        "condition": "{{ \"Production\" in vars.request.selectedRepository }}",
                         "step_name": "Prod Commit Status"
                     },
                     {
@@ -341,7 +341,7 @@
                     "recordTags": "Overwrite"
                 },
                 "step_variables": {
-                    "repo_name": "{% if vars.steps.Select_Input_For_Prod_Env.input.selectRepositoryType == \"Prod Settings\" %}{{vars.cicd_config.prodSettingsRepoName}}{% else %}{{vars.cicd_config.contentRepoName}}{% endif %}"
+                    "repo_name": "{% if vars.request.selectedRepository == \"Production Settings\" %}{{vars.cicd_config.prodSettingsRepoName}}{% else %}{{vars.cicd_config.contentRepoName}}{% endif %}"
                 }
             },
             "status": null,
@@ -632,7 +632,7 @@
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
     "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
-    "isEditable": true,
+    "isEditable": false,
     "uuid": "24963415-4057-4fd5-bbe5-bf7d6bfa059d",
     "owners": [],
     "isPrivate": false,
