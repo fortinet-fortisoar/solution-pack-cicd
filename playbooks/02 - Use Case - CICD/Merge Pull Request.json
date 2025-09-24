@@ -746,7 +746,7 @@
             "name": "Update Last Commit ID",
             "description": null,
             "arguments": {
-                "when": "{{vars.steps.Get_Apply_Latest_Content_Record | length > 0}}",
+                "when": "{{vars.steps.Get_Apply_Latest_Content_Record | length > 0 and vars.cicd_env | length == 2}}",
                 "resource": {
                     "lastCommitID": "{{vars.steps.Merge_Pull_Request.data.sha}}"
                 },

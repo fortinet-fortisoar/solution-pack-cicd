@@ -116,6 +116,7 @@
             "name": "Get Latest Commit",
             "description": null,
             "arguments": {
+                "when": "{{vars.repo_name == \"fortisoar-prod-content\"}}",
                 "message": {
                     "tags": [],
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
@@ -196,18 +197,9 @@
             "name": "Update Commit Details",
             "description": null,
             "arguments": {
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<p>Completed Task: Apply Latest Content<\/p>",
-                    "records": "{{vars.request.record['@id']}}",
-                    "parentstepid": "\/api\/3\/workflow_steps\/3ffce50a-6b49-4b02-a073-2d98209ed88a"
-                },
+                "when": "{{vars.repo_name == \"fortisoar-prod-content\"}}",
                 "resource": {
-                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
-                    "commitStatus": "<h5 class=\"margin-top-negative-1\" style=\"color: #28a745;\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>",
+                    "commitStatus": "<h5 style=\"color: #28a745;\" class=\"margin-top-negative-1\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>",
                     "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}",
                     "lastBuildDeployedOn": "{%if vars.repo_name == vars.cicd_config.contentRepoName %}{{arrow.utcnow().int_timestamp}}{%else%}{{vars.request.record.lastBuildDeployedOn}}{%endif%}"
                 },
@@ -226,6 +218,39 @@
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "d35e03ff-37ee-472e-84b2-06f336876446"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Status as Pending",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Completed Task: Apply Latest Content<\/p>",
+                    "records": "{{vars.request.record['@id']}}",
+                    "parentstepid": "\/api\/3\/workflow_steps\/d35e03ff-37ee-472e-84b2-06f336876446"
+                },
+                "resource": {
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
+                },
+                "operation": "Append",
+                "collection": "{{vars.request.record['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "975",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "72710f60-3c16-4465-a0a9-67f56c9a43a6"
         },
         {
             "@type": "WorkflowStep",
@@ -330,6 +355,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "fb194e4d-017f-495b-b69e-474dd0bd92fe"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Commit Details -> Update Status as Pending",
+            "targetStep": "\/api\/3\/workflow_steps\/72710f60-3c16-4465-a0a9-67f56c9a43a6",
+            "sourceStep": "\/api\/3\/workflow_steps\/d35e03ff-37ee-472e-84b2-06f336876446",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "a7a0973c-5e10-45c7-95ea-a0b119ba747b"
         }
     ],
     "groups": [],
