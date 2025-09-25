@@ -82,8 +82,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "460",
-            "left": "1220",
+            "top": "340",
+            "left": "1440",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "a23ccc91-bd8e-434a-a9ee-61eeddc4e2cb"
@@ -131,7 +131,7 @@
             },
             "status": null,
             "top": "140",
-            "left": "1000",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "2c1fa08e-4236-4130-a372-b3452d72ac5a"
@@ -143,23 +143,29 @@
             "arguments": {
                 "conditions": [
                     {
-                        "option": "Pending",
-                        "step_iri": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89",
-                        "condition": "{{ vars.input.records[0].status.itemValue == \"Pending\" }}",
-                        "step_name": "Update Status as In Progress"
+                        "option": "Connector Not Config",
+                        "step_iri": "\/api\/3\/workflow_steps\/536304c2-25ce-41f6-b22f-bead4240417a",
+                        "condition": "{{ vars.steps.Check_Source_Control_Connector_Configuration.config_id == None }}",
+                        "step_name": "No Connector Configured"
                     },
                     {
                         "option": "In Progress",
                         "default": true,
                         "step_iri": "\/api\/3\/workflow_steps\/a23ccc91-bd8e-434a-a9ee-61eeddc4e2cb",
                         "step_name": "Add Comment Playbook Is Active"
+                    },
+                    {
+                        "option": "Pending",
+                        "step_iri": "\/api\/3\/workflow_steps\/3fed066c-a883-49a8-81bc-8be588136f89",
+                        "condition": "{{ vars.input.records[0].status.itemValue == \"Pending\" }}",
+                        "step_name": "Update Status as In Progress"
                     }
                 ],
                 "step_variables": []
             },
             "status": null,
             "top": "260",
-            "left": "1000",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "845c3ed3-b29d-4af1-8d2f-f9c5e98bcfc0"
@@ -259,6 +265,35 @@
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "2360e578-052b-4f1a-9b3b-d9ccc0999936"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Connector or User Mapping Missing",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "people": [],
+                    "content": "<h5>Warning: Connector or User Mapping Missing<\/h5>\n<hr>\n<p>The logged-in user does not have a configured source control connector or is not mapped to a source control username.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false,
+                    "changeManagement": "{{vars.input.records[0]['@id']}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "480",
+            "left": "1120",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "536304c2-25ce-41f6-b22f-bead4240417a"
         },
         {
             "@type": "WorkflowStep",
@@ -783,8 +818,8 @@
                 "singleRecordExecution": true
             },
             "status": null,
-            "top": "30",
-            "left": "1000",
+            "top": "20",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
             "uuid": "b4747b90-3981-457f-ae61-6d587bf5129a"
@@ -1026,6 +1061,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "49c009fe-0c6b-4e47-ac2c-99cf34b5e912"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Status -> No Connector Configured",
+            "targetStep": "\/api\/3\/workflow_steps\/536304c2-25ce-41f6-b22f-bead4240417a",
+            "sourceStep": "\/api\/3\/workflow_steps\/845c3ed3-b29d-4af1-8d2f-f9c5e98bcfc0",
+            "label": "Connector Not Config",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "547b04b7-a44c-4873-9932-90a9091608df"
         },
         {
             "@type": "WorkflowRoute",
