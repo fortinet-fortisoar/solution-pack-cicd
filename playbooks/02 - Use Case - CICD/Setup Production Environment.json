@@ -17,6 +17,35 @@
     "steps": [
         {
             "@type": "WorkflowStep",
+            "name": "Add Comment Playbook Is Active",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "people": [],
+                    "content": "<h5>Warning: Playbook is Active or Awaiting State<\/h5>\n<hr>\n<p>{{vars.input.records[0].title}} operation is in Active\/Awaiting state. Please wait while the previous operation is completed.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false,
+                    "changeManagement": "{{vars.input.records[0]['@id']}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "560",
+            "left": "980",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "29045bf0-e1d4-4e09-a8b6-81ed2219d475"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Are Repo Created Manually",
             "description": null,
             "arguments": {
@@ -89,11 +118,74 @@
                 "workflowReference": "\/api\/3\/workflows\/dd654cd4-923f-4c20-837c-279669c2fa82"
             },
             "status": null,
-            "top": "435",
-            "left": "300",
+            "top": "380",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "b60fae65-d8fb-4bc7-9798-92a9be3dcfb1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Check Status",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Connector Not Config",
+                        "step_iri": "\/api\/3\/workflow_steps\/31be23f6-9b8f-477a-a737-d21f20361c75",
+                        "condition": "{{ vars.steps.Check_Source_Control_Connector_Configuration.config_id == None }}",
+                        "step_name": "Connector or User Mapping Missing"
+                    },
+                    {
+                        "option": "In Progress",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/29045bf0-e1d4-4e09-a8b6-81ed2219d475",
+                        "step_name": "Add Comment Playbook Is Active"
+                    },
+                    {
+                        "option": "Pending",
+                        "step_iri": "\/api\/3\/workflow_steps\/0e7a9129-086a-4266-967f-29e4a54f1851",
+                        "condition": "{{ vars.input.records[0].status.itemValue == \"Pending\" }}",
+                        "step_name": "Get Source Control Server URL"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "500",
+            "left": "660",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "0de730c8-e7fd-41b6-96a8-5b353bdeb79d"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Connector or User Mapping Missing",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "people": [],
+                    "content": "<h5>Warning: Connector Configuration Missing<\/h5>\n<hr>\n<p>The logged-in user does not have a configured source control connector.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false,
+                    "changeManagement": "{{vars.input.records[0]['@id']}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "700",
+            "left": "660",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "31be23f6-9b8f-477a-a737-d21f20361c75"
         },
         {
             "@type": "WorkflowStep",
@@ -286,8 +378,8 @@
                 "workflowReference": "\/api\/3\/workflows\/d539f6cc-69ca-44ec-a622-e233aa51970a"
             },
             "status": null,
-            "top": "300",
-            "left": "300",
+            "top": "260",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "5b1f5049-732b-4894-8542-369ede0ab465"
@@ -523,8 +615,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "165",
-            "left": "300",
+            "top": "140",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "52ca8e42-4704-4b06-8901-63c083cfc007"
@@ -550,6 +642,30 @@
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "9226fc8e-7de0-40b6-9f6f-fe8860f58a8e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Set Status Pending",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "840",
+            "left": "660",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "6990ca7c-cbc2-412f-b2d6-3a85c5179d3d"
         },
         {
             "@type": "WorkflowStep",
@@ -642,8 +758,8 @@
                 "singleRecordExecution": true
             },
             "status": null,
-            "top": "30",
-            "left": "300",
+            "top": "20",
+            "left": "660",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
             "uuid": "4b469313-7f5e-4829-be90-820574f2b016"
@@ -714,13 +830,53 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Check Source Control Connector Configuration -> Get Source Control Server URL",
-            "targetStep": "\/api\/3\/workflow_steps\/0e7a9129-086a-4266-967f-29e4a54f1851",
+            "name": "Check Source Control Connector Configuration -> Check Status",
+            "targetStep": "\/api\/3\/workflow_steps\/0de730c8-e7fd-41b6-96a8-5b353bdeb79d",
             "sourceStep": "\/api\/3\/workflow_steps\/b60fae65-d8fb-4bc7-9798-92a9be3dcfb1",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "e70229e5-b2a0-4506-ad7c-449499ddda5e"
+            "uuid": "43a78276-5ca5-4005-a113-ca83b643235d"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Status -> Add Comment Playbook Is Active",
+            "targetStep": "\/api\/3\/workflow_steps\/29045bf0-e1d4-4e09-a8b6-81ed2219d475",
+            "sourceStep": "\/api\/3\/workflow_steps\/0de730c8-e7fd-41b6-96a8-5b353bdeb79d",
+            "label": "In Progress",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "d27719d1-5938-4d6c-804e-60fd1c57931f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Status -> Connector or User Mapping Missing",
+            "targetStep": "\/api\/3\/workflow_steps\/31be23f6-9b8f-477a-a737-d21f20361c75",
+            "sourceStep": "\/api\/3\/workflow_steps\/0de730c8-e7fd-41b6-96a8-5b353bdeb79d",
+            "label": "Connector Not Config",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "0ed8d6be-de3a-406a-a14d-6b44bba756f0"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Status -> Get Source Control Server URL",
+            "targetStep": "\/api\/3\/workflow_steps\/0e7a9129-086a-4266-967f-29e4a54f1851",
+            "sourceStep": "\/api\/3\/workflow_steps\/0de730c8-e7fd-41b6-96a8-5b353bdeb79d",
+            "label": "Pending",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "7f70b8df-e550-4929-9de7-ce1866ce7502"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Connector or User Mapping Missing -> Set Status Completed",
+            "targetStep": "\/api\/3\/workflow_steps\/6990ca7c-cbc2-412f-b2d6-3a85c5179d3d",
+            "sourceStep": "\/api\/3\/workflow_steps\/31be23f6-9b8f-477a-a737-d21f20361c75",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "0c90f549-075a-4356-9db2-c111e74b7fb3"
         },
         {
             "@type": "WorkflowRoute",

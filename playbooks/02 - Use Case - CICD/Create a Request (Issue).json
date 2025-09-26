@@ -351,7 +351,7 @@
                 "input": {
                     "schema": {
                         "title": "Action Required: Map Username",
-                        "description": "You must map the logged-in FortiSOAR user to a Source Control username using the \"Map Source Control Username\" operation before performing CI\/CD actions.",
+                        "description": "<h5>Warning: Connector or User Mapping Missing<\/h5>\n<hr>\n<p>The logged-in user does not have a configured source control connector or is not mapped to a source control username.<\/p>",
                         "inputVariables": []
                     }
                 },

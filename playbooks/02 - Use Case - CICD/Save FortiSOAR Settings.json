@@ -89,7 +89,7 @@
             },
             "status": null,
             "top": "165",
-            "left": "300",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "e9a925c9-91a9-4ff8-a181-a3817db6e846"
@@ -101,23 +101,29 @@
             "arguments": {
                 "conditions": [
                     {
-                        "option": "Pending",
-                        "step_iri": "\/api\/3\/workflow_steps\/dfc0dbd2-46d2-4e21-8d06-4ab4dcf466fb",
-                        "condition": "{{ vars.input.records[0].status.itemValue == \"Pending\" }}",
-                        "step_name": "Update Status In Progress"
-                    },
-                    {
                         "option": "In Progress",
                         "default": true,
                         "step_iri": "\/api\/3\/workflow_steps\/7229addc-ef6a-4bad-9db6-935ecb294616",
                         "step_name": "Add Comment Playbook Is Active"
+                    },
+                    {
+                        "option": "Connector Not Config",
+                        "step_iri": "\/api\/3\/workflow_steps\/0c87c283-12ea-4f6c-8c05-5909e7705d16",
+                        "condition": "{{ vars.steps.Check_Source_Control_Connector_Configuration.config_id == None }}",
+                        "step_name": "No Connector or CICD Setup"
+                    },
+                    {
+                        "option": "Pending",
+                        "step_iri": "\/api\/3\/workflow_steps\/dfc0dbd2-46d2-4e21-8d06-4ab4dcf466fb",
+                        "condition": "{{ vars.input.records[0].status.itemValue == \"Pending\" }}",
+                        "step_name": "Update Status In Progress"
                     }
                 ],
                 "step_variables": []
             },
             "status": null,
             "top": "300",
-            "left": "300",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "acc9de15-77e7-4cbf-9286-d5837fae7103"
@@ -141,6 +147,35 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "836eadc2-7613-437a-b84e-d1c4c31440dc"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Connector or User Mapping Missing",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "people": [],
+                    "content": "<h5>Warning: Connector or User Mapping Missing<\/h5>\n<hr>\n<p>The logged-in user does not have a configured source control connector or is not mapped to a source control username.<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false,
+                    "changeManagement": "{{vars.input.records[0]['@id']}}"
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "440",
+            "left": "820",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "0c87c283-12ea-4f6c-8c05-5909e7705d16"
         },
         {
             "@type": "WorkflowStep",
@@ -452,7 +487,7 @@
             },
             "status": null,
             "top": "30",
-            "left": "300",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
             "uuid": "81ba31e6-3c9a-4f87-8cf7-2be72de45b77"
@@ -586,6 +621,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "0154efa4-edaa-4d02-bcdc-4dd8b6843381"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check Status -> No Connector or CICD Setup",
+            "targetStep": "\/api\/3\/workflow_steps\/0c87c283-12ea-4f6c-8c05-5909e7705d16",
+            "sourceStep": "\/api\/3\/workflow_steps\/acc9de15-77e7-4cbf-9286-d5837fae7103",
+            "label": "Connector Not Config",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "2c9dd47d-574f-4da0-b704-a2a1a8c6ad55"
         },
         {
             "@type": "WorkflowRoute",

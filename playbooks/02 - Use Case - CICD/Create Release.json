@@ -85,7 +85,7 @@
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "cicd_config": "{{vars.cicd_config}}",
                 "release_name": "Release\/",
-                "release_number": "1.0",
+                "release_number": "1.0.0",
                 "source_control_web_url": "{{vars.cicd_config.source_control_url}}",
                 "prod_environment_record_iri": "\/api\/3\/change_management\/4be084b9-c5fe-4d42-943f-6bb2161d7157",
                 "release_initial_description": "Intial Commit",
@@ -277,7 +277,7 @@
                         "option": "Yes",
                         "step_iri": "\/api\/3\/workflow_steps\/87e28c72-85e0-48f8-ae2b-d11d659cf9d6",
                         "condition": "{{ vars.steps.Fetch_Release.data | length > 0 }}",
-                        "step_name": "Copy of Add comment for new release"
+                        "step_name": "Add Existing Release Comment"
                     },
                     {
                         "option": "No",
@@ -285,7 +285,8 @@
                         "step_iri": "\/api\/3\/workflow_steps\/93e3d5a7-bfbb-4b08-bd2e-4890c7cf1f7b",
                         "step_name": "Create Release"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
             "top": "840",
@@ -423,7 +424,7 @@
             "name": "Is Release Exist -> Add comment for existing release",
             "targetStep": "\/api\/3\/workflow_steps\/87e28c72-85e0-48f8-ae2b-d11d659cf9d6",
             "sourceStep": "\/api\/3\/workflow_steps\/a30e6ec7-8628-450d-a612-992c6ca026e9",
-            "label": null,
+            "label": "Yes",
             "isExecuted": false,
             "group": null,
             "uuid": "69f95bae-1b98-4bec-a1f0-0812001a6afe"
@@ -433,7 +434,7 @@
             "name": "Is Release Exist -> Create Release",
             "targetStep": "\/api\/3\/workflow_steps\/93e3d5a7-bfbb-4b08-bd2e-4890c7cf1f7b",
             "sourceStep": "\/api\/3\/workflow_steps\/a30e6ec7-8628-450d-a612-992c6ca026e9",
-            "label": null,
+            "label": "No",
             "isExecuted": false,
             "group": null,
             "uuid": "d4c57e07-5f09-4074-92b1-ef9a143b5764"
