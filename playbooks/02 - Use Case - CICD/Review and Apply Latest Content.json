@@ -6,7 +6,7 @@
     "tag": null,
     "description": "Review and apply latest content from Source Control repository and apply it within the FortiSOAR environment",
     "isActive": true,
-    "debug": false,
+    "debug": true,
     "singleRecordExecution": false,
     "remoteExecutableFlag": false,
     "parameters": [],
@@ -388,6 +388,20 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Return Response",
+            "description": null,
+            "arguments": {
+                "data": "{\"status\": \"Connector or User Mapping Missing\"}"
+            },
+            "status": null,
+            "top": "570",
+            "left": "825",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "22bb1877-abef-49d6-a5d7-8a136657ef76"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Source Control is not Configured",
             "description": null,
             "arguments": {
@@ -572,6 +586,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "ee33f5ab-e111-4b33-9fde-eae836647dc0"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Connector or User Mapping Missing -> Return Response",
+            "targetStep": "\/api\/3\/workflow_steps\/22bb1877-abef-49d6-a5d7-8a136657ef76",
+            "sourceStep": "\/api\/3\/workflow_steps\/24d8403f-bda8-43cc-b91b-da4e3085311a",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "4185e59c-9d69-41a2-8407-129c3ef68021"
         },
         {
             "@type": "WorkflowRoute",
