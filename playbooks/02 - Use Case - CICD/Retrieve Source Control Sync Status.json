@@ -25,7 +25,8 @@
                     "org_name": "{{vars.cicd_config.organizationName}}",
                     "repo_name": "{{vars.cicd_config.contentRepoName}}",
                     "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}",
-                    "previousCommitID": "{{vars.steps.Find_Last_Commit_ID[0].lastCommitID}}"
+                    "previousCommitID": "{{vars.steps.Find_Last_Commit_ID[0].lastCommitID}}",
+                    "connector_config_id": "{{vars.config_id}}"
                 },
                 "apply_async": false,
                 "step_variables": [],
@@ -172,7 +173,7 @@
             "arguments": {
                 "arguments": {
                     "get_commit_params": "{ \"org_name\": \"{{vars.cicd_config.organizationName}}\", \"repo_name\": \"{{vars.cicd_config.contentRepoName}}\", \"commit_ref\": \"{{vars.cicd_config.baseBranch}}\", \"repo_type\": \"Organization\" }",
-                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
+                    "connector_config_id": "{{vars.config_id}}"
                 },
                 "apply_async": false,
                 "step_variables": [],

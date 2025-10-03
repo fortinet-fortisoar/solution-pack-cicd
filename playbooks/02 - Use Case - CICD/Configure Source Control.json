@@ -462,6 +462,7 @@
             "name": "Return Output",
             "description": null,
             "arguments": {
+                "cicd_config": "{{vars.steps.Update_Source_Control_Settings_Config.configurationParameters}}",
                 "abort_repo_creation": "false",
                 "are_repo_created_manually": "{% if vars.are_repo_created is defined %}{{vars.are_repo_created}}{% else %}{{false}}{% endif %}"
             },
