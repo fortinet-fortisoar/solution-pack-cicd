@@ -298,6 +298,28 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get Latest Commit",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "get_commit_params": "{ \"org_name\": \"{{vars.steps.Initial_Repository_Configuration.cicd_config.organizationName}}\", \"repo_name\": \"{{vars.steps.Initial_Repository_Configuration.cicd_config.contentRepoName}}\", \"commit_ref\": \"{{vars.steps.Initial_Repository_Configuration.cicd_config.baseBranch}}\", \"repo_type\": \"Organization\" }",
+                    "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration.config_id}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetCommit\"][\"@id\"]}}"
+            },
+            "status": null,
+            "top": "1600",
+            "left": "480",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "e735af80-f956-4d23-8e15-71647430547d"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Get Source Control Server URL",
             "description": null,
             "arguments": {
@@ -417,7 +439,7 @@
                         {
                             "option": "Skip",
                             "primary": false,
-                            "step_iri": "\/api\/3\/workflow_steps\/7b0c6573-cd2b-4590-adf4-1bb57e47eb9a"
+                            "step_iri": "\/api\/3\/workflow_steps\/e735af80-f956-4d23-8e15-71647430547d"
                         }
                     ],
                     "duplicateOption": false,
@@ -531,7 +553,7 @@
                     "batch_size": 100
                 },
                 "resource": {
-                    "lastCommitID": "{{vars.steps.Push_Initial_Production_Environment_Content.data.sha}}",
+                    "lastCommitID": "{{vars.steps.Push_Initial_Production_Environment_Content.data.sha or vars.steps.Get_Latest_Commit.data.sha}}",
                     "lastBuildDeployedOn": "{{arrow.utcnow().int_timestamp}}"
                 },
                 "operation": "Append",
@@ -920,6 +942,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Get Latest Commit -> Is Env Development and Production",
+            "targetStep": "\/api\/3\/workflow_steps\/7b0c6573-cd2b-4590-adf4-1bb57e47eb9a",
+            "sourceStep": "\/api\/3\/workflow_steps\/e735af80-f956-4d23-8e15-71647430547d",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f2d1b3b2-9383-432f-8d3a-019a11eb2b3d"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Get Source Control Server URL -> Get CICD Environment",
             "targetStep": "\/api\/3\/workflow_steps\/fe92f242-fe62-41d1-a335-ec629aab9a7e",
             "sourceStep": "\/api\/3\/workflow_steps\/0e7a9129-086a-4266-967f-29e4a54f1851",
@@ -980,13 +1012,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Push Initial Content -> Is Env Development and Production",
-            "targetStep": "\/api\/3\/workflow_steps\/7b0c6573-cd2b-4590-adf4-1bb57e47eb9a",
+            "name": "Push Initial Content -> Get Latest Commit",
+            "targetStep": "\/api\/3\/workflow_steps\/e735af80-f956-4d23-8e15-71647430547d",
             "sourceStep": "\/api\/3\/workflow_steps\/802ae6bb-1ca5-4350-be29-0b748f404e6c",
             "label": "Skip",
             "isExecuted": false,
             "group": null,
-            "uuid": "20ca1194-1031-4b63-a46b-5825343e1b5c"
+            "uuid": "a1222f3c-91a6-41d0-89be-79a913d119f3"
         },
         {
             "@type": "WorkflowRoute",
