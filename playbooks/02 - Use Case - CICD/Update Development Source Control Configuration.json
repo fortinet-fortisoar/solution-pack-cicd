@@ -13,14 +13,14 @@
     "synchronous": false,
     "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
     "versions": [],
-    "triggerStep": "\/api\/3\/workflow_steps\/9ad6e38c-5eb0-48b0-ac2d-80aafa47e5e7",
+    "triggerStep": "\/api\/3\/workflow_steps\/466a53ac-6865-451b-b11a-d18e7f89cc2a",
     "steps": [
         {
             "@type": "WorkflowStep",
             "name": "Start",
             "description": null,
             "arguments": {
-                "route": "a1b19f9d-2387-4ce8-acf2-ef23c2c249aa",
+                "route": "20e08bb4-bb13-4d43-bdb2-a289e60f0539",
                 "title": "Update Configuration Parameters",
                 "message": {
                     "tags": [],
@@ -56,33 +56,24 @@
                                 "_operator": "eq"
                             },
                             {
-                                "type": "array",
+                                "type": "object",
                                 "field": "environment",
-                                "value": {
-                                    "id": 465,
-                                    "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
-                                    "icon": null,
-                                    "uuid": "d4ff078d-7692-4737-b45b-00990e949651",
-                                    "@type": "Picklist",
-                                    "color": "#11c1e5",
-                                    "display": "Development",
-                                    "listName": "\/api\/3\/picklist_names\/6b216e0d-c167-4cfd-a772-97fe1be0f52d",
-                                    "itemValue": "Development",
-                                    "importedBy": [],
-                                    "orderIndex": 0
-                                },
+                                "value": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
                                 "_value": {
-                                    "id": 465,
                                     "@id": "\/api\/3\/picklists\/d4ff078d-7692-4737-b45b-00990e949651",
-                                    "icon": null,
-                                    "uuid": "d4ff078d-7692-4737-b45b-00990e949651",
-                                    "@type": "Picklist",
-                                    "color": "#11c1e5",
                                     "display": "Development",
-                                    "listName": "\/api\/3\/picklist_names\/6b216e0d-c167-4cfd-a772-97fe1be0f52d",
-                                    "itemValue": "Development",
-                                    "importedBy": [],
-                                    "orderIndex": 0
+                                    "itemValue": "Development"
+                                },
+                                "operator": "eq"
+                            },
+                            {
+                                "type": "object",
+                                "field": "type",
+                                "value": "\/api\/3\/picklists\/dc57442c-3d52-43a0-aa19-ed2898e30ff7",
+                                "_value": {
+                                    "@id": "\/api\/3\/picklists\/dc57442c-3d52-43a0-aa19-ed2898e30ff7",
+                                    "display": "Development",
+                                    "itemValue": "Development"
                                 },
                                 "operator": "eq"
                             },
@@ -107,14 +98,14 @@
                     "messageVisible": true
                 },
                 "triggerOnReplicate": false,
-                "singleRecordExecution": false
+                "singleRecordExecution": true
             },
             "status": null,
             "top": "30",
             "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/f414d039-bb0d-4e59-9c39-a8f1e880b18a",
             "group": null,
-            "uuid": "9ad6e38c-5eb0-48b0-ac2d-80aafa47e5e7"
+            "uuid": "466a53ac-6865-451b-b11a-d18e7f89cc2a"
         },
         {
             "@type": "WorkflowStep",
@@ -141,11 +132,11 @@
             "@type": "WorkflowRoute",
             "name": "Start -> Update Source Control Settings",
             "targetStep": "\/api\/3\/workflow_steps\/8463f750-1d32-4006-b7ba-810dc6b46c68",
-            "sourceStep": "\/api\/3\/workflow_steps\/9ad6e38c-5eb0-48b0-ac2d-80aafa47e5e7",
+            "sourceStep": "\/api\/3\/workflow_steps\/466a53ac-6865-451b-b11a-d18e7f89cc2a",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "c7b24a2d-8e5c-4775-9f42-ce1727408b76"
+            "uuid": "59247a69-6351-4e50-a5aa-ce6ab285c5e3"
         }
     ],
     "groups": [],

@@ -17,32 +17,6 @@
     "steps": [
         {
             "@type": "WorkflowStep",
-            "name": "Check Environment Sync Status",
-            "description": null,
-            "arguments": {
-                "arguments": {
-                    "cr_iri": "{{vars.steps.Find_Last_Commit_ID[0]['@id']}}",
-                    "org_name": "{{vars.cicd_config.organizationName}}",
-                    "repo_name": "{{vars.cicd_config.contentRepoName}}",
-                    "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}",
-                    "previousCommitID": "{{vars.steps.Find_Last_Commit_ID[0].lastCommitID}}",
-                    "connector_config_id": "{{vars.config_id}}"
-                },
-                "apply_async": false,
-                "step_variables": [],
-                "pass_parent_env": false,
-                "pass_input_record": false,
-                "workflowReference": "\/api\/3\/workflows\/fce53c7e-778d-48aa-afb7-8f67830570ab"
-            },
-            "status": null,
-            "top": "1515",
-            "left": "300",
-            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
-            "group": null,
-            "uuid": "c8cd31b8-8647-4e96-9b4f-1aa3fa816dc8"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Configuration",
             "description": null,
             "arguments": {
@@ -221,9 +195,9 @@
                 "conditions": [
                     {
                         "option": "Yes",
-                        "step_iri": "\/api\/3\/workflow_steps\/c8cd31b8-8647-4e96-9b4f-1aa3fa816dc8",
+                        "step_iri": "\/api\/3\/workflow_steps\/bfbfc946-30f3-4ca8-8e06-87e9f6bc243a",
                         "condition": "{{ (vars.steps.Find_Last_Commit_ID[0].lastCommitID != None) and (vars.steps.Find_Last_Commit_ID[0].lastCommitID != vars.steps.Get_Latest_Commit.data.sha) }}",
-                        "step_name": "Check Environment Sync Status"
+                        "step_name": "Update Latest Commit"
                     },
                     {
                         "option": "No",
@@ -236,7 +210,7 @@
             },
             "status": null,
             "top": "1380",
-            "left": "475",
+            "left": "480",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "2dc6565e-de0b-4331-9d55-12a106ca3793"
@@ -351,6 +325,30 @@
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
             "uuid": "668f019d-d72e-4249-8342-c6b671ae1cc6"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Latest Commit",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}"
+                },
+                "operation": "Append",
+                "collection": "{{vars.steps.Find_Last_Commit_ID[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1520",
+            "left": "280",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "bfbfc946-30f3-4ca8-8e06-87e9f6bc243a"
         }
     ],
     "routes": [
@@ -416,16 +414,6 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Commit id Drift -> Check Environment Sync Status",
-            "targetStep": "\/api\/3\/workflow_steps\/c8cd31b8-8647-4e96-9b4f-1aa3fa816dc8",
-            "sourceStep": "\/api\/3\/workflow_steps\/2dc6565e-de0b-4331-9d55-12a106ca3793",
-            "label": "Yes",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "31a6e645-2d3c-46a0-8d29-5862057f5640"
-        },
-        {
-            "@type": "WorkflowRoute",
             "name": "Is Commit id Drift -> No Operation",
             "targetStep": "\/api\/3\/workflow_steps\/72b152e3-8add-4aab-9454-eb429da57826",
             "sourceStep": "\/api\/3\/workflow_steps\/2dc6565e-de0b-4331-9d55-12a106ca3793",
@@ -433,6 +421,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "bad53682-d07b-4125-a943-9433a39cc544"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is Commit ID Drift -> Update Latest Commit",
+            "targetStep": "\/api\/3\/workflow_steps\/bfbfc946-30f3-4ca8-8e06-87e9f6bc243a",
+            "sourceStep": "\/api\/3\/workflow_steps\/2dc6565e-de0b-4331-9d55-12a106ca3793",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "3fb7118f-ff49-4505-8cd5-250c28607f1d"
         },
         {
             "@type": "WorkflowRoute",

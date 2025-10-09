@@ -22,23 +22,24 @@
             "name": "Activate Source Control Sync Status Schedule",
             "description": null,
             "arguments": {
+                "when": "{{vars.cicd_config.env_config | length == 1 and vars.cicd_config.env_config[0].itemValue == \"Production\"}}",
                 "params": {
                     "iri": "\/api\/wf\/api\/scheduled\/{{vars.steps.Get_Source_Control_Sync_Status_Schedule_Details.data['hydra:member'][0].id}}\/?format=json",
                     "body": "{\n    \"id\": \"gAAAAABogL_f0z1Br_2VEIMqyq7kbg6BxCcPjgUkhluoH06hO1Zq-xwD97YR0rdjwJz_tGUS6YiT9_mFeJeS9JnOHcH_mFM5uQ==\",\n    \"crontab\": {\n        \"id\": 3,\n        \"minute\": \"0\",\n        \"hour\": \"*\/1\",\n        \"day_of_week\": \"*\",\n        \"day_of_month\": \"*\",\n        \"month_of_year\": \"*\",\n        \"timezone\": \"UTC\"\n    },\n    \"interval\": null,\n    \"name\": \"Ingest_Source-Control-Sync-Status(CICD)\",\n    \"task\": \"workflow.tasks.periodic_task\",\n    \"enabled\": true\n}",
                     "method": "PUT"
                 },
-                "version": "3.6.0",
+                "version": "3.5.0",
                 "connector": "cyops_utilities",
                 "operation": "make_cyops_request",
                 "operationTitle": "FSR: Make FortiSOAR API Call",
                 "step_variables": []
             },
             "status": null,
-            "top": "1520",
-            "left": "480",
+            "top": "1650",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "7654b64e-acba-4cd9-a17f-5d473404c784"
+            "uuid": "6b92edaa-6008-45c7-838d-3bacd4a42601"
         },
         {
             "@type": "WorkflowStep",
@@ -68,8 +69,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "700",
-            "left": "480",
+            "top": "840",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "7aeabc30-3990-4b2f-933c-ca56a2c29028"
@@ -84,8 +85,8 @@
                 "source_control_operations": "{% set filtered = [] %}{% for item in ((vars.steps.Get_Source_Control_Playbooks.data['hydra:member'] | json_query(\"[?isActive==`true`].recordTags\")) | flatten(levels=1)) %}{% if '-' in item %}{% do filtered.append(item) %}{% endif %}{% endfor %}{{filtered}}"
             },
             "status": null,
-            "top": "440",
-            "left": "480",
+            "top": "570",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "72d4a7bd-82d9-45ce-8092-de138c20189b"
@@ -106,8 +107,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1240",
-            "left": "480",
+            "top": "1380",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "813442f4-8ab0-4a86-9af4-515fb8dc8985"
@@ -135,11 +136,33 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "580",
-            "left": "480",
+            "top": "705",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "0aded246-f9d5-48f2-829c-37952fe60070"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Source Control Connector",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "query": "{{{\n  \"__selectFields\": [\n    \"name\",\n    \"label\",\n    \"version\",\n    \"uuid\"\n  ],\n  \"logic\": \"AND\",\n  \"filters\": [\n    {\n      \"field\": \"type\",\n      \"operator\": \"in\",\n      \"value\": [\n        \"connector\"\n      ]\n    },\n    {\n      \"field\": \"installed\",\n      \"operator\": \"eq\",\n      \"value\": true\n    },\n    {\n      \"field\": \"name\",\n      \"operator\": \"eq\",\n      \"value\": vars.request.sourceControl.name\n    }\n  ]\n}}}",
+                    "resource": "solutionpacks"
+                },
+                "version": "3.7.0",
+                "connector": "cyops_utilities",
+                "operation": "query_cyops_resource",
+                "operationTitle": "FSR: Find Record",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "475",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "82f9efc8-1359-41db-a55c-7341edbb1d6d"
         },
         {
             "@type": "WorkflowStep",
@@ -147,19 +170,19 @@
             "description": null,
             "arguments": {
                 "params": {
-                    "iri": "\/api\/3\/workflow_collections?$limit=2147483647&$orderby=name&$relationships=true&__selectFields=fsr_primary,workflowCount&name=Sample - {{vars.request.sourceControl.label}} - {{vars.request.sourceControl.version}}",
+                    "iri": "\/api\/3\/workflow_collections?$limit=2147483647&$orderby=name&$relationships=true&__selectFields=fsr_primary,workflowCount&name=Sample - {{vars.steps.Get_Source_Control_Connector.data[0].label}} - {{vars.steps.Get_Source_Control_Connector.data[0].version}}",
                     "body": "",
                     "method": "GET"
                 },
-                "version": "3.6.0",
+                "version": "3.7.0",
                 "connector": "cyops_utilities",
                 "operation": "make_cyops_request",
                 "operationTitle": "FSR: Make FortiSOAR API Call",
                 "step_variables": []
             },
             "status": null,
-            "top": "160",
-            "left": "480",
+            "top": "300",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "fc39f306-f324-47bc-a307-3d0bb2a2bbee"
@@ -181,8 +204,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "300",
-            "left": "480",
+            "top": "435",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "d5836224-b1bc-485b-b5d8-4f251df39d05"
@@ -192,23 +215,24 @@
             "name": "Get Source Control Sync Status Schedule Details",
             "description": null,
             "arguments": {
+                "when": "{{vars.cicd_config.env_config | length == 1 and vars.cicd_config.env_config[0].itemValue == \"Production\"}}",
                 "params": {
                     "iri": "\/api\/wf\/api\/scheduled\/?depth=2&format=json&limit=5000&ordering=-modified&task=workflow.tasks.periodic_task&name=Ingest_Source-Control-Sync-Status(CICD)",
                     "body": "",
                     "method": "GET"
                 },
-                "version": "3.6.0",
+                "version": "3.5.0",
                 "connector": "cyops_utilities",
                 "operation": "make_cyops_request",
                 "operationTitle": "FSR: Make FortiSOAR API Call",
                 "step_variables": []
             },
             "status": null,
-            "top": "1380",
-            "left": "480",
+            "top": "1515",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
-            "uuid": "71c4410e-c4d8-47b2-8387-775da6d096bc"
+            "uuid": "4377ca64-5178-4459-9a2c-87106e8575fe"
         },
         {
             "@type": "WorkflowStep",
@@ -233,8 +257,8 @@
                 }
             },
             "status": null,
-            "top": "1100",
-            "left": "480",
+            "top": "1245",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "b688e2d8-9214-4196-9952-5f623d8637eb"
@@ -268,8 +292,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "840",
-            "left": "140",
+            "top": "975",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "09e37b88-4466-4104-87c4-a4c8b3640696"
@@ -303,8 +327,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "920",
-            "left": "480",
+            "top": "1110",
+            "left": "125",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "990eb8db-3c12-4144-bcda-9ba15717e849"
@@ -338,7 +362,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "840",
+            "top": "975",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -356,8 +380,8 @@
                 }
             },
             "status": null,
-            "top": "40",
-            "left": "480",
+            "top": "30",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
             "group": null,
             "uuid": "e3243c1a-daf7-4bf1-901a-8cc380e797f2"
@@ -388,8 +412,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "980",
-            "left": "140",
+            "top": "1110",
+            "left": "475",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "a84c99ad-f48e-405d-a1df-4100fc01f7a3"
@@ -420,7 +444,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "975",
+            "top": "1110",
             "left": "825",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -470,13 +494,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Create CICD Env Global Variable -> Get Investigate Outbreak Alerts Schedule Details",
-            "targetStep": "\/api\/3\/workflow_steps\/71c4410e-c4d8-47b2-8387-775da6d096bc",
+            "name": "Create CICD Env Global Variable -> Get Source Control Sync Status Schedule Details",
+            "targetStep": "\/api\/3\/workflow_steps\/4377ca64-5178-4459-9a2c-87106e8575fe",
             "sourceStep": "\/api\/3\/workflow_steps\/813442f4-8ab0-4a86-9af4-515fb8dc8985",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "28d72f0e-2e06-4f6a-bc67-a1fac7b0bcf4"
+            "uuid": "754ed009-02d1-4b5d-8755-96d78b17d74f"
         },
         {
             "@type": "WorkflowRoute",
@@ -490,13 +514,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Get Investigate Outbreak Alerts Schedule Details -> Activate Investigate Outbreak Alerts Schedule",
-            "targetStep": "\/api\/3\/workflow_steps\/7654b64e-acba-4cd9-a17f-5d473404c784",
-            "sourceStep": "\/api\/3\/workflow_steps\/71c4410e-c4d8-47b2-8387-775da6d096bc",
+            "name": "Get Source Control Connector -> Get Source Control Playbook Collection",
+            "targetStep": "\/api\/3\/workflow_steps\/fc39f306-f324-47bc-a307-3d0bb2a2bbee",
+            "sourceStep": "\/api\/3\/workflow_steps\/82f9efc8-1359-41db-a55c-7341edbb1d6d",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "366be41e-e487-46b0-87e2-91aa12bb6593"
+            "uuid": "2bf05d95-79b6-411c-9050-6a8176677e26"
         },
         {
             "@type": "WorkflowRoute",
@@ -517,6 +541,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "e346a6af-4d11-4d95-92dd-e7f355fb40cd"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Source Control Sync Status Schedule Details -> Activate Source Control Sync Status Schedule",
+            "targetStep": "\/api\/3\/workflow_steps\/6b92edaa-6008-45c7-838d-3bacd4a42601",
+            "sourceStep": "\/api\/3\/workflow_steps\/4377ca64-5178-4459-9a2c-87106e8575fe",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f0bf8b3a-4f4d-4550-bb14-05577bf55eb9"
         },
         {
             "@type": "WorkflowRoute",
@@ -560,13 +594,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Start -> Get Source Control Playbook Collection",
-            "targetStep": "\/api\/3\/workflow_steps\/fc39f306-f324-47bc-a307-3d0bb2a2bbee",
+            "name": "Start -> Get Source Control Connector",
+            "targetStep": "\/api\/3\/workflow_steps\/82f9efc8-1359-41db-a55c-7341edbb1d6d",
             "sourceStep": "\/api\/3\/workflow_steps\/e3243c1a-daf7-4bf1-901a-8cc380e797f2",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "02911476-6c4c-4a4e-895b-e8fd33fcf8aa"
+            "uuid": "5984cc56-7017-4adf-a83f-f67d3461d538"
         },
         {
             "@type": "WorkflowRoute",
