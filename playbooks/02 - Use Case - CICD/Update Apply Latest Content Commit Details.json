@@ -48,7 +48,7 @@
                 },
                 "cicd_env": "{{globalVars.cicd_env}}",
                 "org_name": "{{vars.cicd_config.organizationName}}",
-                "repo_name": "{% if vars.steps.Select_Input_For_Prod_Env.input.selectRepositoryType == \"Prod Settings\" %}{{vars.cicd_config.prodSettingsRepoName}}{% elif vars.steps.Select_Input_For_Dev_Env.input.selectRepositoryType == \"Dev Settings\" %}{{vars.cicd_config.devSettingsRepoName}}{% else %}{{vars.cicd_config.contentRepoName}}{% endif %}",
+                "repo_name": "{% if vars.request.selectedRepository == \"Production Settings\" %}{{vars.cicd_config.prodSettingsRepoName}}{% elif vars.request.selectedRepository == \"Development Settings\" %}{{vars.cicd_config.devSettingsRepoName}}{% else %}{{vars.cicd_config.contentRepoName}}{% endif %}",
                 "base_branch_name": "{{vars.cicd_config.baseBranch}}"
             },
             "status": null,
@@ -116,7 +116,7 @@
             "name": "Get Latest Commit",
             "description": null,
             "arguments": {
-                "when": "{{vars.repo_name == \"fortisoar-prod-content\"}}",
+                "when": "{{vars.repo_name == vars.cicd_config.contentRepoName}}",
                 "message": {
                     "tags": [],
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
@@ -197,7 +197,7 @@
             "name": "Update Commit Details",
             "description": null,
             "arguments": {
-                "when": "{{vars.repo_name == \"fortisoar-prod-content\"}}",
+                "when": "{{vars.repo_name == vars.cicd_config.contentRepoName}}",
                 "resource": {
                     "commitStatus": "<h5 style=\"color: #28a745;\" class=\"margin-top-negative-1\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>",
                     "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}",

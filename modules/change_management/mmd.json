@@ -124,7 +124,7 @@
                     "logic": "AND",
                     "filters": [
                         {
-                            "field": "commitStatus",
+                            "field": "lastCommitID",
                             "operator": "isnull",
                             "_operator": "isnull",
                             "value": "false",

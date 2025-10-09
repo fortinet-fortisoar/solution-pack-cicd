@@ -435,7 +435,7 @@
             "name": "Get Latest Commit",
             "description": null,
             "arguments": {
-                "when": "{{vars.repo_name == \"fortisoar-prod-content\"}}",
+                "when": "{{vars.repo_name == vars.cicd_config.contentRepoName}}",
                 "arguments": {
                     "get_commit_params": "{\n\"org_name\": \"{{vars.org_name}}\",\n\"repo_name\": \"{{vars.repo_name}}\",\n\"commit_ref\": \"{{vars.base_branch_name}}\",\n\"repo_type\": \"Organization\"\n}",
                     "connector_config_id": "{{vars.steps.Check_Source_Control_Connector_Configuration['config_id']}}"
@@ -858,16 +858,7 @@
             "name": "Update Deployed Details",
             "description": null,
             "arguments": {
-                "when": "{{vars.repo_name == \"fortisoar-prod-content\"}}",
-                "message": {
-                    "tags": [],
-                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
-                    "tenant": "",
-                    "thread": false,
-                    "content": "<p>Applying the latest content from the {{vars.repo_name}} repository<\/p>",
-                    "records": "{{vars.steps.Find_Apply_Latest_Changes_Record | json_query(\"[*][\\\"@id\\\"][]\")}}",
-                    "parentstepid": "\/api\/3\/workflow_steps\/a5c3262e-440b-4950-82bc-ad5f39e9bb93"
-                },
+                "when": "{{vars.repo_name == vars.cicd_config.contentRepoName}}",
                 "for_each": {
                     "item": "{{vars.steps.Find_Apply_Latest_Changes_Record}}",
                     "__bulk": true,
@@ -876,7 +867,7 @@
                     "batch_size": 100
                 },
                 "resource": {
-                    "commitStatus": "<h5 class=\"margin-top-negative-1\" style=\"color: #28a745;\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>",
+                    "commitStatus": "<h5 style=\"color: #28a745;\" class=\"margin-top-negative-1\">\u2705 Environment is Up-to-Date<\/h5>\n<p>No drift detected. The environment is fully synchronized with the latest production content.<\/p>",
                     "lastCommitID": "{{vars.steps.Get_Latest_Commit.data.sha}}",
                     "lastBuildDeployedOn": "{%if vars.repo_name == vars.cicd_config.contentRepoName %}{{arrow.utcnow().int_timestamp}}{%else%}{{vars.input.records[0].lastBuildDeployedOn}}{%endif%}"
                 },
@@ -891,7 +882,7 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2160",
+            "top": "2040",
             "left": "100",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
@@ -902,6 +893,14 @@
             "name": "Update Status",
             "description": null,
             "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p>Applying the latest content from the {{vars.repo_name}} repository<\/p>",
+                    "records": "{{vars.input.records[0]['@id']}}"
+                },
                 "resource": {
                     "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293"
                 },
@@ -1004,7 +1003,7 @@
                 }
             },
             "status": null,
-            "top": "2040",
+            "top": "2160",
             "left": "100",
             "stepType": "\/api\/3\/workflow_step_types\/6832e556-b9c7-497a-babe-feda3bd27dbf",
             "group": null,
@@ -1204,13 +1203,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Import FortiSOAR Template -> Wait for Publish",
-            "targetStep": "\/api\/3\/workflow_steps\/2f0328bd-2b74-427e-b2e8-099ab6f4edbf",
+            "name": "Import FortiSOAR Template -> Update Deployed Details",
+            "targetStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
             "sourceStep": "\/api\/3\/workflow_steps\/4b66de3f-03f2-4cfa-bfbc-00453548e2a4",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "dbbf9d04-d710-4bd7-b3b7-b60a941dfe17"
+            "uuid": "5d03e883-2746-4426-a186-b2b488121ed6"
         },
         {
             "@type": "WorkflowRoute",
@@ -1304,13 +1303,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Update Deployed Date -> Create Comment",
-            "targetStep": "\/api\/3\/workflow_steps\/f183e6b1-7bc4-4fa1-bbe5-c78d383d64b0",
+            "name": "Update Deployed Details -> Wait for Publish",
+            "targetStep": "\/api\/3\/workflow_steps\/2f0328bd-2b74-427e-b2e8-099ab6f4edbf",
             "sourceStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "c38028f2-fdeb-4627-ba88-89a8a36eb3dd"
+            "uuid": "7698070f-9e2d-4807-841b-8f8ab2cfed54"
         },
         {
             "@type": "WorkflowRoute",
@@ -1324,13 +1323,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Wait for Publish -> Update Deployed Date",
-            "targetStep": "\/api\/3\/workflow_steps\/e343e5e7-c917-4e1a-bd82-53a3d2859c50",
+            "name": "Wait for Publish -> Create Comment",
+            "targetStep": "\/api\/3\/workflow_steps\/f183e6b1-7bc4-4fa1-bbe5-c78d383d64b0",
             "sourceStep": "\/api\/3\/workflow_steps\/2f0328bd-2b74-427e-b2e8-099ab6f4edbf",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "7442f705-5510-494a-80e3-25cf41e32524"
+            "uuid": "0966c1ef-7480-4648-8e19-e840abdab85d"
         }
     ],
     "groups": [],
