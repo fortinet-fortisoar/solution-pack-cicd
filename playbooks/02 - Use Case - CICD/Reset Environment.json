@@ -1,4 +1,5 @@
 {
+    "@context": "\/api\/3\/contexts\/Workflow",
     "@type": "Workflow",
     "triggerLimit": null,
     "name": "Reset Environment",
@@ -408,9 +409,10 @@
                 "resource": {
                     "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
                     "results": "<p>{{null}}<\/p>",
-                    "lastCommitID": "{{null}}"
+                    "lastCommitID": "{{null}}",
+                    "configurationParameters": "{{null}}"
                 },
-                "_showJson": true,
+                "_showJson": false,
                 "operation": "Append",
                 "collection": "{{vars.item['@id']}}",
                 "__recommend": [],
@@ -435,13 +437,15 @@
                 "for_each": {
                     "item": "{{vars.steps.Find_Production_Type_Environment}}",
                     "__bulk": true,
+                    "parallel": false,
                     "condition": "",
                     "batch_size": 100
                 },
                 "resource": {
                     "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
                     "results": "<p>{{null}}<\/p>",
-                    "lastCommitID": "{{null}}"
+                    "lastCommitID": "{{null}}",
+                    "configurationParameters": "{{null}}"
                 },
                 "operation": "Append",
                 "collection": "{{vars.item['@id']}}",
@@ -476,7 +480,8 @@
                     "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
                     "results": "<p>{{null}}<\/p>",
                     "environment": "\/api\/3\/picklists\/5ec65649-9da5-4fcd-8198-48dcb548cf41",
-                    "lastCommitID": "{{null}}"
+                    "lastCommitID": "{{null}}",
+                    "configurationParameters": "{{null}}"
                 },
                 "_showJson": false,
                 "operation": "Append",
