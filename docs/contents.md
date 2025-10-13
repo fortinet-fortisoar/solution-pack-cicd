@@ -34,6 +34,10 @@ The **Continuous Delivery** solution pack installs the following resources:
 | CICD Configuration Wizard | Launches a wizard that walks a user through the process of setting up source control for Continuous Delivery.                                                           |
 | Record CTA Tile           | Displays the details of a module record, in Tile form, when the containing button is clicked; and also shows a Call To Action Button to Launch the Record Details Panel |
 | Record Card               | Displays the module records in a card format.                                                                                                                           |
+|Playbook Execution Wizard|The Playbook Execution Wizard widget renders playbook execution logs and related comments on the wizard|
+|Playbook Buttons|The Playbook Buttons widget creates playbook buttons on a record's detailed view|
+|Export Template Wizard|Manage FortiSOAR export templates that control what content is saved to source control systems like GitHub or GitLab.|
+|CICD Content Import|Select a source control repository, review its contents, and import updates into FortiSOAR with full control over applied changes using editable export templates.|
 
 ## Playbook Collections
 
@@ -119,3 +123,8 @@ The **Continuous Delivery** solution pack installs the following resources:
 - Change Management List
 - Change Management Detail
 - Change Management Form
+
+# Next Steps 
+ 
+| [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
+|----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|
