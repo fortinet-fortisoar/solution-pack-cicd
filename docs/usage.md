@@ -233,23 +233,23 @@ Following section explains how to get a list of closed change requests (CRs) sin
 
 # Additional Resources
 
-- [Terminologies](./docs/terminologies.md) &ndash; Short description about commonly used terms across the document
+- [Terminologies](./terminologies.md) &ndash; Short description about commonly used terms across the document
 
-- [Setting up Source control &ndash; initial configuration](./docs/initial-source-control-setup.md) &ndash; checklist of basic configurations that must be in place for the most efficient usage of **Continuous Delivery** solution pack
+- [Setting up Source control &ndash; initial configuration](./initial-source-control-setup.md) &ndash; checklist of basic configurations that must be in place for the most efficient usage of **Continuous Delivery** solution pack
 
-- [Best Practices](./docs/best-practices.md) &ndash; pointers to avoid common pitfalls when working with source control
+- [Best Practices](./best-practices.md) &ndash; pointers to avoid common pitfalls when working with source control
 
-- [CR for Building a new Playbook](./docs/build-playbook-cr.md)
+- [CR for Building a new Playbook](./build-playbook-cr.md) &ndash; use this example flow to create playbooks
 
-- [CR for Building a new Module](./docs/build-module-cr.md)
+- [CR for Building a new Module](./build-module-cr.md) &ndash; use this example flow to create modules
 
-- [Including Connector Installation and Configuration in Source Control](./docs/connector-inst-config-git.md)
+- [Including Connector Installation and Configuration in Source Control](./connector-inst-config-git.md) &ndash; steps to include connector installation and configuration under source control
 
-- [Exporting Sample Alerts/Incidents from Prod Environment](./docs/export-alerts-incidents-from-prod.md)
+- [Exporting Sample Alerts/Incidents from Prod Environment](./export-alerts-incidents-from-prod.md) &ndash; export sample alerts or incidents from a production environment to work with and test
 
-- [Editing the Export Template](./editing-export-template.md)
+- [Editing the Export Template](./editing-export-template.md) &ndash; edit export template to manage what gets exported to a production or a development environment
 
-- [Upgrade Instructions](./docs/upgrade-instructions.md) &ndash; absolutely important to go through before, and after, upgrading of **Continuous Delivery** solution pack
+- [Upgrade Instructions](./upgrade-instructions.md) &ndash; absolutely important to go through before, and after, upgrading of **Continuous Delivery** solution pack
  
 # Next Steps 
 
