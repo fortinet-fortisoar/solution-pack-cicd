@@ -9,5 +9,13 @@
         "metadata": [],
         "style": "col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1"
     },
-    "uuid": "modules-change_management-form"
+    "module": "change_management",
+    "filters": [],
+    "isDefault": true,
+    "visible": true,
+    "viewOptions": "form",
+    "name": "Base Template",
+    "system": true,
+    "uuid": "modules-change_management-form",
+    "newUuid": "5f97420d-c155-42e8-9f5e-5c71c5eb9957"
 }

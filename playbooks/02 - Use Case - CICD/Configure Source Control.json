@@ -32,10 +32,11 @@
                     {
                         "option": "Yes",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417",
-                        "step_name": "Repository Details"
+                        "step_iri": "\/api\/3\/workflow_steps\/fe6d5d55-94fd-4863-962c-767d46e9fdbd",
+                        "step_name": "Get Base Branch Latest Commit"
                     }
-                ]
+                ],
+                "step_variables": []
             },
             "status": null,
             "top": "920",
@@ -175,11 +176,73 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1440",
+            "top": "1540",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "66f26ebf-cfbb-4678-94f7-a64d94f2827f"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Find Source Control Settings",
+            "description": null,
+            "arguments": {
+                "query": {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "type": "primitive",
+                            "field": "title",
+                            "value": "Source Control Settings",
+                            "operator": "eq",
+                            "_operator": "eq"
+                        },
+                        {
+                            "type": "object",
+                            "field": "environment",
+                            "value": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                            "_value": {
+                                "@id": "\/api\/3\/picklists\/48b9f120-34bc-4884-b886-85e82321684b",
+                                "display": "Production",
+                                "itemValue": "Production"
+                            },
+                            "operator": "eq"
+                        }
+                    ]
+                },
+                "module": "change_management?$limit=30",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1300",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
+            "group": null,
+            "uuid": "f8834aec-b964-4df6-99f6-35167ccff85e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Base Branch Latest Commit",
+            "description": null,
+            "arguments": {
+                "arguments": {
+                    "get_commit_params": "{ \"org_name\": \"{{vars.steps.Get_Repositories_Detail.input.orgName}}\", \"repo_name\": \"{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}\", \"commit_ref\": \"{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}\" }",
+                    "connector_config_id": "{{vars.input.params['connector_config_id']}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"GetCommit\"][\"@id\"]}}"
+            },
+            "status": null,
+            "top": "1160",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "fe6d5d55-94fd-4863-962c-767d46e9fdbd"
         },
         {
             "@type": "WorkflowStep",
@@ -364,7 +427,7 @@
                         {
                             "option": "Confirm",
                             "primary": true,
-                            "step_iri": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417"
+                            "step_iri": "\/api\/3\/workflow_steps\/fe6d5d55-94fd-4863-962c-767d46e9fdbd"
                         },
                         {
                             "option": "Cancel",
@@ -396,32 +459,15 @@
         },
         {
             "@type": "WorkflowStep",
-            "name": "Repository Details",
-            "description": null,
-            "arguments": {
-                "base_branch": "{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}",
-                "content_repo": "{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}",
-                "dev_settings": "{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}",
-                "prod_settings": "{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}",
-                "organization_name": "{{vars.steps.Get_Repositories_Detail.input.orgName}}"
-            },
-            "status": null,
-            "top": "1180",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
-            "group": null,
-            "uuid": "56935f57-cf06-487f-8d0d-97ae8bc1b417"
-        },
-        {
-            "@type": "WorkflowStep",
             "name": "Return Output",
             "description": null,
             "arguments": {
+                "cicd_config": "{{vars.steps.Update_Source_Control_Settings_Config.configurationParameters}}",
                 "abort_repo_creation": "false",
                 "are_repo_created_manually": "{% if vars.are_repo_created is defined %}{{vars.are_repo_created}}{% else %}{{false}}{% endif %}"
             },
             "status": null,
-            "top": "1720",
+            "top": "1820",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
@@ -441,28 +487,6 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "c51caa0e-fe0c-4e01-9992-220317e48209"
-        },
-        {
-            "@type": "WorkflowStep",
-            "name": "Set CICD Config Global Variable",
-            "description": null,
-            "arguments": {
-                "params": {
-                    "macro": "{{\"cicd_config\"}}",
-                    "value": "{{ ({\"source_control_web_url\": vars.source_control_base_url,\"organizationName\": vars.organization_name, \"content\": vars.content_repo, \"productionSettings\": vars.prod_settings, \"developmentSettings\": vars.dev_settings, \"baseBranch\": vars.base_branch,\"contentRepoName\": vars.steps.Get_Repositories_Detail.input.contentRepositoryName, \"prodSettingsRepoName\": vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName, \"devSettingsRepoName\": vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}) | toJSON }}"
-                },
-                "version": "3.3.0",
-                "connector": "cyops_utilities",
-                "operation": "updatemacro",
-                "operationTitle": "FSR: Create\/Update Global Variables",
-                "step_variables": []
-            },
-            "status": null,
-            "top": "1300",
-            "left": "120",
-            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
-            "group": null,
-            "uuid": "c9c6876f-56ec-464f-8759-e95de2d4d663"
         },
         {
             "@type": "WorkflowStep",
@@ -492,12 +516,12 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "tenant": "",
                     "thread": false,
-                    "content": "<p class=\"mp-tile-description muted-80\">Created\/Captured following source control repositories with the base branch \"{{vars.base_branch}}\":<\/p>\n<ul class=\"font-size-13 muted-80\">\n<li><em>Production Content: <\/em><a href=\"{{vars.content_repo}}\" target=\"_blank\" rel=\"noopener\">{{vars.content_repo}}<\/a><\/li>\n<li><em>Production Settings: <\/em><a href=\"{{vars.prod_settings}}\" target=\"_blank\" rel=\"noopener\">{{vars.prod_settings}}<\/a><\/li>\n<li><em>Development Settings: <\/em><a href=\"{{vars.dev_settings}}\" target=\"_blank\" rel=\"noopener\">{{vars.dev_settings}}<\/a><\/li>\n<\/ul>",
+                    "content": "<p class=\"mp-tile-description muted-80\">Created\/Captured following source control repositories with the base branch \"{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}\":<\/p>\n<ul class=\"font-size-13 muted-80\">\n<li><em>Production Content: <\/em><a href=\"{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}<\/a><\/li>\n<li><em>Production Settings: <\/em><a href=\"{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}<\/a><\/li>\n<li><em>Development Settings: <\/em><a href=\"{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}<\/a><\/li>\n<\/ul>",
                     "records": "{{vars.input.records[0]['@id']}}",
                     "parentstepid": "\/api\/3\/workflow_steps\/91e2e908-b7a9-42d4-9bed-d311560b8f6e"
                 },
                 "resource": {
-                    "results": "<p class=\"mp-tile-description muted-80\"><strong>{{vars.steps.Find_Previous_Result[0].results}}<\/strong><\/p>\n<p class=\"mp-tile-description muted-80\">&nbsp;<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Source Control Repositories<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li><em>Production Content: <\/em><a href=\"{{vars.content_repo}}\" target=\"_blank\" rel=\"noopener\">{{vars.content_repo}}<\/a><\/li>\n<li><em>Production Settings: <\/em><a href=\"{{vars.prod_settings}}\" target=\"_blank\" rel=\"noopener\">{{vars.prod_settings}}<\/a><\/li>\n<li><em>Development Settings: <\/em><a href=\"{{vars.dev_settings}}\" target=\"_blank\" rel=\"noopener\">{{vars.dev_settings}}<\/a><\/li>\n<\/ul>"
+                    "results": "<p class=\"mp-tile-description muted-80\"><strong>{{vars.steps.Find_Previous_Result[0].results}}<\/strong><\/p>\n<p class=\"mp-tile-description muted-80\">&nbsp;<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Source Control Repositories<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li><em>Production Content: <\/em><a href=\"{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}<\/a><\/li>\n<li><em>Production Settings: <\/em><a href=\"{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}<\/a><\/li>\n<li><em>Development Settings: <\/em><a href=\"{{vars.source_control_base_url}}\/{{vars.steps.Get_Repositories_Detail.input.orgName}}\/{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}\" target=\"_blank\" rel=\"noopener\">{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}<\/a><\/li>\n<\/ul>"
                 },
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
@@ -509,11 +533,42 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1580",
+            "top": "1680",
             "left": "120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "990ef5b3-56a4-4aa7-bd2d-9acb3b444e71"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Source Control Settings Config",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "configurationParameters": {
+                        "baseBranch": "{{vars.steps.Get_Repositories_Detail.input.baseBranchName}}",
+                        "contentRepoName": "{{vars.steps.Get_Repositories_Detail.input.contentRepositoryName}}",
+                        "organizationName": "{{vars.steps.Get_Repositories_Detail.input.orgName}}",
+                        "source_control_url": "{{vars.source_control_base_url}}",
+                        "devSettingsRepoName": "{{vars.steps.Get_Repositories_Detail.input.developmentSettingsRepositoryName}}",
+                        "prodSettingsRepoName": "{{vars.steps.Get_Repositories_Detail.input.productionSettingsRepositoryName}}"
+                    }
+                },
+                "operation": "Append",
+                "collection": "{{vars.steps.Find_Source_Control_Settings[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1420",
+            "left": "120",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "9f621f13-3f19-4caa-b9b6-cb84d45bbfc4"
         },
         {
             "@type": "WorkflowStep",
@@ -578,6 +633,16 @@
     "routes": [
         {
             "@type": "WorkflowRoute",
+            "name": "Are Repositories Created -> Get Base Branch Latest Commit",
+            "targetStep": "\/api\/3\/workflow_steps\/fe6d5d55-94fd-4863-962c-767d46e9fdbd",
+            "sourceStep": "\/api\/3\/workflow_steps\/9cf9e738-00da-454f-8472-3635682f5ace",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "55f73d9e-dff7-4ce7-baf0-2904dcb3200d"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Configuration -> Use Precreated Repositories",
             "targetStep": "\/api\/3\/workflow_steps\/35b6d5a1-c28f-4a31-b94a-22cd7c53d942",
             "sourceStep": "\/api\/3\/workflow_steps\/b9efa927-a4b4-40bb-abdd-5a099f03e87d",
@@ -628,6 +693,26 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Find Source Control Settings -> Update Source Control Settings Config",
+            "targetStep": "\/api\/3\/workflow_steps\/9f621f13-3f19-4caa-b9b6-cb84d45bbfc4",
+            "sourceStep": "\/api\/3\/workflow_steps\/f8834aec-b964-4df6-99f6-35167ccff85e",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "39929ef9-bdd0-412d-8e75-ff53e22ce70f"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Base Branch Latest Commit -> Find Source Control Settings",
+            "targetStep": "\/api\/3\/workflow_steps\/f8834aec-b964-4df6-99f6-35167ccff85e",
+            "sourceStep": "\/api\/3\/workflow_steps\/fe6d5d55-94fd-4863-962c-767d46e9fdbd",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "127eb0f5-1844-46b3-8856-1862029a5bd0"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Get Repositories Detail -> Configuration",
             "targetStep": "\/api\/3\/workflow_steps\/b9efa927-a4b4-40bb-abdd-5a099f03e87d",
             "sourceStep": "\/api\/3\/workflow_steps\/4858af16-8286-4b28-8389-e3fcd3d7fe3e",
@@ -645,16 +730,6 @@
             "isExecuted": false,
             "group": null,
             "uuid": "ca014b57-2321-4882-9442-b49f327cf104"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Has Repo Created -> Repository Details",
-            "targetStep": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417",
-            "sourceStep": "\/api\/3\/workflow_steps\/9cf9e738-00da-454f-8472-3635682f5ace",
-            "label": "Yes",
-            "isExecuted": false,
-            "group": null,
-            "uuid": "d01bfb44-b5f1-4a37-9101-d6bbc8d9a568"
         },
         {
             "@type": "WorkflowRoute",
@@ -678,13 +753,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Provide Repositories Detail -> Repository Details",
-            "targetStep": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417",
+            "name": "Provide Repositories Detail -> Get Base Branch Latest Commit",
+            "targetStep": "\/api\/3\/workflow_steps\/fe6d5d55-94fd-4863-962c-767d46e9fdbd",
             "sourceStep": "\/api\/3\/workflow_steps\/45cbca60-9c08-4010-9797-8cbcd99b4a40",
             "label": "Confirm",
             "isExecuted": false,
             "group": null,
-            "uuid": "311cf16d-681a-41ac-aa3c-1cd4f04faf80"
+            "uuid": "3f1cc164-a730-4f38-b9fd-8ce16653486a"
         },
         {
             "@type": "WorkflowRoute",
@@ -695,26 +770,6 @@
             "isExecuted": false,
             "group": null,
             "uuid": "6e3caf9d-a58c-49fe-b5b9-c3b906c53dc4"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Repository Details -> Set CICD Config Global Variable",
-            "targetStep": "\/api\/3\/workflow_steps\/c9c6876f-56ec-464f-8759-e95de2d4d663",
-            "sourceStep": "\/api\/3\/workflow_steps\/56935f57-cf06-487f-8d0d-97ae8bc1b417",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "b7978088-2a8a-411d-a96b-150117aaf017"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Set CICD Config Global Variable -> Find Previous Result",
-            "targetStep": "\/api\/3\/workflow_steps\/66f26ebf-cfbb-4678-94f7-a64d94f2827f",
-            "sourceStep": "\/api\/3\/workflow_steps\/c9c6876f-56ec-464f-8759-e95de2d4d663",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "1634611d-5895-47a6-8f97-773c40dc5cba"
         },
         {
             "@type": "WorkflowRoute",
@@ -738,6 +793,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Update Source Control Settings Config -> Find Previous Result",
+            "targetStep": "\/api\/3\/workflow_steps\/66f26ebf-cfbb-4678-94f7-a64d94f2827f",
+            "sourceStep": "\/api\/3\/workflow_steps\/9f621f13-3f19-4caa-b9b6-cb84d45bbfc4",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "7b5c392f-78c3-43bb-8fa4-d89cf07c555f"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Use Precreated Repositories -> Copy of Provide Repositories Detail",
             "targetStep": "\/api\/3\/workflow_steps\/b22b164e-cc74-4af1-9fe1-2b104b30a8c7",
             "sourceStep": "\/api\/3\/workflow_steps\/35b6d5a1-c28f-4a31-b94a-22cd7c53d942",
@@ -749,6 +814,8 @@
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
     "uuid": "db8dc26a-7a55-430f-b49e-9f5f177377dc",
     "owners": [],
     "isPrivate": false,

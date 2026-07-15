@@ -9,7 +9,7 @@
     "queueable": true,
     "trackable": true,
     "taggable": true,
-    "peerReplicable": true,
+    "peerReplicable": false,
     "defaultSort": [],
     "uniqueConstraint": [
         {
@@ -26,10 +26,190 @@
     "attributes": [
         {
             "@type": "AttributeMetadata",
+            "type": "object",
+            "name": "configurationParameters",
+            "length": null,
+            "formType": "object",
+            "dataSource": null,
+            "searchable": false,
+            "peerReplicable": true,
+            "system": false,
+            "encrypted": false,
+            "gridColumn": false,
+            "collection": false,
+            "inversedField": null,
+            "ownsRelationship": false,
+            "validation": {
+                "required": false,
+                "minlength": 0,
+                "maxlength": 10485761,
+                "_enableRange": false
+            },
+            "bulkAction": {
+                "allow": false,
+                "buttonText": "",
+                "buttonIcon": "",
+                "buttonClass": "btn btn-default btn-sm"
+            },
+            "dataSourceFilters": null,
+            "defaultValue": null,
+            "tooltip": null,
+            "visibility": [
+                {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "configurationParameters",
+                            "operator": "isnull",
+                            "value": "false",
+                            "_value": {
+                                "display": "",
+                                "itemValue": "",
+                                "@id": "false"
+                            },
+                            "type": "object"
+                        }
+                    ]
+                }
+            ],
+            "htmlEscape": false,
+            "orphanRemoval": null,
+            "readable": true,
+            "writeable": true,
+            "identifier": null,
+            "unique": false,
+            "recommend": false,
+            "skipSerialization": false,
+            "displayName": "{{ configurationParameters }}",
+            "descriptions": {
+                "singular": "Configuration Parameters"
+            }
+        },
+        {
+            "@type": "AttributeMetadata",
+            "type": "string",
+            "name": "commitStatus",
+            "length": null,
+            "formType": "html",
+            "dataSource": null,
+            "searchable": true,
+            "peerReplicable": true,
+            "system": false,
+            "encrypted": false,
+            "gridColumn": false,
+            "collection": false,
+            "inversedField": null,
+            "ownsRelationship": false,
+            "validation": {
+                "required": false,
+                "minlength": 0,
+                "maxlength": 10485761,
+                "_enableRange": false
+            },
+            "bulkAction": {
+                "allow": false,
+                "buttonText": "",
+                "buttonIcon": "",
+                "buttonClass": "btn btn-default btn-sm"
+            },
+            "dataSourceFilters": null,
+            "defaultValue": "",
+            "tooltip": null,
+            "visibility": [
+                {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "lastCommitID",
+                            "operator": "isnull",
+                            "_operator": "isnull",
+                            "value": "false",
+                            "type": "primitive"
+                        }
+                    ]
+                }
+            ],
+            "htmlEscape": false,
+            "orphanRemoval": null,
+            "readable": true,
+            "writeable": true,
+            "identifier": null,
+            "unique": false,
+            "recommend": false,
+            "skipSerialization": false,
+            "displayName": "{{ commitStatus }}",
+            "descriptions": {
+                "singular": "Commit Status"
+            }
+        },
+        {
+            "@type": "AttributeMetadata",
+            "type": "string",
+            "name": "lastCommitID",
+            "length": null,
+            "formType": "text",
+            "dataSource": null,
+            "searchable": false,
+            "peerReplicable": true,
+            "system": false,
+            "encrypted": false,
+            "gridColumn": false,
+            "collection": false,
+            "inversedField": null,
+            "ownsRelationship": false,
+            "validation": {
+                "required": false,
+                "minlength": 0,
+                "maxlength": 10485761,
+                "_enableRange": false
+            },
+            "bulkAction": {
+                "allow": false,
+                "buttonText": "",
+                "buttonIcon": "",
+                "buttonClass": "btn btn-default btn-sm"
+            },
+            "dataSourceFilters": null,
+            "defaultValue": "",
+            "tooltip": null,
+            "visibility": [
+                {
+                    "sort": [],
+                    "limit": 30,
+                    "logic": "AND",
+                    "filters": [
+                        {
+                            "field": "lastCommitID",
+                            "operator": "isnull",
+                            "_operator": "isnull",
+                            "value": "false",
+                            "type": "primitive"
+                        }
+                    ]
+                }
+            ],
+            "htmlEscape": false,
+            "orphanRemoval": null,
+            "readable": true,
+            "writeable": true,
+            "identifier": null,
+            "unique": false,
+            "recommend": false,
+            "skipSerialization": false,
+            "displayName": "{{ lastCommitID }}",
+            "descriptions": {
+                "singular": "Last Commit ID"
+            }
+        },
+        {
+            "@type": "AttributeMetadata",
             "type": "string",
             "name": "issues",
             "length": null,
-            "orderIndex": 1,
             "formType": "richtext",
             "dataSource": null,
             "searchable": true,
@@ -89,7 +269,6 @@
             "type": "integer",
             "name": "lastBuildDeployedOn",
             "length": null,
-            "orderIndex": 2,
             "formType": "datetime",
             "dataSource": null,
             "searchable": true,
@@ -103,7 +282,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": {
                 "allow": false,
@@ -148,7 +328,6 @@
             "type": "comments",
             "name": "comments",
             "length": null,
-            "orderIndex": 3,
             "formType": "manyToMany",
             "dataSource": {
                 "model": "comments"
@@ -164,7 +343,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": [],
             "dataSourceFilters": null,
@@ -189,7 +369,6 @@
             "type": "string",
             "name": "title",
             "length": null,
-            "orderIndex": 4,
             "formType": "text",
             "dataSource": null,
             "searchable": false,
@@ -234,7 +413,6 @@
             "type": "string",
             "name": "description",
             "length": null,
-            "orderIndex": 5,
             "formType": "html",
             "dataSource": null,
             "searchable": true,
@@ -279,7 +457,6 @@
             "type": "string",
             "name": "results",
             "length": null,
-            "orderIndex": 6,
             "formType": "html",
             "dataSource": null,
             "searchable": true,
@@ -339,7 +516,6 @@
             "type": "picklists",
             "name": "status",
             "length": null,
-            "orderIndex": 7,
             "formType": "picklist",
             "dataSource": {
                 "model": "picklists",
@@ -448,6 +624,7 @@
                             "operator": "eq",
                             "value": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c",
                             "_value": {
+                                "display": "Setup",
                                 "itemValue": "Setup",
                                 "@id": "\/api\/3\/picklists\/b43deb65-1edc-482b-b20e-1fed06bbc01c"
                             },
@@ -474,7 +651,6 @@
             "type": "picklists",
             "name": "type",
             "length": null,
-            "orderIndex": 8,
             "formType": "picklist",
             "dataSource": {
                 "model": "picklists",
@@ -557,7 +733,6 @@
             "type": "picklists",
             "name": "environment",
             "length": null,
-            "orderIndex": 9,
             "formType": "picklist",
             "dataSource": {
                 "model": "picklists",
@@ -587,6 +762,10 @@
                         "conditions": null
                     },
                     "262e570e-efe0-4eb0-aee9-e6e54b4ca3ef": {
+                        "visibility": "visible",
+                        "conditions": null
+                    },
+                    "5ec65649-9da5-4fcd-8198-48dcb548cf41": {
                         "visibility": "visible",
                         "conditions": null
                     }
@@ -634,7 +813,6 @@
             "type": "integer",
             "name": "sequence",
             "length": null,
-            "orderIndex": 10,
             "formType": "integer",
             "dataSource": null,
             "searchable": true,
@@ -678,7 +856,6 @@
             "type": "string",
             "name": "recordIcon",
             "length": null,
-            "orderIndex": 11,
             "formType": "html",
             "dataSource": null,
             "searchable": true,
@@ -692,7 +869,8 @@
             "validation": {
                 "required": false,
                 "minlength": 0,
-                "maxlength": 10485761
+                "maxlength": 10485761,
+                "_enableRange": false
             },
             "bulkAction": {
                 "allow": false,

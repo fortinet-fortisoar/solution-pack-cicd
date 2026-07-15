@@ -1,0 +1,330 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Update Source Control Configuration",
+    "aliasName": null,
+    "tag": null,
+    "description": "Update source control settings including the base branch, repository names, organization, and source control URL.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/f8bc7877-d55b-4df9-b292-bbf7ca18136b",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "updated_config": "{\n  \"baseBranch\" : \"{{vars.steps.Configuration_Parameters.input.baseBranch}}\",\n  \"contentRepoName\" : \"{{vars.steps.Configuration_Parameters.input.contentRepository}}\",\n  \"organizationName\" : \"{{vars.steps.Configuration_Parameters.input.organization}}\",\n  \"source_control_url\" : \"{{vars.steps.Configuration_Parameters.input.sourceControlURL}}\", \n  \"devSettingsRepoName\" : \"{{vars.steps.Configuration_Parameters.input.developmentSettingsRepository}}\",\n  \"prodSettingsRepoName\" : \"{{vars.steps.Configuration_Parameters.input.productionSettingsRepository}}\"\n}"
+            },
+            "status": null,
+            "top": "435",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "da1693d1-670c-4942-bd7f-b12d24599bfd"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration Parameters",
+            "description": null,
+            "arguments": {
+                "type": "InputBased",
+                "input": {
+                    "schema": {
+                        "title": "Update Source Control Configuration",
+                        "description": "Update the source control settings below if required. \nThese values are used during CICD-related source control operations. Ensure all entries are accurate to prevent synchronization or deployment issues.",
+                        "inputVariables": [
+                            {
+                                "name": "sourceControlURL",
+                                "type": "string",
+                                "label": "Source Control URL",
+                                "tooltip": "",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": false,
+                                "defaultValue": "{{vars.input.records[0].configurationParameters.source_control_url}}",
+                                "_previousName": "sourceControl",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "organization",
+                                "type": "string",
+                                "label": "Organization",
+                                "tooltip": "",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": false,
+                                "defaultValue": "{{vars.input.records[0].configurationParameters.organizationName}}",
+                                "_previousName": "organizationName",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "baseBranch",
+                                "type": "string",
+                                "label": "Base Branch",
+                                "title": "Dynamic List",
+                                "usable": true,
+                                "options": "{{vars.input.records[0].configurationParameters}}",
+                                "tooltip": "",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": false,
+                                "mmdUpdate": true,
+                                "collection": false,
+                                "searchable": false,
+                                "templateUrl": "app\/components\/form\/fields\/dynamicList.html",
+                                "defaultValue": "{{vars.input.records[0].configurationParameters.baseBranch}}",
+                                "_previousName": "baseB",
+                                "playbookField": true,
+                                "lengthConstraint": true,
+                                "allowedGridColumn": false,
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "contentRepository",
+                                "type": "string",
+                                "label": "Content Repository",
+                                "tooltip": "",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": false,
+                                "defaultValue": "{{vars.input.records[0].configurationParameters.contentRepoName}}",
+                                "_previousName": "contentRepo",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            },
+                            {
+                                "name": "productionSettingsRepository",
+                                "type": "string",
+                                "label": "Production Settings Repository",
+                                "tooltip": "",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": true,
+                                "defaultValue": "{{vars.input.records[0].configurationParameters.prodSettingsRepoName}}",
+                                "_previousName": "productionSettingsReposito",
+                                "visibilityQuery": {
+                                    "sort": [],
+                                    "limit": 30,
+                                    "logic": "AND",
+                                    "filters": [
+                                        {
+                                            "type": "primitive",
+                                            "field": "productionSettingsRepository",
+                                            "value": "true",
+                                            "operator": "isnull",
+                                            "_operator": "isnull"
+                                        }
+                                    ]
+                                },
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false,
+                                "_addVisibilityConditions": true
+                            },
+                            {
+                                "name": "developmentSettingsRepository",
+                                "type": "string",
+                                "label": "Development Settings Repository",
+                                "tooltip": "",
+                                "dataType": "text",
+                                "formType": "text",
+                                "required": true,
+                                "_expanded": true,
+                                "defaultValue": "{{vars.input.records[0].configurationParameters.devSettingsRepoName}}",
+                                "_previousName": "developmentSettingsRepo",
+                                "jinjaExpressionView": true,
+                                "useRecordFieldDefault": false
+                            }
+                        ]
+                    }
+                },
+                "record": "{{ vars.input.records[0][\"@id\"] }}",
+                "agent_id": null,
+                "resources": "change_management",
+                "is_approval": false,
+                "owner_detail": {
+                    "isAssigned": false,
+                    "emailRecipients": ""
+                },
+                "isRecordLinked": true,
+                "step_variables": [],
+                "response_mapping": {
+                    "options": [
+                        {
+                            "option": "Submit",
+                            "primary": true,
+                            "step_iri": "\/api\/3\/workflow_steps\/da1693d1-670c-4942-bd7f-b12d24599bfd"
+                        }
+                    ],
+                    "duplicateOption": false,
+                    "customSuccessMessage": "Awaiting Playbook resumed successfully."
+                },
+                "email_notification": {
+                    "enabled": false,
+                    "smtpParameters": []
+                },
+                "customEmailExternal": false,
+                "inline_channel_list": [],
+                "external_channel_list": [],
+                "unauthenticated_input": false,
+                "external_email_subject": null,
+                "internal_email_subject": "A FortiSOAR playbook is requesting your input",
+                "custom_email_body_external": null,
+                "external_email_attachments": null
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
+            "group": null,
+            "uuid": "5017112d-8599-4690-8d48-02faad02c93c"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "f8bc7877-d55b-4df9-b292-bbf7ca18136b"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Source Control Configuration",
+            "description": null,
+            "arguments": {
+                "message": {
+                    "tags": [],
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tenant": "",
+                    "thread": false,
+                    "content": "<p><strong>Completed Tasks:<\/strong> Update Source Control Configuration<\/p>",
+                    "records": "",
+                    "parentstepid": "\/api\/3\/workflow_steps\/6c412126-9186-44a4-b8b9-ae1ea35de86b"
+                },
+                "resource": {
+                    "status": "\/api\/3\/picklists\/cc6dc0fe-4a49-44e7-af30-8a0fbeacd293",
+                    "configurationParameters": "{{vars.updated_config}}"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "570",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "8e5bbf53-11f4-4157-8f77-6dcc0b0c0d9e"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Update Status as In Progress",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "status": "\/api\/3\/picklists\/7f0263bf-29ab-4453-aefe-41d20f0fe9c3"
+                },
+                "operation": "Append",
+                "collection": "{{vars.input.records[0]['@id']}}",
+                "__recommend": [],
+                "collectionType": "\/api\/3\/change_management",
+                "fieldOperation": {
+                    "recordTags": "Append"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
+            "group": null,
+            "uuid": "5cc5744b-6e90-47d6-b470-81a74c2966d7"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration Parameters -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/da1693d1-670c-4942-bd7f-b12d24599bfd",
+            "sourceStep": "\/api\/3\/workflow_steps\/5017112d-8599-4690-8d48-02faad02c93c",
+            "label": "Submit",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "73e93325-b07a-495b-bc68-20606fafb28c"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Update Source Control Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/8e5bbf53-11f4-4157-8f77-6dcc0b0c0d9e",
+            "sourceStep": "\/api\/3\/workflow_steps\/da1693d1-670c-4942-bd7f-b12d24599bfd",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "2f40803d-6005-453d-9db6-7e5f88f634f4"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Update Status as In Progress",
+            "targetStep": "\/api\/3\/workflow_steps\/5cc5744b-6e90-47d6-b470-81a74c2966d7",
+            "sourceStep": "\/api\/3\/workflow_steps\/f8bc7877-d55b-4df9-b292-bbf7ca18136b",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "aa49fc08-268d-47f1-820d-d218f470e893"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Update Status as In Progress -> Configuration Parameters",
+            "targetStep": "\/api\/3\/workflow_steps\/5017112d-8599-4690-8d48-02faad02c93c",
+            "sourceStep": "\/api\/3\/workflow_steps\/5cc5744b-6e90-47d6-b470-81a74c2966d7",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "8477183b-a88e-40cf-a738-c8c7b5422a52"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
+    "uuid": "44b750e6-8606-4c48-8bb6-43beea85b09e",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CICD",
+        "Subroutine"
+    ]
+}

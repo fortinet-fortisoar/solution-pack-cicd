@@ -28,5 +28,15 @@
         "name": "playbookButtons",
         "title": "Playbook Buttons",
         "install_mode": "rpm"
+    },
+    {
+        "name": "cicdContentImport",
+        "title": "CICD Content Import",
+        "install_mode": "rpm"
+    },
+    {
+        "name": "exportTemplateWizard",
+        "title": "Export Template Wizard",
+        "install_mode": "rpm"
     }
 ]

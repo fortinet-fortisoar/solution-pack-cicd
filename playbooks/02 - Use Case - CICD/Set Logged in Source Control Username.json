@@ -165,12 +165,12 @@
                     "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
                     "tenant": "",
                     "thread": false,
-                    "content": "<p class=\"mp-tile-description muted-80\"><strong>Mapped Following FortiSOAR User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.logged_in_user}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User:<\/em> {{vars.steps.Get_Usernames.input.sourceControlUsername}}<\/li>\n<\/ul>",
+                    "content": "<p class=\"mp-tile-description muted-80\"><strong>Mapped Following FortiSOAR User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: {{vars.logged_in_user}}<\/em><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User: {{vars.steps.Get_Usernames.input.sourceControlUsername}}<\/em><\/li>\n<\/ul>",
                     "records": "{{vars.input.records[0]['@id']}}",
                     "parentstepid": "\/api\/3\/workflow_steps\/05bcfc1c-3b6a-4fbb-a4de-a5b5c662366d"
                 },
                 "resource": {
-                    "results": "<p>{% if vars.steps.Find_Previous_Result | length %}{{vars.steps.Find_Previous_Result[0].results}}<\/p>\n<p>{%endif %}<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Administrator User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: <\/em><a href=\"{{vars.request.baseUri}}\/security\/people\" target=\"_blank\" rel=\"noopener\">{{vars.logged_in_user}}<\/a><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User:<\/em> {{vars.steps.Get_Usernames.input.sourceControlUsername}}<\/li>\n<\/ul>"
+                    "results": "<p>{% if vars.steps.Find_Previous_Result | length %}{{vars.steps.Find_Previous_Result[0].results}}<\/p>\n<p>{%endif %}<\/p>\n<p class=\"mp-tile-description muted-80\"><strong>- Administrator User<\/strong><\/p>\n<ul class=\"font-size-13 muted-80\">\n<li class=\"mp-tile-description muted-80\"><em>FortiSOAR User: {{vars.logged_in_user}}<\/em><\/li>\n<li class=\"mp-tile-description muted-80\"><em>Source Control User: {{vars.steps.Get_Usernames.input.sourceControlUsername}}<\/em><\/li>\n<\/ul>"
                 },
                 "operation": "Append",
                 "collection": "{{vars.input.records[0]['@id']}}",
@@ -266,6 +266,8 @@
     ],
     "groups": [],
     "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/b6d710a9-a8ec-41ec-8817-fe9fa062fcdd",
+    "isEditable": false,
     "uuid": "d539f6cc-69ca-44ec-a622-e233aa51970a",
     "owners": [],
     "isPrivate": false,

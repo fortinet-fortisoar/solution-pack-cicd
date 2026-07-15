@@ -16,10 +16,7 @@
 
 Following rules serve as a guide for building *Pluggable* source control:
 
-- The source control connector must have following information within `info.json`:
-
-    - A category `Source Code Management`
-    - A configuration parameter `username`
+- The source control connector must have a category `Source Code Management` information within `info.json`
 
 - The pluggable source control playbooks must be in the respective connector's sample playbook collection.
 
@@ -374,3 +371,8 @@ Following rules serve as a guide for building *Pluggable* source control:
         <td>Creates or updates a file. If file exists, the <em>Create File</em> step fails hence an <code>Ignore Error Yes</code> flag helps update the file. Returns <code>Create File</code> step result and status after creating the file and returns <em>Update File</em> step result and status.</td>
     </tr>
 </table>
+
+# Next Steps 
+ 
+| [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
+|----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

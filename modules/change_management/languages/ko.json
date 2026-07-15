@@ -5,6 +5,9 @@
             "PLURAL_NAME": "변경 관리"
         },
         "FIELDS": {
+            "CONFIGURATIONPARAMETERS": "구성 매개변수",
+            "COMMITSTATUS": "커밋 상태",
+            "LASTCOMMITID": "마지막 커밋 ID",
             "ISSUES": "이슈",
             "LASTBUILDDEPLOYEDON": "최종 빌드 배포 일자",
             "COMMENTS": "코멘트",

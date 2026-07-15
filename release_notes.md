@@ -3,56 +3,96 @@
 
 # What's New
 
-- GitLab is now supported as one of the source control platforms. Earlier, source control was only available for GitHub.
+This release brings significant improvements to the *Change Management* process in FortiSOAR's **Continuous Delivery** solution pack. Instantly noticeable smoother workflows, clearer visibility into change requests (CRs), and enhanced control over applying content changes across environments. The enhancements ensure that CR lifecycle management, from development to production, is more transparent and less error-prone.
 
-- A new **Pluggable Source Control** framework now connects with any of the available source control platforms.
+---
 
-## Widget Enhancements
+## Enhancements
 
-Introduced following new widgets:
+### Wizard Improvements
 
-- **Playbook Execution Wizard** displays continuous delivery solution pack's playbook execution progress on the user interface. This widget can be configured to display execution of any of the playbooks.
+- Only **GitHub** and **GitLab** are now available in the **Select Your Source Control** option, simplifying platform selection for Continuous Delivery setup.
 
-- **Playbook Buttons** executes following continuous delivery operations on the widget **Playbook Execution Wizard**:
+- The wizard now waits for the **Setup CICD Environment** playbook to complete before proceeding to the Finish step, ensuring that the source control environment is fully prepared before deployment.
 
-    - Setup the Source Control for Production Environment
+### Change Log Visibility
 
-    - Setup the Development Environment
+- The **Apply Latest Content** feature in both production and development environments now computes and displays a **change log**.
 
-    - Apply Latest Content
+- Analysts can clearly see what changes are being merged before they are applied, reducing the risk of surprises in production.
 
-    - Save Production Settings
+### New Tracking Fields in Change Management
 
-    - Map Source Control Username
+- Added **Last Commit ID** and **Commit Status** fields.
 
-    This widget can be configured to place button within any record's detail helping trigger playbooks at the click of a button.
+- These fields allow analysts to trace exactly which commit was last applied and whether it succeeded, making CR tracking more reliable.
 
-- **JSON to Grid** widget now has following capabilities:
+### Task Management Improvements
 
-    - Execute grid operations of **Production** or **Development** environment on **Playbook Execution Wizard** widget 
+The following improvements give analysts more flexibility in managing workflows:
 
-    - Show grid columns even if there is no change request record present  
+- A **Reset Task** button appears when the task is completed or is in progress.
 
-    - Supported auto refresh of the Grid on create of the change request record 
+- An **Abort** button to cancel the change request being created; as simply closing the modal may keep the associated playbook *active*.
 
-- **CICD Configuration Wizard** now offers **GitLab**, along with GitHub, as a source control platform and helps configure the selected source control with *Continuous Delivery* solution pack.
+### Source Control Settings
 
-## UI Enhancements
+- A new card **Source Control Settings** under both *Production* and *Development* tabs helps manage exported content such as playbooks, module definitions, connectors, and related components to streamline updates and ensure critical components are version-controlled.
 
-- Refreshed infographic on the **Setup** tab of the *Continuous Delivery* solution pack.
+  This card features a new **Edit Export Template** button that helps export the following:
 
-- Refreshed infographic on the Continuous Delivery configuration wizard.
+  - **Production Settings** from the *Production* tab
 
-## Other Enhancements
+  - **Production Content** and **Development Settings** from the *Development* tab
 
-- **Map GitHub Username** operation is now **Map Source Control Username**.
+- A new button **Update Configuration Parameters** helps edit the source control configuration parameters after the *Production* and *Development* environments have been set up.
 
-- **GitHub** as a term in the *Continuous Delivery* solution pack is now referred to **Source Control** to include current (GitLab and GitHub) and future source control integrations.
+### Review and Apply Latest Content
 
-- The **Export/Import** workflow operations is now optimized.
+- A new button in both *Production* and *Development* environments triggers an **import wizard** that guides analysts through applying content changes.
 
-- **Closed Issues** records are now viewable in a separate grid under **Apply Latest Changes** in *Development* and *Production* tabs of *Continuous Delivery*.
+- The wizard applies both *Production Content* and *Production Settings* safely, with a clear preview of what will change.
 
-- Moved all **GitHub** playbooks to the GitHub connector
+### Improved PR Workflow
 
-- Added **Source Control Username** field in the **People** module
+- When submitting a PR for review, analysts can now **select reviewers from a drop-down list of Git users** rather than typing usernames manually.
+
+### Miscellaneous
+
+- Task progress notifications now include more information to give better context on the tasks at hand and reduce navigation overhead. For example: **direct links** are included when a repository or PR is created.
+
+- A new **CR Status** column under issues shows the lifecycle state of each CR, improving at-a-glance tracking.
+
+- Multiple pre-checks added as part of error handling in various Continuous Delivery operations such as:
+
+  - Repository creation - Repo creation is skipped if the repository already exists.
+
+  - PR review - The creator of a PR can no longer be the reviewer.
+
+  - Create issue - The playbook easily handles any special characters in the title and description fields of an issue.
+
+
+
+---
+
+## Bug Fixes
+
+- Fixed the following issues:
+
+  - Users could not create another production content repository when setting up multiple production environments
+  - Production/Development tabs appeared prematurely before source control setup.
+  - PR links and their statuses were not visible in the UI when multiple issues were listed.
+  - Reviewer names caused submission errors in push/PR workflows.
+  - PR submission failed if a PR already existed for the CR.
+  - Source control sync status retrieval did not retrieve user context.
+  - Legacy HTML code and Key Store dependencies were removed for cleaner execution.
+
+Together, these fixes reduce friction and ensure analysts can rely on predictable CR workflows.
+
+---
+
+## Why Upgrade Now
+
+With this release, SOC analysts gain **greater clarity in CR tracking**, **fewer blockers in workflows**, and **more control when applying content safely**. If you're still on an earlier version, upgrading ensures smoother day-to-day operations and prevents errors during critical change rollouts.
+
+Refer to [Upgrade Instructions](./docs/upgrade-instructions.md) for more information.
