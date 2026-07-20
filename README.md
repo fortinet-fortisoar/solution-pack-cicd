@@ -1,9 +1,9 @@
 # Release Information
 
-- **Version**:  3.1.0
+- **Version**:  3.2.0
 - **Certified**: Yes
 - **Publisher**: Fortinet
-- **Compatible Version**: FortiSOAR v7.4.3 and later
+- **Compatible Version**: FortiSOAR v8.0.0 and later
 - [Release Notes](./release_notes.md)
 - [Upgrade Instructions](./docs/upgrade-instructions.md)
 

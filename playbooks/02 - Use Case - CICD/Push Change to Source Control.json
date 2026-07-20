@@ -28,8 +28,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1245",
-            "left": "475",
+            "top": "1400",
+            "left": "460",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "10527b19-c15b-44c7-9e60-25d16ab941a3"
@@ -115,8 +115,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1515",
-            "left": "825",
+            "top": "1680",
+            "left": "820",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "eec3b0cf-92b8-4e65-9a14-9ba7dbbdaa2f"
@@ -174,11 +174,11 @@
                 "export_file_name": "FortiSOAR Export-{{arrow.utcnow().int_timestamp}}",
                 "current_timestamp": "{{arrow.get((arrow.utcnow().int_timestamp  | int | abs)).format('YYYYMMDDHHmm')}}",
                 "source_control_type": "{{(globalVars.cicd_env| toDict).source_control.baseURL}}",
-                "export_template_name": "{% if vars.cicd_config[\"contentRepoName\"] in vars.input.records[0].repo_url %}Source Control - Production Content{% elif vars.cicd_config[\"devSettingsRepoName\"] in vars.input.records[0].repo_url %}Source Control - Development Settings{% else %}Source Control - Production Settings{% endif %}"
+                "export_template_name": "{% if vars.cicd_config[\"contentRepoName\"] in vars.input.records[0].repo_url %}{{ (vars.steps.Get_CRs_Export_Templates.data['hydra:member'] | json_query(\"[?contains(name, '\"+vars.input.records[0].new_branch+\"')]\"))[0].name }}{% elif vars.cicd_config[\"devSettingsRepoName\"] in vars.input.records[0].repo_url %}Source Control - Development Settings{% else %}Source Control - Production Settings{% endif %}"
             },
             "status": null,
-            "top": "975",
-            "left": "650",
+            "top": "1120",
+            "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "f8cb5711-7578-46d7-adc8-13b1ffb0db19"
@@ -275,6 +275,29 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get CRs Export Templates",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/query\/export_templates?$limit=5000",
+                    "body": "{\n    \"sort\": [\n        {\n            \"field\": \"modifyDate\",\n            \"direction\": \"DESC\"\n        }\n    ],\n    \"limit\": 30,\n    \"logic\": \"AND\",\n    \"filters\": [\n        {\n            \"logic\": \"OR\",\n            \"filters\": [\n                {\n                    \"field\": \"name\",\n                    \"operator\": \"like\",\n                    \"_operator\": \"like\",\n                    \"value\": \"%Source Control (CR-%%\",\n                    \"type\": \"primitive\"\n                },\n                {\n                    \"field\": \"name\",\n                    \"operator\": \"eq\",\n                    \"_operator\": \"eq\",\n                    \"value\": \"Source Control - Development Settings\",\n                    \"type\": \"primitive\"\n                }\n            ]\n        },\n        {\n            \"field\": \"name\",\n            \"operator\": \"neq\",\n            \"_operator\": \"neq\",\n            \"value\": \"SolutionPack Export\",\n            \"type\": \"primitive\"\n        }\n    ],\n    \"__selectFields\": [\n        \"name\"\n    ]\n}",
+                    "method": "POST"
+                },
+                "version": "3.7.2",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "980",
+            "left": "640",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "960229b7-05fc-451d-a2f7-ece1d613f2c4"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Is Export Template Review",
             "description": null,
             "arguments": {
@@ -325,8 +348,8 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "1110",
-            "left": "650",
+            "top": "1260",
+            "left": "640",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "f4b4374e-315b-4d88-a230-59f7421f08de"
@@ -346,8 +369,8 @@
                     {
                         "option": "Finished",
                         "default": true,
-                        "step_iri": "\/api\/3\/workflow_steps\/f8cb5711-7578-46d7-adc8-13b1ffb0db19",
-                        "step_name": "Configuration"
+                        "step_iri": "\/api\/3\/workflow_steps\/960229b7-05fc-451d-a2f7-ece1d613f2c4",
+                        "step_name": "Get CRs Export Templates"
                     }
                 ],
                 "step_variables": []
@@ -409,8 +432,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1650",
-            "left": "825",
+            "top": "1800",
+            "left": "820",
             "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
             "group": null,
             "uuid": "08027c16-ab47-4837-91ea-af29a3e0314f"
@@ -439,8 +462,8 @@
                 "workflowReference": "\/api\/3\/workflows\/8413a393-367b-4501-9196-ffbb027f0a3b"
             },
             "status": null,
-            "top": "1380",
-            "left": "825",
+            "top": "1540",
+            "left": "820",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "cf2f32bf-453f-42d0-b6f8-9434ee1a2493"
@@ -544,8 +567,8 @@
                 "external_email_attachments": null
             },
             "status": null,
-            "top": "1245",
-            "left": "825",
+            "top": "1400",
+            "left": "820",
             "stepType": "\/api\/3\/workflow_step_types\/fc04082a-d7dc-4299-96fb-6837b1baa0fe",
             "group": null,
             "uuid": "1deb2f29-0fdb-4a3d-9113-eddd876e4aa4"
@@ -682,13 +705,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Configuration -> Is Export Template Modified",
+            "name": "Configuration -> Is Export Template Review",
             "targetStep": "\/api\/3\/workflow_steps\/f4b4374e-315b-4d88-a230-59f7421f08de",
             "sourceStep": "\/api\/3\/workflow_steps\/f8cb5711-7578-46d7-adc8-13b1ffb0db19",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "257a92aa-a692-49ea-a9d2-a8557f83b17f"
+            "uuid": "b70a543a-fbfa-44df-9008-47083c22f8aa"
         },
         {
             "@type": "WorkflowRoute",
@@ -709,6 +732,16 @@
             "isExecuted": false,
             "group": null,
             "uuid": "70218b8d-309b-4a23-a2fb-8c3f1b782211"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get CRs Export Templates -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/f8cb5711-7578-46d7-adc8-13b1ffb0db19",
+            "sourceStep": "\/api\/3\/workflow_steps\/960229b7-05fc-451d-a2f7-ece1d613f2c4",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "0ef45b4c-58f7-4125-8803-0cd640b82534"
         },
         {
             "@type": "WorkflowRoute",
@@ -742,13 +775,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Is Playbook Active or Awaiting -> Configuration",
-            "targetStep": "\/api\/3\/workflow_steps\/f8cb5711-7578-46d7-adc8-13b1ffb0db19",
+            "name": "Is Playbook Active or Awaiting -> Get CRs Export Templates",
+            "targetStep": "\/api\/3\/workflow_steps\/960229b7-05fc-451d-a2f7-ece1d613f2c4",
             "sourceStep": "\/api\/3\/workflow_steps\/8eed896f-1c57-4601-a4c1-f5e625c0f1f4",
             "label": "Finished",
             "isExecuted": false,
             "group": null,
-            "uuid": "4c86ca9d-4159-4fdc-aae1-63f488cbc0ec"
+            "uuid": "41c314d5-0b48-47a0-933e-766aa3be0ed0"
         },
         {
             "@type": "WorkflowRoute",

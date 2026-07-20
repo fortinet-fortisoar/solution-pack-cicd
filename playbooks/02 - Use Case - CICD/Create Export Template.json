@@ -1,0 +1,113 @@
+{
+    "@type": "Workflow",
+    "triggerLimit": null,
+    "name": "Create Export Template",
+    "aliasName": null,
+    "tag": null,
+    "description": "Create an export template for the specified change request.",
+    "isActive": true,
+    "debug": false,
+    "singleRecordExecution": false,
+    "remoteExecutableFlag": false,
+    "parameters": [
+        "cr_number"
+    ],
+    "synchronous": false,
+    "collection": "\/api\/3\/workflow_collections\/4c58fed3-9e16-451a-9528-0be2b71acda4",
+    "versions": [],
+    "triggerStep": "\/api\/3\/workflow_steps\/ef3893b3-e987-48b0-adda-f523ca9e5a95",
+    "steps": [
+        {
+            "@type": "WorkflowStep",
+            "name": "Configuration",
+            "description": null,
+            "arguments": {
+                "export_template_body_params": "{\n    \"options\": {\n        \"modules\": [],\n        \"recordSets\": [],\n        \"viewTemplates\": [],\n        \"picklistNames\": [],\n        \"views\": [],\n        \"reports\": [],\n        \"dashboards\": [],\n        \"roles\": [],\n        \"teams\": [],\n        \"actors\": [],\n        \"playbookBlocks\": {\n            \"blocks\": [],\n            \"includeGlobalVariables\": true\n        },\n        \"rules\": [],\n        \"ruleChannels\": [],\n        \"preprocessingRules\": [],\n        \"connectors\": [],\n        \"widgets\": [],\n        \"appSettings\": [],\n        \"playbooks\": {\n            \"collections\": [],\n            \"globalVariables\": []\n        }\n    },\n    \"metadata\": {\n        \"autoSelectPicklists\": true,\n        \"autoSelectDeps\": {\n            \"ai_agents\": true\n        }\n    },\n    \"name\": \"Source Control (CR-{{vars.input.params['cr_number']}}) - Production Content\"\n}"
+            },
+            "status": null,
+            "top": "165",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "4d3e9176-2353-492c-a8a0-35c0f39b0499"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Change Request Export Template",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/3\/export_templates",
+                    "body": "{{vars.export_template_body_params}}",
+                    "method": "POST"
+                },
+                "version": "3.7.2",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "300",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "a47adaca-f680-45ac-bb8c-6c1b04c7d3e1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Start",
+            "description": null,
+            "arguments": {
+                "__triggerLimit": true,
+                "step_variables": {
+                    "input": {
+                        "params": []
+                    }
+                },
+                "triggerOnSource": true,
+                "triggerOnReplicate": false
+            },
+            "status": null,
+            "top": "30",
+            "left": "125",
+            "stepType": "\/api\/3\/workflow_step_types\/b348f017-9a94-471f-87f8-ce88b6a7ad62",
+            "group": null,
+            "uuid": "ef3893b3-e987-48b0-adda-f523ca9e5a95"
+        }
+    ],
+    "routes": [
+        {
+            "@type": "WorkflowRoute",
+            "name": "Configuration -> Create Change Request Export Template",
+            "targetStep": "\/api\/3\/workflow_steps\/a47adaca-f680-45ac-bb8c-6c1b04c7d3e1",
+            "sourceStep": "\/api\/3\/workflow_steps\/4d3e9176-2353-492c-a8a0-35c0f39b0499",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "ed0f8154-958d-40e9-98c1-2a013eeabff7"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Start -> Configuration",
+            "targetStep": "\/api\/3\/workflow_steps\/4d3e9176-2353-492c-a8a0-35c0f39b0499",
+            "sourceStep": "\/api\/3\/workflow_steps\/ef3893b3-e987-48b0-adda-f523ca9e5a95",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f506a44f-796f-4d09-97ac-4d5edc8a4e32"
+        }
+    ],
+    "groups": [],
+    "priority": "\/api\/3\/picklists\/2b563c61-ae2c-41c0-a85a-c9709585e3f2",
+    "playbookOrigin": "\/api\/3\/picklists\/15c1e8c9-22bf-4e66-8fbb-0a502d4a4a3f",
+    "isEditable": false,
+    "uuid": "4559a154-0d27-4700-868d-ba79632a895f",
+    "owners": [],
+    "isPrivate": false,
+    "deletedAt": null,
+    "recordTags": [
+        "CICD",
+        "Subroutine"
+    ]
+}
