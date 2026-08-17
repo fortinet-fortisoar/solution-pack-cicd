@@ -3160,6 +3160,21 @@
                                                                                                                         }
                                                                                                                     ]
                                                                                                                 }
+                                                                                                            },
+                                                                                                            "module": "export_templates",
+                                                                                                            "query": {
+                                                                                                                "sort": [],
+                                                                                                                "limit": 30,
+                                                                                                                "logic": "AND",
+                                                                                                                "filters": [
+                                                                                                                    {
+                                                                                                                        "field": "name",
+                                                                                                                        "operator": "eq",
+                                                                                                                        "_operator": "eq",
+                                                                                                                        "value": "Source Control - Production Settings",
+                                                                                                                        "type": "primitive"
+                                                                                                                    }
+                                                                                                                ]
                                                                                                             }
                                                                                                         }
                                                                                                     },
@@ -3324,6 +3339,35 @@
                                                                                                                         }
                                                                                                                     ]
                                                                                                                 }
+                                                                                                            },
+                                                                                                            "module": "export_templates",
+                                                                                                            "query": {
+                                                                                                                "sort": [
+                                                                                                                    {
+                                                                                                                        "direction": "ASC",
+                                                                                                                        "field": "name",
+                                                                                                                        "_fieldTitle": "Template Name",
+                                                                                                                        "_fieldName": "name"
+                                                                                                                    }
+                                                                                                                ],
+                                                                                                                "limit": 30,
+                                                                                                                "logic": "OR",
+                                                                                                                "filters": [
+                                                                                                                    {
+                                                                                                                        "field": "name",
+                                                                                                                        "operator": "like",
+                                                                                                                        "_operator": "like",
+                                                                                                                        "value": "%Source Control (CR-%",
+                                                                                                                        "type": "primitive"
+                                                                                                                    },
+                                                                                                                    {
+                                                                                                                        "field": "name",
+                                                                                                                        "operator": "eq",
+                                                                                                                        "_operator": "eq",
+                                                                                                                        "value": "Source Control - Development Settings",
+                                                                                                                        "type": "primitive"
+                                                                                                                    }
+                                                                                                                ]
                                                                                                             }
                                                                                                         }
                                                                                                     },
