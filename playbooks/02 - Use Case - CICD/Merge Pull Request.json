@@ -139,8 +139,8 @@
                 "workflowReference": "{{vars.cicd_env[\"source_control_playbooks\"][\"DeleteBranch\"][\"@id\"]}}"
             },
             "status": null,
-            "top": "1980",
-            "left": "940",
+            "top": "2240",
+            "left": "800",
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "3be79dea-680a-47fe-8dd4-e0128f7cd8ab"
@@ -172,6 +172,18 @@
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "1511cd33-7e15-4a27-8fd1-7993b4988eee"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Dummy Step",
+            "description": null,
+            "arguments": [],
+            "status": null,
+            "top": "2100",
+            "left": "960",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "92eff631-30a1-4b04-abaf-d4f854e7e85c"
         },
         {
             "@type": "WorkflowStep",
@@ -298,8 +310,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "1980",
-            "left": "1320",
+            "top": "2240",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928770",
             "group": null,
             "uuid": "62621715-df7d-46fe-84d8-9ee9d587f2fc"
@@ -384,6 +396,34 @@
             "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
             "group": null,
             "uuid": "db048767-1629-46c9-970b-5e62223a73ba"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Is PR Merged",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "No",
+                        "step_iri": "\/api\/3\/workflow_steps\/fed3e451-95d5-4a56-9855-1b08459511f7",
+                        "condition": "{{ vars.steps.Merge_Pull_Request.data.merged == false }}",
+                        "step_name": "Pull Request Merged Failed Details"
+                    },
+                    {
+                        "option": "Yes",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/92eff631-30a1-4b04-abaf-d4f854e7e85c",
+                        "step_name": "Dummy Step"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "1980",
+            "left": "1120",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "b4154c7a-4a37-480f-9935-98bb55dfd18d"
         },
         {
             "@type": "WorkflowStep",
@@ -648,11 +688,40 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2100",
-            "left": "940",
+            "top": "2360",
+            "left": "800",
             "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
             "group": null,
             "uuid": "1a75b9ae-2943-4911-b72d-1304a821eec1"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Pull Request Merged Failed Details",
+            "description": null,
+            "arguments": {
+                "resource": {
+                    "type": "\/api\/3\/picklists\/ff599189-3eeb-4c86-acb0-a7915e85ac3b",
+                    "tasks": "{{vars.steps.Find_Related_Task[0]['@id']}}",
+                    "people": [],
+                    "content": "<p>{{vars.steps.Merge_Pull_Request.data.message}}<\/p>",
+                    "__replace": "",
+                    "isImportant": false,
+                    "peopleUpdated": false
+                },
+                "operation": "Overwrite",
+                "collection": "\/api\/3\/comments",
+                "__recommend": [],
+                "fieldOperation": {
+                    "recordTags": "Overwrite"
+                },
+                "step_variables": []
+            },
+            "status": null,
+            "top": "2100",
+            "left": "1320",
+            "stepType": "\/api\/3\/workflow_step_types\/2597053c-e718-44b4-8394-4d40fe26d357",
+            "group": null,
+            "uuid": "fed3e451-95d5-4a56-9855-1b08459511f7"
         },
         {
             "@type": "WorkflowStep",
@@ -761,8 +830,8 @@
                 "step_variables": []
             },
             "status": null,
-            "top": "2100",
-            "left": "1320",
+            "top": "2360",
+            "left": "1120",
             "stepType": "\/api\/3\/workflow_step_types\/b593663d-7d13-40ce-a3a3-96dece928722",
             "group": null,
             "uuid": "d6fcc674-c80a-494c-bfee-c10725860158"
@@ -890,6 +959,26 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Dummy Step -> Delete Branch",
+            "targetStep": "\/api\/3\/workflow_steps\/3be79dea-680a-47fe-8dd4-e0128f7cd8ab",
+            "sourceStep": "\/api\/3\/workflow_steps\/92eff631-30a1-4b04-abaf-d4f854e7e85c",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "02b51382-a08d-4de0-9874-66dd0d84df4d"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Dummy Step -> Get Apply Latest Content Record",
+            "targetStep": "\/api\/3\/workflow_steps\/62621715-df7d-46fe-84d8-9ee9d587f2fc",
+            "sourceStep": "\/api\/3\/workflow_steps\/92eff631-30a1-4b04-abaf-d4f854e7e85c",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "b46d187c-47ba-4fe8-94f9-e242519bf5b5"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Dummy Step -> Merge Pull Request",
             "targetStep": "\/api\/3\/workflow_steps\/f9c4f5fc-6672-431c-833e-0da14d27ae1b",
             "sourceStep": "\/api\/3\/workflow_steps\/1fa2fd67-4b54-4195-bc3b-4b0c90263cd1",
@@ -970,6 +1059,26 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Is PR Merged -> Copy of Pull Request Merged Details",
+            "targetStep": "\/api\/3\/workflow_steps\/fed3e451-95d5-4a56-9855-1b08459511f7",
+            "sourceStep": "\/api\/3\/workflow_steps\/b4154c7a-4a37-480f-9935-98bb55dfd18d",
+            "label": "No",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "d787434c-8454-486d-b3b6-218d75ba00e2"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Is PR Merged -> Dummy Step",
+            "targetStep": "\/api\/3\/workflow_steps\/92eff631-30a1-4b04-abaf-d4f854e7e85c",
+            "sourceStep": "\/api\/3\/workflow_steps\/b4154c7a-4a37-480f-9935-98bb55dfd18d",
+            "label": "Yes",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "8f82338d-bb10-45e0-ae31-367bc626e934"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Is Pull Request Approved -> Copy of Populate PR Merged Details",
             "targetStep": "\/api\/3\/workflow_steps\/537a5ac6-872c-4490-903b-8bfe28174ffa",
             "sourceStep": "\/api\/3\/workflow_steps\/0ee694df-f1be-411d-a0cb-1d5239d9e2d3",
@@ -1020,23 +1129,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Merge Pull Request -> Delete Branch",
-            "targetStep": "\/api\/3\/workflow_steps\/3be79dea-680a-47fe-8dd4-e0128f7cd8ab",
+            "name": "Merge Pull Request -> Is PR Merged",
+            "targetStep": "\/api\/3\/workflow_steps\/b4154c7a-4a37-480f-9935-98bb55dfd18d",
             "sourceStep": "\/api\/3\/workflow_steps\/f9c4f5fc-6672-431c-833e-0da14d27ae1b",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "ce904f2d-3a3c-46c1-b22e-37801f4e644e"
-        },
-        {
-            "@type": "WorkflowRoute",
-            "name": "Merge Pull Request -> Get Apply Latest Content Record",
-            "targetStep": "\/api\/3\/workflow_steps\/62621715-df7d-46fe-84d8-9ee9d587f2fc",
-            "sourceStep": "\/api\/3\/workflow_steps\/f9c4f5fc-6672-431c-833e-0da14d27ae1b",
-            "label": null,
-            "isExecuted": false,
-            "group": null,
-            "uuid": "8b32dae9-06ee-4d64-8d18-ceaaada34d18"
+            "uuid": "3e4d3cff-8b2d-41fc-8971-195d48971416"
         },
         {
             "@type": "WorkflowRoute",
