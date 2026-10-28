@@ -7,11 +7,11 @@ This section explains how to use the **Continuous Delivery (CI/CD) solution pack
 
 The instructions in this guide are scenario-driven, focusing on practical workflows such as creating new playbooks or modules, exporting settings, or applying changes from source control to production environments. Each section highlights the actions required by specific roles to maintain separation of duties and ensure smooth content delivery.
 
-## Understanding the Environments
+## Understanding the environments
 
-The CI/CD solution pack for FortiSOAR assumes a **three-tier environment setup**: **Development**, **Staging**, and **Production**. Each environment serves a unique purpose and interacts with source control to enable controlled, auditable changes.
+The CI/CD solution pack for FortiSOAR uses a two-tier environment baseline: **Development** and **Production**. You can optionally add a **Staging** environment as an intermediate validation layer between development and production. Each environment interacts with source control to enable controlled, auditable changes.
 
-### Production Environment
+### Production environment
 
 The production environment is your "live" FortiSOAR system handling real security incidents. Changes here must be deliberate and thoroughly tested to avoid disrupting operations.
 
@@ -19,7 +19,7 @@ Admins raise **Change Requests (CRs)** in production when new customizations or 
 
 *Example:* An admin raises a CR to add a new phishing triage playbook. The CR is sent to the development team via source control.
 
-### Development Environment
+### Development environment
 
 The development environment is a sandbox where developers implement and test new content or configuration changes. Changes are iterative and experimental here.
 
@@ -27,62 +27,70 @@ Once development is complete, changes are submitted as **Pull Requests (PRs)** i
 
 *Example:* A developer creates a new phishing triage playbook, tests it in development, and submits a PR for review.
 
-### Staging Environment
+### Staging environment (optional)
 
-The staging environment serves as an **intermediate validation layer** between development and production. Its role depends on perspective:
+A staging environment is not required, but you can set one up as an intermediate validation layer between development and production. Its role depends on perspective:
 
-- **For Development:** Staging is "Production" &ndash; developers deploy their tested changes here to ensure they work in an environment similar to the actual production instance.
-- **For Production:** Staging is "Development" &ndash; admins can see changes applied here before they reach live production, ensuring a safe rollout.
+- **For development:** staging is "Production": developers deploy their tested changes here to check that they work in an environment similar to the actual production instance.
+- **For production:** staging is "Development": admins can see changes applied here before they reach live production, supporting a safer rollout.
 
 *Example:* After testing a new playbook in development, a developer deploys it to staging. Admins and other testers validate the playbook in staging before approving its application in production.
 
-### Flow Between Environments
+### Flow between environments
 
-1. **Production → Development:** Admins raise CRs in production that are implemented in development.
-2. **Development → Staging:** Developers push changes from development to staging for intermediate validation.
-3. **Staging → Production:** Admins approve and apply validated changes from staging into the production environment.
+Changes move through the environments in this sequence:
 
-This three-tier setup ensures that production remains stable while supporting continuous development and controlled deployment of changes.
+1. **Production to development:** Admins raise CRs in production that are implemented in development.
+2. **Development to production:** Developers push changes from development to source control, where admins review and approve them before they reach production.
+3. **Optional staging step:** If a staging environment is configured, developers push changes to staging first, and admins validate them there before the same changes are applied to production.
 
-Here's a textual diagram and table to make the three-tier flow clearer:
+This baseline keeps production stable while supporting continuous development and, when needed, an extra validation layer before deployment.
+
+Here's a diagram and table that illustrate the environment flow:
 
 ![](./res/environment-flow-diagram.svg)
 
-### Environment Roles Table
+### Environment roles table
 
-| Environment     | Primary Role                                | Perspective | Example Actions                                                                                    |
-|-----------------|---------------------------------------------|-------------|----------------------------------------------------------------------------------------------------|
-| **Production**  | Live incident handling                      | Admin       | Raise CRs, approve/merge changes, apply latest content                                             |
-| **Development** | Sandbox for implementing changes            | Developer   | Build new playbooks, dashboards, modules; push changes to source control                           |
-| **Staging**     | Validation layer between dev and production | Hybrid      | Test developer changes in a near-production setting before final rollout; QA by admins and testers |
+The following table summarizes the role each environment plays and who is responsible for it.
 
-## Lifecycle of a Change Request (CR)
+| Environment            | Primary role                                         | Perspective | Example actions                                                                                     |
+|-------------------------|-------------------------------------------------------|-------------|-------------------------------------------------------------------------------------------------------|
+| **Production**          | Live incident handling                                | Admin       | Raise CRs, approve and merge changes, apply latest content                                            |
+| **Development**         | Sandbox for implementing changes                      | Developer   | Build new playbooks, dashboards, modules; push changes to source control                              |
+| **Staging (optional)**  | Validation layer between development and production   | Hybrid      | Test developer changes in a near-production setting before final rollout; QA by admins and testers    |
 
-This section explains how a change request (CR) moves through the Continuous Delivery workflow, from creation in FortiSOAR to deployment in the production environment. The workflow ensures that content developed in a **Development Environment** is reviewed, tested, and safely applied to the **Production Environment**. Staging environments act as an intermediate sandbox, providing a "production-like" testing space before final deployment.
+## Lifecycle of a change request (CR)
+
+This section explains how a change request (CR) moves through the Continuous Delivery workflow, from creation in FortiSOAR to deployment in the production environment. The workflow ensures that content developed in a **Development Environment** is reviewed, tested, and safely applied to the **Production Environment**. A staging environment, if configured, acts as an intermediate sandbox that provides a "production-like" testing space before final deployment.
 
 ![Lifecycle of a change request](./res/CR-life-cycle.svg)
 
-### Steps in the CR Lifecycle
+### Steps in the CR lifecycle
+
+The CR lifecycle includes the following steps:
 
 1. **Create a Change Request (Production Environment)**
    The application administrator creates a new CR in FortiSOAR's **Production Environment**.
 
-   - Refer to [Creating a new CR]./usage.md#creating-a-new-change-request).
+   - Refer to [Creating a new CR](./usage.md#creating-a-new-change-request).
    - The CR automatically appears as a new issue under **Issues** in the source control repository for the production content.
+   - An export template named `Source Control (CR-<number>) - Production Content` is created for the CR. When development and production share one FortiSOAR instance, it is created with the CR. When they are separate instances, it is created on the development instance when open CRs are fetched.
 
 2. **Build the Content (Development Environment)**
    The content developer works on the CR in the **Development Environment**, implementing the requested changes.
 
-   - If required, the developer edits the export template to include new playbooks, dashboards, rules, or other content.
+   - If required, the developer edits the CR's export template to include new playbooks, dashboards, rules, or other content.
 
-> [!WARNING]
-> Do not delete or rename existing export templates. Cloning an export template with the same name as an existing one can cause merge conflicts and data loss.
+> [!Warning]
+> Do not delete or rename existing export templates, including CR export templates. The playbooks find a CR's export template by name and delete it automatically when the CR is closed. Cloning an export template with the same name as an existing one can cause merge conflicts and data loss.
 
 3. **Push Changes to Source Control (Development Environment)**
    The developer selects the CR in FortiSOAR and clicks **Push Changes to Source Control**.
 
    - A new branch is created on the source control platform containing the changes from this CR.
    - The changes are committed and pushed to the branch automatically.
+   - The push exports only the content selected in the CR's export template.
 
 4. **Submit Changes for Review (Development Environment)**
    The developer selects the CR again and clicks **Submit Changes for Review**.
@@ -105,6 +113,7 @@ This section explains how a change request (CR) moves through the Continuous Del
    The administrator selects the CR again and clicks **Mark as Complete**.
 
    - This closes the CR in FortiSOAR and the source control platform.
+   - The CR's export template is deleted. When development and production are separate instances, it is deleted from the development instance when closed CRs are fetched.
 
 8. **Apply Latest Content to Production Environment**
    Once the CR is approved and completed, the application administrator clicks **Apply Latest Content** in FortiSOAR.
@@ -115,7 +124,7 @@ This section explains how a change request (CR) moves through the Continuous Del
 > [!TIP]
 > Always validate content in a staging environment (if available) before applying to production to catch potential issues early.
 
-## Creating a New Change Request
+## Creating a new change request
 
 You can raise a change request (CR) from within the FortiSOAR's production environment and assign it to a content developer for further action. To create a new CR and assign it to a content developer:
 
@@ -133,34 +142,40 @@ You can raise a change request (CR) from within the FortiSOAR's production envir
 
 The raised CR appears under **Issues** on the source control platform under your organization's Production Content repository and under the **Continuous Delivery** menu for Application Administrators.
 
-## Working on a new Change Request
+## Working on a new change request
 
 > [!TIP]
-> Once the *Development* environment is set up, click the card **Apply Latest Content* to make the development instance a clone of *Production* instance (Required if the production and development FortiSOAR instances are separate).
+> Once the *Development* environment is set up, click the card **Apply Latest Content** to make the development instance a clone of *Production* instance (Required if the production and development FortiSOAR instances are separate).
 
-The raised CR also appears under the **Continuous Delivery** menu for the Content Developer to whom the issue is assigned. Use the refresh icon <picture><source media="(prefers-color-scheme: dark)" srcset="./res/icon-refresh-light.svg"><source media="(prefers-color-scheme: light)" srcset="./res/icon-refresh-dark.svg"><img alt="" src="./res/icon-refresh-dark.svg"></picture>, if the CR does not appear automatically.
+The raised CR also appears under the **Continuous Delivery** menu for the Content Developer to whom the issue is assigned. Content developers see only the CRs assigned to them.
+
+<!-- DEV REVIEW: Assignee-based CR visibility is not implemented in any playbook. Confirm in widget code, or raise an objection. -->
+
+Use the refresh icon <picture><source media="(prefers-color-scheme: dark)" srcset="./res/icon-refresh-light.svg"><source media="(prefers-color-scheme: light)" srcset="./res/icon-refresh-dark.svg"><img alt="" src="./res/icon-refresh-dark.svg"></picture>, if the CR does not appear automatically.
 
 After content developers are done making the customizations to address the CR raised in FortiSOAR:
 
-1. [Edit the export template](./editing-export-template.md) to include the content created. 
-    
-   For example, if the content developers have built a new Dashboard, they need to edit the export template, select **Module** and click **Continue**, select the newly created Dashboard on the next screen, and click **Save**. This action ensures that the new dashboard is part of the content to be pushed to source control. For
+1. [Edit the CR's export template](./editing-export-template.md), `Source Control (CR-<number>) - Production Content`, to include the content created. Only the export templates of the developer's open CRs are available for pushing.
 
-2. Select the CR and click **Push Changes**. Following tasks are performed:
+   <!-- DEV REVIEW: Push selects the CR export template by branch name. Restricting templates to the developer's open CRs is not found in playbooks. Confirm in widget code, or raise an objection. -->
 
-   1. A branch containing the changes of this CR is created on the source control platform.
+   For example, if the content developers have built a new Dashboard, they need to edit the CR's export template, select **Module** and click **Continue**, select the newly created Dashboard on the next screen, and click **Save**. This action ensures that the new dashboard is part of the content to be pushed to source control.
+
+2. Select the CR and click **Push Changes**. The following tasks are performed:
+
+   1. A branch containing the changes of this CR is created on the source control platform. The content is exported using the CR's export template.
 
    2. The changes are committed and pushed to the new branch.
 
    3. A prompt asks the content developer to specify a **Summary** (mandatory) and **Description** (optional) of the commit message.
 
-2. Select the CR again and click **Submit for Review**. Creation of a PR is initiated.
+3. Select the CR again and click **Submit for Review**. Creation of a PR is initiated.
 
-3. Specify a **Title** of the PR.
+4. Specify a **Title** of the PR.
 
-4. Select **Reviewers Name** from the list. Content developer is not listed as the reviewer.
+5. Select **Reviewers Name** from the list. Content developer is not listed as the reviewer.
 
-## Approving & Completing a CR in Production Environment
+## Approving and completing a CR in production environment
 
 The CR submitted for review needs approval of the application administrator in FortiSOAR. The application administrator now has to approve, merge, and mark the changes as complete in production environment.
 
@@ -175,9 +190,9 @@ The CR submitted for review needs approval of the application administrator in F
 
 4. Select the CR in FortiSOAR and click **Approve Changes**. This merges the PR into the main branch and deletes the CR branch.
 
-5. Select the CR again and click **Mark as Complete** to close the issue from FortiSOAR and the source control platform.
+5. Select the CR again and click **Mark as Complete** to close the issue from FortiSOAR and the source control platform. This also deletes the CR's export template.
 
-## Applying Latest changes in Production environment
+## Applying latest changes in production environment
 
 Application administrators may want to merge the customizations on the source control platform on the main branch to production instance on FortiSOAR.
 
@@ -195,7 +210,9 @@ Application administrators may want to merge the customizations on the source co
 
 Once the changes are applied, logout and login again to view published changes.
 
-## Saving Development Settings
+## Saving development settings
+
+To back up development settings, such as connector configurations, SSO settings, and user configurations, to source control:
 
 1. Select **Continuous Delivery** from the FortiSOAR menu.
 
@@ -203,7 +220,7 @@ Once the changes are applied, logout and login again to view published changes.
 
 3. Click the tile **Save Development Settings** to initiate export of development settings like connector configurations, SSO settings, and user configurations to the source control platform in the repository mapped with FortiSOAR Development Settings.
 
-## Applying Latest changes in Development environment
+## Applying latest changes in development environment
 
 Application administrators may want to merge the customizations on the source control platform on the main branch to development instance on FortiSOAR.
 
@@ -221,9 +238,9 @@ Application administrators may want to merge the customizations on the source co
 
 Once the changes are applied, logout and login again to view published changes.
 
-## View Closed CRs since Last Deployment
+## Viewing closed CRs since last deployment
 
-Following section explains how to get a list of closed change requests (CRs) since the last time **Apply Latest Changes** was performed on the production environment.
+This section explains how to get a list of closed change requests (CRs) since **Apply Latest Content** was last run in the production environment.
 
 1. Select **Continuous Delivery** from the FortiSOAR menu.
 
@@ -231,27 +248,31 @@ Following section explains how to get a list of closed change requests (CRs) sin
 
 3. Click **Fetch Latest Changes** button from the lower-left of the screen to get the list of issues resolved since the last applied change.
 
-# Additional Resources
+# Additional resources
 
-- [Terminologies](./terminologies.md) &ndash; Short description about commonly used terms across the document
+The following resources cover related setup tasks, terminology, and example workflows referenced throughout this guide.
 
-- [Setting up Source control &ndash; initial configuration](./initial-source-control-setup.md) &ndash; checklist of basic configurations that must be in place for the most efficient usage of **Continuous Delivery** solution pack
+- [Terminologies](./terminologies.md): short description of commonly used terms across the document.
 
-- [Best Practices](./best-practices.md) &ndash; pointers to avoid common pitfalls when working with source control
+- [Setting up source control: initial configuration](./initial-source-control-setup.md): checklist of basic configurations that must be in place for the most efficient usage of **Continuous Delivery** solution pack.
 
-- [CR for Building a new Playbook](./build-playbook-cr.md) &ndash; use this example flow to create playbooks
+- [Best practices](./best-practices.md): pointers to avoid common pitfalls when working with source control.
 
-- [CR for Building a new Module](./build-module-cr.md) &ndash; use this example flow to create modules
+- [CR for building a new playbook](./build-playbook-cr.md): use this example flow to create playbooks.
 
-- [Including Connector Installation and Configuration in Source Control](./connector-inst-config-git.md) &ndash; steps to include connector installation and configuration under source control
+- [CR for building a new module](./build-module-cr.md): use this example flow to create modules.
 
-- [Exporting Sample Alerts/Incidents from Prod Environment](./export-alerts-incidents-from-prod.md) &ndash; export sample alerts or incidents from a production environment to work with and test
+- [Including connector installation and configuration in source control](./connector-inst-config-git.md): steps to include connector installation and configuration under source control.
 
-- [Editing the Export Template](./editing-export-template.md) &ndash; edit export template to manage what gets exported to a production or a development environment
+- [Exporting sample alerts/incidents from prod environment](./export-alerts-incidents-from-prod.md): export sample alerts or incidents from a production environment to work with and test.
 
-- [Upgrade Instructions](./upgrade-instructions.md) &ndash; absolutely important to go through before, and after, upgrading of **Continuous Delivery** solution pack
- 
-# Next Steps 
+- [Editing the export template](./editing-export-template.md): edit export template to manage what gets exported to a production or a development environment.
+
+- [Multi-office setup](./multi-office-setup.md): set up one shared production environment with a development environment per office.
+
+- [Upgrade instructions](./upgrade-instructions.md): important to review before, and after, upgrading the **Continuous Delivery** solution pack.
+
+# Next steps
 
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Contents](./contents.md) |
 |-----------------------------------------|-------------------------------------------|---------------------------|

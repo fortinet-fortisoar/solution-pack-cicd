@@ -7,19 +7,25 @@ The **Continuous Delivery** solution pack installs the following resources:
 
 ## Roles
 
+The following roles are included in this solution pack.
+
 | Role                     | Description                                                                                            |
 |:-------------------------|:-------------------------------------------------------------------------------------------------------|
 | Production Administrator | Responsible for change request administration in Continuous Integration and Continuous Delivery (CICD) |
 | Full App Permissions     | Essentially the root user, use carefully                                                               |
 | Content Developer        | Responsible for change request development in Continuous Integration and Continuous Delivery (CICD)    |
 
-## System Views
+## System views
+
+The following system view is included in this solution pack.
 
 | System View         | Description                                                                                                                                                           |
 |:--------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Continuous Delivery | A menu option that launches the Continuous Delivery user interface for setting up development and production environment subsequent interactions with source control. |
 
-## Module Schemas
+## Module schemas
+
+The following module schemas are included in this solution pack.
 
 | Module Schema     | Description                                                                                                                                |
 |:------------------|:-------------------------------------------------------------------------------------------------------------------------------------------|
@@ -27,6 +33,8 @@ The **Continuous Delivery** solution pack installs the following resources:
 | Change Management | A schema or framework that helps organize information specific to Continuous Delivery like issue, title, description, and environment.     |
 
 ## Widgets
+
+The following widgets are included in this solution pack.
 
 | Widgets                   | Description                                                                                                                                                             |
 |:--------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -39,7 +47,9 @@ The **Continuous Delivery** solution pack installs the following resources:
 |Export Template Wizard|Manage FortiSOAR export templates that control what content is saved to source control systems like GitHub or GitLab.|
 |CICD Content Import|Select a source control repository, review its contents, and import updates into FortiSOAR with full control over applied changes using editable export templates.|
 
-## Playbook Collections
+## Playbook collections
+
+The following playbook collection and playbooks are included in this solution pack.
 
 |02 - Use Case - CICD|
 |:-------------------|
@@ -48,6 +58,8 @@ The **Continuous Delivery** solution pack installs the following resources:
 | Playbook Name                                                                          | Description                                                                                                                                                                               |
 |:---------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Fetch Closed Requests (Issues)![icon-new](./res/icon-new.svg)                          | Fetch all closed source control requests (Issues) from Content, Production Setting and Development Setting repositories                                                                   |
+| Create Export Template![icon-new](./res/icon-new.svg)                                  | Create an export template for the specified change request                                                                                                                                |
+| Delete Export Template![icon-new](./res/icon-new.svg)                                  | Delete an export template for the specified change request                                                                                                                                |
 | Add Source Control Repository Collaborator                                             | Add source control repository collaborator for specified repository                                                                                                                       |
 | Push Content to Source Control                                                         | Clone the specified repository, apply the export template content and push to source control                                                                                              |
 | Push Initial Production Environment Content                                            | Push initial Production Environment Content into source control main branch                                                                                                               |
@@ -101,30 +113,38 @@ The **Continuous Delivery** solution pack installs the following resources:
 
 ## Connectors
 
+The following connectors are included in this solution pack.
+
 | Connector  | Description                                                                                                                                    |
 |:-----------|:-----------------------------------------------------------------------------------------------------------------------------------------------|
 | GitHub     | This connector facilitates automated interactions with GitHub such as creating and managing repositories, branches, issues, and pull requests. |
 | GitLab     | This connector facilitates automated interactions with GitLab such as creating and managing repositories, branches, issues, and pull requests. |
 | CICD Utils | CICD Utils provides out of the box actions for CICD solution pack                                                                              |
 
-## Record Sets
+## Record sets
 
-- Change Management (8)
+The following record sets are included in this solution pack.
+
+- Change Management (10)
 - Export Templates (3)
 
 ## Picklists
+
+The following picklists are included in this solution pack.
 
 - Change Management Environment
 - Change Management Status
 - Change Management Type
 
-## Module Views
+## Module views
+
+The following module views are included in this solution pack.
 
 - Change Management List
 - Change Management Detail
 - Change Management Form
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|
