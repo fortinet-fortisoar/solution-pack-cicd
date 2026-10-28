@@ -1,7 +1,7 @@
 | [Home](../README.md) |
 |----------------------|
 
-# Setting up Source Control &ndash; Initial Configuration
+# Setting up source control: initial configuration
 
 This section explains setting up initial configurations for a source control. Currently, **Continuous Delivery** solution pack supports the following source control platforms:
 
@@ -9,7 +9,7 @@ This section explains setting up initial configurations for a source control. Cu
 
 - GitLab
 
-1. **Setup an organization**: Creating an organization helps keep all repositories and users under a single umbrella. Refer to these articles for creating new organizations:
+1. **Set up an organization**: Creating an organization helps keep all repositories and users under a single umbrella. Refer to these articles for creating new organizations:
 
     - [Creating a new organization - GitHub](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/creating-a-new-organization-from-scratch)
 
@@ -21,13 +21,13 @@ This section explains setting up initial configurations for a source control. Cu
 
     - [Members in an organization - GitLab](https://docs.gitlab.com/ee/user/project/members/index.html)
 
-3. **Create Repositories**: Repositories can contain folders and files, images, videos, spreadsheets, and data sets - anything your project needs. The Setup Source Control process in FortiSOAR's Continuous Delivery creates repositories for you. However, you can create repositories and map them with FortiSOAR's Continuous Delivery to store and collaborate on your content customizations. Refer to these articles for creating and working with repositories:
+3. **Create Repositories**: Repositories can contain folders and files, images, videos, spreadsheets, and data sets, including anything your project needs. The **Setup Source Control** process in FortiSOAR's Continuous Delivery creates repositories for you. However, you can create repositories and map them with FortiSOAR's Continuous Delivery to store and collaborate on your content customizations. Refer to these articles for creating and working with repositories:
     
     - [Creating and working with repositories - GitHub](https://docs.github.com/en/get-started/quickstart/create-a-repo)
 
     - [Creating and working with repositories/projects - GitLab](https://docs.gitlab.com/ee/user/project/#create-a-blank-project)
 
-4. **Branching**: You can create branches so your changes do not affect the production content, and when ready can be merged into the main branch. Refer to these articles on Creating branches in a repository
+4. **Branching**: You can create branches so your changes do not affect the production content, and when ready can be merged into the main branch. Refer to these articles on creating branches in a repository:
 
     - [Creating branches in a repository - GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository)
 
@@ -39,7 +39,7 @@ This section explains setting up initial configurations for a source control. Cu
 
     - [Contributing and collaborating on GitLab](https://docs.gitlab.com/ee/tutorials/make_first_git_commit/index.html#commit-and-push-your-changes)
 
-6. **Working with Personal Access Tokens**: Personal access tokens help avoid entering sensitive information like passwords. You can assign only relevant rights to your access token. GitHub  and GitLab connectors in FortiSOAR require a personal access token to be entered during configuration. Refer to these articles for generating and using personal access tokens:
+6. **Working with Personal Access Tokens**: Personal access tokens help avoid entering sensitive information like passwords. You can assign only relevant rights to your access token. GitHub and GitLab connectors in FortiSOAR require a personal access token to be entered during configuration. Refer to these articles for generating and using personal access tokens:
 
     - [Accessing GitHub using Personal Access Token (Classic)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#personal-access-tokens-classic)
 
@@ -47,7 +47,7 @@ This section explains setting up initial configurations for a source control. Cu
 
 7. **Invite Collaborators**: Collaborators have write access to the repositories to which they are invited. Collaborators must accept the invitation from GitHub's or GitLab's user interface to begin contributing.
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

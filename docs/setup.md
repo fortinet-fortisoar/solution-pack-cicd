@@ -3,6 +3,8 @@
 
 # Installation
 
+Follow these steps to install the **Continuous Delivery** solution pack.
+
 1. To install this solution pack, click **Content Hub** > **Discover**.
 
 2. From the list of solution packs that appear, search for **Continuous Delivery** solution pack.
@@ -45,22 +47,22 @@ You also need the following to use the **Continuous Delivery** solution pack:
 
     To use the wizard for setting up source control and creating repositories through playbooks, FortiSOAR admin must have appropriate rights to create repositories on your preferred source control platform.
 
-    - **Application Editor (GitHub & GitLab)**
+    - **Application Editor (GitHub and GitLab)**
 
-        | **Task**                       | **GitHub (Fine-grained PAT + Repo Permissions)**                              | **GitLab (API Scopes + Project Permissions)** |
-        | ------------------------------ | ----------------------------------------------------------------------------- | --------------------------------------------- |
-        | Create repository              | `organization:write`, `repository:write` (with “Create repositories” enabled) | `api` scope + Group role = **Maintainer**     |
+        | Task                            | GitHub (fine-grained PAT + repo permissions)                                  | GitLab (API scopes + project permissions)     |
+        |:--------------------------------|:--------------------------------------------------------------------------------|:------------------------------------------------|
+        | Create repository              | `organization:write`, `repository:write` (with "Create repositories" enabled) | `api` scope + Group role = **Maintainer**     |
         | Create branch                  | `contents:write`                                                              | Project role = **Developer** or higher        |
         | Create issue (on private repo) | `issues:write` + repo access                                                  | `api` scope + **Reporter** or higher          |
         | Close issue                    | `issues:write`                                                                | `api` scope + **Reporter** or higher          |
         | Fetch issues / PRs             | `issues:read`, `pull_requests:read`                                           | `read_api` scope + **Reporter** or higher     |
-        | Approve & Merge PR             | `pull_requests:write` + `contents:write`                                      | **Maintainer**                                |
+        | Approve and merge PR           | `pull_requests:write` + `contents:write`                                      | **Maintainer**                                |
         | Delete branch                  | `contents:write`                                                              | **Developer** or higher                       |
 
-    - **Content Developer (GitHub & GitLab)**
+    - **Content Developer (GitHub and GitLab)**
 
-        | **Task**           | **GitHub (Fine-grained PAT + Repo Permissions)** | **GitLab (API Scopes + Project Permissions)** |
-        | ------------------ | ------------------------------------------------ | --------------------------------------------- |
+        | Task                | GitHub (fine-grained PAT + repo permissions)     | GitLab (API scopes + project permissions)     |
+        |:--------------------|:---------------------------------------------------|:-------------------------------------------------|
         | Commit / Push      | `contents:write`                                 | **Developer**                                 |
         | Create PR          | `pull_requests:write`, `contents:write`          | **Developer**                                 |
         | Fetch issues       | `issues:read`                                    | `read_api` scope + **Reporter** or higher     |
@@ -86,7 +88,7 @@ You also need the following to use the **Continuous Delivery** solution pack:
 
         - [Protect a branch - GitLab](https://docs.gitlab.com/user/project/repository/branches/protected/#protect-a-branch)
 
-    2. **Production Settings Repository**: Production settings containing system views (e.g. Navigation Menu structure), application configuration, environment variables, account configuration, LDAP, SSO, and RADIUS configuration of a production environment are saved to this repository. Development environment must not have access to this repository as it uses production configurations and information.
+    2. **Production Settings Repository**: Production settings containing system views (for example, Navigation Menu structure), application configuration, environment variables, account configuration, LDAP, SSO, and RADIUS configuration of a production environment are saved to this repository. Development environment must not have access to this repository as it uses production configurations and information.
 
     3. **Development Settings Repository**: Development settings containing system views, application configuration, environment variables, account configuration, LDAP, SSO, and RADIUS configuration of a development environment are backed up or synced on this repository.
 
@@ -108,7 +110,7 @@ This section details the required configurations for optimal performance of the 
 > [!NOTE]
 > FortiSOAR users directly interacting with their preferred source control platform must be appropriately mapped with corresponding usernames in their source control's connector configurations.
 
-## Setup Continuous Delivery on FortiSOAR
+## Setting up Continuous Delivery on FortiSOAR
 
 After installation of the **Continuous Delivery** solution pack, run the configuration wizard to ready your FortiSOAR environment. This wizard helps you connect your FortiSOAR development and production environments to your preferred source control.
 
@@ -133,13 +135,12 @@ After installation of the **Continuous Delivery** solution pack, run the configu
 
 5. Add configuration information for setting up interactions with your preferred source control platform. You can set up multiple configurations for multiple users, depending on their access levels. Click **Next** on the lower-right corner to proceed. You can skip configuring the connector now and click **Skip** to proceed.
 
-    | ![Setup source control GitHub](./res/config-wizard-04-github.png) | ![Setup source control GitLab](./res/config-wizard-04-gitlab.png) |
-    |:-----------------------------------------------------------------:|:-----------------------------------------------------------------:|
-    |                    Setup source control GitHub                    |                    Setup source control GitLab                    |
-
+    | ![Setting up source control: GitHub](./res/config-wizard-04-github.png) | ![Setting up source control: GitLab](./res/config-wizard-04-gitlab.png) |
+    |:-------------------------------------------------------------------------:|:-------------------------------------------------------------------------:|
+    |                     Setting up source control: GitHub                     |                     Setting up source control: GitLab                     |
 
 > [!NOTE]
-> To setup a new configuration, select <picture><source media="(prefers-color-scheme: dark)" srcset="./res/icon-add-light.svg"><source media="(prefers-color-scheme: light)" srcset="./res/icon-add-dark.svg"><img alt="" src="./res/icon-add-dark.svg"></picture> **Add New Configuration** from the *Select Configuration* field.
+> To set up a new configuration, select <picture><source media="(prefers-color-scheme: dark)" srcset="./res/icon-add-light.svg"><source media="(prefers-color-scheme: light)" srcset="./res/icon-add-dark.svg"><img alt="" src="./res/icon-add-dark.svg"></picture> **Add New Configuration** from the *Select Configuration* field.
 
 6. Click **Finish** to complete the configuration process.
 
@@ -147,17 +148,21 @@ After installation of the **Continuous Delivery** solution pack, run the configu
 
 
 
-# Additional Resources
+# Additional resources
 
-- [Setup Production Environment](./setup-prod-env.md)
+The following resources cover environment-specific setup and ongoing configuration changes.
 
-- [Setup Development Environment](./setup-dev-env.md)
+- [Setting up the production environment](./setup-prod-env.md)
 
-- [Setup Staging Environment](./setup-staging-env.md)
+- [Setting up the development environment](./setup-dev-env.md)
 
-- [Update Configuration Parameters](./update-config-params.md)
+- [Setting up the staging environment](./setup-staging-env.md)
 
-# Next Steps 
- 
+- [Updating configuration parameters](./update-config-params.md)
+
+- [Multi-office setup](./multi-office-setup.md): set up one shared production environment with a development environment per office.
+
+# Next steps
+
 | [Contents](./contents.md) | [Usage](./usage.md) |
 |---------------------------|---------------------|

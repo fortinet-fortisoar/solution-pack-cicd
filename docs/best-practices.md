@@ -1,9 +1,9 @@
 | [Home](../README.md) |
 |----------------------|
 
-## Working with Source Control and Continuous Delivery - Best Practices
+## Best practices for source control and Continuous Delivery
 
-Apart from best practices around source control like branching and merging strategies, committing code frequently with clear commit messages, automating the build process, and using a deployment pipeline for consistent and reliable releases; following pointers help avoid common pitfalls.
+Apart from best practices around source control like branching and merging strategies, committing code frequently with clear commit messages, automating the build process, and using a deployment pipeline for consistent and reliable releases, the following pointers help avoid common pitfalls.
 
 1. While creating repos using playbooks, ensure that your preferred source control platform's connector is configured.
 
@@ -11,9 +11,13 @@ Apart from best practices around source control like branching and merging strat
 
     - Your preferred source control platform's username specified during configuration must be mapped with the user who is setting up the Source Control.
 
-2. For repos with restricted merge access, the logged-in user must have sufficient privileges to make the initial commit without creating a PR.
+2. For repos with restricted merge access, the logged-in user must have sufficient privileges to make the initial commit without creating a pull request (PR).
 
-3. When mapping existing repos during Continuous Delivery's **Setup Source Control** process, ensure *Issues* & *Merge Commit* option are enabled for these existing repos.
+3. When mapping existing repos during Continuous Delivery's **Setup Source Control** process, ensure the **Issues** and **Merge commits** options are enabled for these existing repos.
+
+    | ![Enabling Issues on a repository](./res/repo-settings-enable-issues.png) | ![Enabling merge commits on a repository](./res/repo-settings-enable-merge-commits.png) |
+    |:-----------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------:|
+    |                    Enabling Issues on a repository                    |                    Enabling merge commits on a repository                    |
 
 4. Users and their tokens must have sufficient privileges for following actions:
 
@@ -23,13 +27,13 @@ Apart from best practices around source control like branching and merging strat
 
     - Merging a pull request (PR)
 
-5. After applying latest changes [in production environment](./usage.md#apply-latest-changes-in-production-environment) or [in development environment](./usage.md#apply-latest-changes-in-development-environment), perform following actions for optimum performance:
+5. After applying latest changes [in the production environment](./usage.md#applying-latest-changes-in-production-environment) or [in the development environment](./usage.md#applying-latest-changes-in-development-environment), perform the following actions for optimum performance:
 
     - Refresh the FortiSOAR page
 
-    - Logout & Login
+    - Logout and login
 
-    - For a role change or addition, ensure the role is assigned to the appropriate user 
+    - For a role change or addition, ensure the role is assigned to the appropriate user
 
 6. In case of conflicts in a pull request (PR), resolve the conflict on the source control platform before merging the PR.
 
@@ -49,11 +53,24 @@ Apart from best practices around source control like branching and merging strat
 
 14. Changes related to a single change request (CR) must never be pushed from multiple development environments.
 
-<!-- 15. After the action **Apply Latest Content** is run on development or production environment an **fsrimport-xxx**  file(For example `fsrimport-381e5a85-ccb5-4407-b5ea-97d294bb3a5e`) is created in the `/tmp` directory.
+15. After the action **Apply Latest Content** is run on a development or production environment, an `fsrimport-xxx` file (for example, `fsrimport-381e5a85-ccb5-4407-b5ea-97d294bb3a5e`) is created in the `/tmp` directory.
 
-    These files are intended for deletion. To automate the process, you can establish a cron job to remove these files. -->
+    These files are intended for deletion. To automate the process, you can establish a cron job to remove these files.
 
-# Next Steps 
- 
+### Known limitation: concurrent changes to the same object
+
+Per-CR export templates stop one CR from exporting content selected for another. They do not isolate two CRs that change the same object.
+
+<!-- DEV REVIEW: Limitation and recommendation sourced from the design document, not from code. Confirm, or raise an objection. -->
+
+- FortiSOAR exports content as whole objects, not as incremental changes. This applies to playbook collections, dashboards, reports, service view templates (SVTs), modules, layouts, and connector configurations.
+- If two CRs change the same object, for example, each adds a different playbook to the same playbook collection, each CR exports the complete object.
+- The CR merged last overwrites the changes of the earlier CR to that object.
+- The solution pack does not provide object-level locking, object-level merge, or conflict detection during push.
+
+To avoid lost changes, do not assign concurrent CRs that change the same object to different content developers.
+
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|
