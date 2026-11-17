@@ -1,14 +1,16 @@
 | [Home](../README.md) |
 |----------------------|
 
-## Setting up the Development Environment
+## Setting up the development environment
 
-Once you have setup source control for production environment, setup the development environment to bring dev content changes under the purview of source control.
+Once you have set up source control for the production environment, set up the development environment to bring dev content changes under the purview of source control.
 
 ---
 ### Prerequisites
 
-1. Source Control must already be setup for the production environment. See [Setting up the Production Environment](./setup-prod-env.md).
+Confirm the following before you set up the development environment.
+
+1. Source Control must already be set up for the production environment. See [Setting up the production environment](./setup-prod-env.md).
 
 2. A source control connector already configured, for tracking and managing changes to code:
 
@@ -17,6 +19,8 @@ Once you have setup source control for production environment, setup the develop
     - To configure and use the GitLab connector to track and manage changes through GitLab, refer to [Configuring GitLab](https://docs.fortinet.com/fortisoar/connectors/gitlab).
 
 ---
+
+To set up the development environment:
 
 1. Select **Continuous Delivery** from the FortiSOAR menu.
 
@@ -49,9 +53,9 @@ Once you have setup source control for production environment, setup the develop
         Pushing overwrites the contents of the repository mentioned in Development Content. You can click the button **Skip** to push the contents later.
 
 > [!TIP]
-> Once the *Development* environment is set up, click the card **Apply Latest Content* to make the development instance a clone of *Production* instance (Required if the production and development FortiSOAR instances are separate).
+> Once the *Development* environment is set up, click the card **Apply Latest Content** to make the development instance a clone of the *Production* instance (required if the production and development FortiSOAR instances are separate).
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

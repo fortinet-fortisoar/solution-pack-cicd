@@ -1,98 +1,31 @@
 | [Home](./README.md) |
 |----------------------|
 
-# What's New
+# Release notes
 
-This release brings significant improvements to the *Change Management* process in FortiSOAR's **Continuous Delivery** solution pack. Instantly noticeable smoother workflows, clearer visibility into change requests (CRs), and enhanced control over applying content changes across environments. The enhancements ensure that CR lifecycle management, from development to production, is more transparent and less error-prone.
+This page lists the changes in **Continuous Delivery** v3.2.0, relative to v3.1.0.
 
----
+## v3.2.0
 
-## Enhancements
+### Compatibility
 
-### Wizard Improvements
+This release changes the minimum supported FortiSOAR version.
 
-- Only **GitHub** and **GitLab** are now available in the **Select Your Source Control** option, simplifying platform selection for Continuous Delivery setup.
+- Minimum FortiSOAR compatibility raised from v7.4.0 to v8.0.0. Review [Upgrade instructions](./docs/upgrade-instructions.md) before upgrading.
 
-- The wizard now waits for the **Setup CICD Environment** playbook to complete before proceeding to the Finish step, ensuring that the source control environment is fully prepared before deployment.
+### What's new
 
-### Change Log Visibility
+This release adds one new capability.
 
-- The **Apply Latest Content** feature in both production and development environments now computes and displays a **change log**.
+- Each change request (CR) now gets its own export template, named `Source Control (CR-<number>) - Production Content`. When a content developer pushes changes for a CR, the push uses that CR's export template instead of the shared `Source Control - Production Content` template, so one CR no longer exports content selected for another. Where the template is created and deleted depends on the deployment:
 
-- Analysts can clearly see what changes are being merged before they are applied, reducing the risk of surprises in production.
+  - **Development and production on the same FortiSOAR instance**: the **Create a Request (Issue)** playbook creates the template when the CR is created. The **Close Change Request** playbook deletes it when the CR is closed.
+  - **Development and production on separate FortiSOAR instances**: the template is managed on the development instance only, and no export template is created on the production instance. The **Fetch Open Requests (Issues)** playbook creates a template for each open CR that does not have one. The **Fetch Closed Requests (Issues)** playbook deletes the template of each closed CR.
 
-### New Tracking Fields in Change Management
+  The new **Create Export Template** and **Delete Export Template** playbooks perform these actions. Per-CR templates do not isolate concurrent changes to the same object. Refer to [Best practices for source control and Continuous Delivery](./docs/best-practices.md#known-limitation-concurrent-changes-to-the-same-object).
 
-- Added **Last Commit ID** and **Commit Status** fields.
+### Bug fixes
 
-- These fields allow analysts to trace exactly which commit was last applied and whether it succeeded, making CR tracking more reliable.
+This release includes one fix.
 
-### Task Management Improvements
-
-The following improvements give analysts more flexibility in managing workflows:
-
-- A **Reset Task** button appears when the task is completed or is in progress.
-
-- An **Abort** button to cancel the change request being created; as simply closing the modal may keep the associated playbook *active*.
-
-### Source Control Settings
-
-- A new card **Source Control Settings** under both *Production* and *Development* tabs helps manage exported content such as playbooks, module definitions, connectors, and related components to streamline updates and ensure critical components are version-controlled.
-
-  This card features a new **Edit Export Template** button that helps export the following:
-
-  - **Production Settings** from the *Production* tab
-
-  - **Production Content** and **Development Settings** from the *Development* tab
-
-- A new button **Update Configuration Parameters** helps edit the source control configuration parameters after the *Production* and *Development* environments have been set up.
-
-### Review and Apply Latest Content
-
-- A new button in both *Production* and *Development* environments triggers an **import wizard** that guides analysts through applying content changes.
-
-- The wizard applies both *Production Content* and *Production Settings* safely, with a clear preview of what will change.
-
-### Improved PR Workflow
-
-- When submitting a PR for review, analysts can now **select reviewers from a drop-down list of Git users** rather than typing usernames manually.
-
-### Miscellaneous
-
-- Task progress notifications now include more information to give better context on the tasks at hand and reduce navigation overhead. For example: **direct links** are included when a repository or PR is created.
-
-- A new **CR Status** column under issues shows the lifecycle state of each CR, improving at-a-glance tracking.
-
-- Multiple pre-checks added as part of error handling in various Continuous Delivery operations such as:
-
-  - Repository creation - Repo creation is skipped if the repository already exists.
-
-  - PR review - The creator of a PR can no longer be the reviewer.
-
-  - Create issue - The playbook easily handles any special characters in the title and description fields of an issue.
-
-
-
----
-
-## Bug Fixes
-
-- Fixed the following issues:
-
-  - Users could not create another production content repository when setting up multiple production environments
-  - Production/Development tabs appeared prematurely before source control setup.
-  - PR links and their statuses were not visible in the UI when multiple issues were listed.
-  - Reviewer names caused submission errors in push/PR workflows.
-  - PR submission failed if a PR already existed for the CR.
-  - Source control sync status retrieval did not retrieve user context.
-  - Legacy HTML code and Key Store dependencies were removed for cleaner execution.
-
-Together, these fixes reduce friction and ensure analysts can rely on predictable CR workflows.
-
----
-
-## Why Upgrade Now
-
-With this release, SOC analysts gain **greater clarity in CR tracking**, **fewer blockers in workflows**, and **more control when applying content safely**. If you're still on an earlier version, upgrading ensures smoother day-to-day operations and prevents errors during critical change rollouts.
-
-Refer to [Upgrade Instructions](./docs/upgrade-instructions.md) for more information.
+- The default `Source Control - Production Content` export template no longer ships with an unrelated role definition and its full permission set bundled into it.

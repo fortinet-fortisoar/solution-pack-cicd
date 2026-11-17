@@ -1,7 +1,7 @@
 {
     "name": "continuousDelivery",
-    "version": "3.1.0",
-    "fsrMinCompatibility": "7.4.0",
+    "version": "3.2.0",
+    "fsrMinCompatibility": "8.0.0",
     "type": "solutionpack",
     "local": true,
     "label": "Continuous Delivery",
@@ -17,7 +17,7 @@
     "publisher": "Fortinet",
     "certified": "true",
     "description": "Setup Source Control and streamline content development lifecycle (CICD) across multiple FortiSOAR environments designated as Development, Staging and Production.",
-    "help": "https://github.com/fortinet-fortisoar/solution-pack-cicd/blob/release/3.1.0/README.md",
+    "help": "https://github.com/fortinet-fortisoar/solution-pack-cicd/blob/release/3.2.0/README.md",
     "category": [],
     "supportInfo": "Fortinet Customer Support",
     "iconLarge": "fsr-icon-large.png",
@@ -27,7 +27,6 @@
             {
                 "name": "cicdConfiguration",
                 "label": "CICD Configuration Wizard",
-                "version": "1.1.0",
                 "autoLaunch": true,
                 "buttonLabel": "Configure"
             }

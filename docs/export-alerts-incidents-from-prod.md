@@ -1,19 +1,19 @@
 | [Home](../README.md) |
 |----------------------|
 
-## Exporting Sample Alerts/Incidents from Prod Environment
+## Exporting sample alerts and incidents from the production environment
 
-Exporting alerts from production environment can help organizations,
+Exporting alerts from the production environment can help organizations:
 
 - Analyze and troubleshoot issues thereby continuously improving their operations
 - Test the effectiveness of their alert configurations in a safe, controlled environment
 - Reduce the risk of security incidents by training their systems on all possible variations of a threat
 - Reduce storage in the source system
-- Preserve historical data for future reference.
+- Preserve historical data for future reference
 
-You can tag alerts to be exported, individually, and use a filter to include those tagged alerts in the export template.
+You can individually tag alerts to be exported, and use a filter to include those tagged alerts in the export template.
 
-Following steps help export alerts or incidents from a FortiSOAR production environment to a development environment:
+The following steps help export alerts or incidents from a FortiSOAR production environment to a development environment:
 
 1. Log in to FortiSOAR's production instance.
 
@@ -39,9 +39,9 @@ Following steps help export alerts or incidents from a FortiSOAR production envi
 
 5. [Save](./usage.md#saving-development-settings) the development or production settings to export alerts to source control.
 
-6. [Apply Latest Content](./usage.md#applying-latest-changes-in-production-environment) to import alerts in development environment. 
+6. [Apply Latest Content](./usage.md#applying-latest-changes-in-production-environment) to import alerts in the development environment.
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

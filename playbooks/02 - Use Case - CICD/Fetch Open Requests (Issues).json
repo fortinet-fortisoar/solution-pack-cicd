@@ -1,4 +1,5 @@
 {
+    "@context": "\/api\/3\/contexts\/Workflow",
     "@type": "Workflow",
     "triggerLimit": null,
     "name": "Fetch Open Requests (Issues)",
@@ -45,6 +46,34 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Check CICD Env",
+            "description": null,
+            "arguments": {
+                "conditions": [
+                    {
+                        "option": "Dev",
+                        "step_iri": "\/api\/3\/workflow_steps\/1fa055cf-5118-47a5-be83-b5c4d240fbf7",
+                        "condition": "{{ vars.cicd_env.env_config | length == 1 and vars.cicd_env.env_config[0].itemValue == \"Development\" }}",
+                        "step_name": "Get CRs Export Templates"
+                    },
+                    {
+                        "option": "Prod and Dev",
+                        "default": true,
+                        "step_iri": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
+                        "step_name": "Prepare Issues JSON"
+                    }
+                ],
+                "step_variables": []
+            },
+            "status": null,
+            "top": "860",
+            "left": "980",
+            "stepType": "\/api\/3\/workflow_step_types\/12254cf5-5db7-4b1a-8cb1-3af081924b28",
+            "group": null,
+            "uuid": "4e2c6cc8-4f99-47e7-857a-a535eb9d1227"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Check Source Control Connector Configuration",
             "description": null,
             "arguments": {
@@ -76,6 +105,45 @@
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "deae7f44-95e7-47c6-bdb1-d23c5b1b0957"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Create Export Template",
+            "description": null,
+            "arguments": {
+                "when": "{{vars.branch_names | length > 0}}",
+                "for_each": {
+                    "item": "{{vars.branch_names}}",
+                    "parallel": false,
+                    "condition": ""
+                },
+                "arguments": {
+                    "cr_number": "{{vars.item}}"
+                },
+                "apply_async": false,
+                "step_variables": [],
+                "pass_parent_env": false,
+                "pass_input_record": false,
+                "workflowReference": "\/api\/3\/workflows\/4559a154-0d27-4700-868d-ba79632a895f"
+            },
+            "status": null,
+            "top": "1220",
+            "left": "1140",
+            "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
+            "group": null,
+            "uuid": "1f12cd01-1529-4f36-9ba0-cf241955ca74"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Dummy Step",
+            "description": null,
+            "arguments": [],
+            "status": null,
+            "top": "1340",
+            "left": "840",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "af445239-5a0f-48fe-8882-bd9ca7143f10"
         },
         {
             "@type": "WorkflowStep",
@@ -156,6 +224,29 @@
         },
         {
             "@type": "WorkflowStep",
+            "name": "Get CRs Export Templates",
+            "description": null,
+            "arguments": {
+                "params": {
+                    "iri": "\/api\/query\/export_templates?$limit=5000",
+                    "body": "{\n    \"sort\": [\n        {\n            \"field\": \"modifyDate\",\n            \"direction\": \"DESC\"\n        }\n    ],\n    \"limit\": 30,\n    \"logic\": \"AND\",\n    \"filters\": [\n        {\n            \"logic\": \"OR\",\n            \"filters\": [\n                {\n                    \"field\": \"name\",\n                    \"operator\": \"like\",\n                    \"_operator\": \"like\",\n                    \"value\": \"%Source Control (CR-%%\",\n                    \"type\": \"primitive\"\n                },\n                {\n                    \"field\": \"name\",\n                    \"operator\": \"eq\",\n                    \"_operator\": \"eq\",\n                    \"value\": \"Source Control - Development Settings\",\n                    \"type\": \"primitive\"\n                }\n            ]\n        },\n        {\n            \"field\": \"name\",\n            \"operator\": \"neq\",\n            \"_operator\": \"neq\",\n            \"value\": \"SolutionPack Export\",\n            \"type\": \"primitive\"\n        }\n    ],\n    \"__selectFields\": [\n        \"name\"\n    ]\n}",
+                    "method": "POST"
+                },
+                "version": "3.7.2",
+                "connector": "cyops_utilities",
+                "operation": "make_cyops_request",
+                "operationTitle": "FSR: Make FortiSOAR API Call",
+                "step_variables": []
+            },
+            "status": null,
+            "top": "980",
+            "left": "1140",
+            "stepType": "\/api\/3\/workflow_step_types\/0109f35d-090b-4a2b-bd8a-94cbc3508562",
+            "group": null,
+            "uuid": "1fa055cf-5118-47a5-be83-b5c4d240fbf7"
+        },
+        {
+            "@type": "WorkflowStep",
             "name": "Get Issues",
             "description": null,
             "arguments": {
@@ -175,6 +266,20 @@
             "stepType": "\/api\/3\/workflow_step_types\/74932bdc-b8b6-4d24-88c4-1a4dfbc524f3",
             "group": null,
             "uuid": "8b038cca-10ea-43ea-870b-1fe4329d0f97"
+        },
+        {
+            "@type": "WorkflowStep",
+            "name": "Get Not Created CRs Export Templates",
+            "description": null,
+            "arguments": {
+                "branch_names": "{% set branch = [] %}{% if vars.steps.Get_CRs_Export_Templates.data['hydra:member'] | length > 0 %}{% for issue in vars.steps.Get_Issues.data %}{% set cr = \"CR-\"+issue.number %}{% if (vars.steps.Get_CRs_Export_Templates.data['hydra:member'] | json_query(\"[?contains(name, '\" ~ cr ~ \"')]\")) | length == 0 %}{% set _ = branch.append(issue.number) %}{% endif %}{% endfor %}{% endif %}{{branch}}"
+            },
+            "status": null,
+            "top": "1100",
+            "left": "1140",
+            "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
+            "group": null,
+            "uuid": "fed53a1b-3a13-4a5a-9d99-613cfe09613d"
         },
         {
             "@type": "WorkflowStep",
@@ -228,8 +333,8 @@
                 "grid_columns": "{\n    \"columns\": [\n      {\n        \"field\": \"cRNo\",\n        \"displayName\": \"CR-No\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.cRNo }}\\\" data-ng-bind-html=\\\"row.entity.cRNo\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"repo_url\",\n        \"displayName\": \"Repository\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.repo_url }}\\\" data-ng-bind-html=\\\"row.entity.repo_url\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"summary\",\n        \"displayName\": \"Summary\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.summary\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"new_branch\",\n        \"displayName\": \"New Branch\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.new_branch\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"assigneeUsername\",\n        \"displayName\": \"Assignee\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.assigneeUsername\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"reporterUsername\",\n        \"displayName\": \"Reporter\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.reporterUsername\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"cRStatus\",\n        \"displayName\": \"CR Status\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.cRStatus\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"pullRequest\",\n        \"displayName\": \"Pull Request\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span title=\\\"{{ row.entity.pullRequest }}\\\" data-ng-bind-html=\\\"row.entity.pullRequest\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"pRStatus\",\n        \"displayName\": \"PR Status\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.pRStatus\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      },\n      {\n        \"field\": \"pRReviewer\",\n        \"displayName\": \"Reviewers\",\n        \"cellTemplate\": \"<div class='ui-grid-cell-contents'>&nbsp;&nbsp;<span data-ng-bind=\\\"row.entity.pRReviewer\\\"><\/span><\/div>\",\n        \"enableCellEdit\": false,\n        \"enableFiltering\": false,\n        \"enableColumnMenu\": true,\n        \"enableSorting\": true,\n        \"visible\": true,\n        \"width\": \"*\"\n      }\n    ]\n  }"
             },
             "status": null,
-            "top": "1100",
-            "left": "680",
+            "top": "1460",
+            "left": "840",
             "stepType": "\/api\/3\/workflow_step_types\/04d0cf46-b6a8-42c4-8683-60a7eaa69e8f",
             "group": null,
             "uuid": "4ab82f05-5959-4023-9812-e090bff99a53"
@@ -301,6 +406,26 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Check CICD Env -> Get CRs Export Templates",
+            "targetStep": "\/api\/3\/workflow_steps\/1fa055cf-5118-47a5-be83-b5c4d240fbf7",
+            "sourceStep": "\/api\/3\/workflow_steps\/4e2c6cc8-4f99-47e7-857a-a535eb9d1227",
+            "label": "Dev",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f8d5acfb-3a54-4ee3-9206-04f18e65f0fb"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Check CICD Env -> Prepare Issues JSON",
+            "targetStep": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
+            "sourceStep": "\/api\/3\/workflow_steps\/4e2c6cc8-4f99-47e7-857a-a535eb9d1227",
+            "label": "Prod and Dev",
+            "isExecuted": false,
+            "group": null,
+            "uuid": "fc0b3046-8875-4752-8979-6312ac82f61b"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Check Source Control Connector Configuration -> Find Source Control Settings",
             "targetStep": "\/api\/3\/workflow_steps\/c140578c-b082-47b6-9ca6-5554765648d9",
             "sourceStep": "\/api\/3\/workflow_steps\/a05e66b1-4d8e-4112-baf4-b4fe9e4a50a3",
@@ -331,6 +456,26 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Create Export Template -> Dummy Step",
+            "targetStep": "\/api\/3\/workflow_steps\/af445239-5a0f-48fe-8882-bd9ca7143f10",
+            "sourceStep": "\/api\/3\/workflow_steps\/1f12cd01-1529-4f36-9ba0-cf241955ca74",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "48292396-6de8-4735-a205-efc2d2f611d8"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Dummy Step -> Return Output",
+            "targetStep": "\/api\/3\/workflow_steps\/4ab82f05-5959-4023-9812-e090bff99a53",
+            "sourceStep": "\/api\/3\/workflow_steps\/af445239-5a0f-48fe-8882-bd9ca7143f10",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "f02f5f73-0ccd-4b22-808e-16b70f821e1e"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Find Source Control Settings -> Are Repositories Created",
             "targetStep": "\/api\/3\/workflow_steps\/4073de99-9d80-45f9-84ac-6062a4ff3649",
             "sourceStep": "\/api\/3\/workflow_steps\/c140578c-b082-47b6-9ca6-5554765648d9",
@@ -348,6 +493,26 @@
             "isExecuted": false,
             "group": null,
             "uuid": "2068f44a-a4ec-4d72-a8ff-2cccc6d9b15d"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get CRs Export Templates -> Get Open and Close Issue",
+            "targetStep": "\/api\/3\/workflow_steps\/fed53a1b-3a13-4a5a-9d99-613cfe09613d",
+            "sourceStep": "\/api\/3\/workflow_steps\/1fa055cf-5118-47a5-be83-b5c4d240fbf7",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "2f3ca2b0-cac2-4139-8498-c280138ed9e0"
+        },
+        {
+            "@type": "WorkflowRoute",
+            "name": "Get Issues -> Check CICD Env",
+            "targetStep": "\/api\/3\/workflow_steps\/4e2c6cc8-4f99-47e7-857a-a535eb9d1227",
+            "sourceStep": "\/api\/3\/workflow_steps\/8b038cca-10ea-43ea-870b-1fe4329d0f97",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "be8ac377-6909-49f3-8ef6-5c1c1ff0326d"
         },
         {
             "@type": "WorkflowRoute",
@@ -371,6 +536,16 @@
         },
         {
             "@type": "WorkflowRoute",
+            "name": "Get Not Created CRs Export Templates -> Create Export Template",
+            "targetStep": "\/api\/3\/workflow_steps\/1f12cd01-1529-4f36-9ba0-cf241955ca74",
+            "sourceStep": "\/api\/3\/workflow_steps\/fed53a1b-3a13-4a5a-9d99-613cfe09613d",
+            "label": null,
+            "isExecuted": false,
+            "group": null,
+            "uuid": "411152bd-f970-4d97-9329-5a798a137862"
+        },
+        {
+            "@type": "WorkflowRoute",
             "name": "Get PRs For Open Issues -> Prepare Issues JSON",
             "targetStep": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
             "sourceStep": "\/api\/3\/workflow_steps\/869c391c-fcff-4aae-81bb-9d52f5560786",
@@ -391,13 +566,13 @@
         },
         {
             "@type": "WorkflowRoute",
-            "name": "Prepare Issues JSON -> Return Output",
-            "targetStep": "\/api\/3\/workflow_steps\/4ab82f05-5959-4023-9812-e090bff99a53",
+            "name": "Prepare Issues JSON -> Dummy Step",
+            "targetStep": "\/api\/3\/workflow_steps\/af445239-5a0f-48fe-8882-bd9ca7143f10",
             "sourceStep": "\/api\/3\/workflow_steps\/2f91888b-f37b-40a5-88c8-942a440421ad",
             "label": null,
             "isExecuted": false,
             "group": null,
-            "uuid": "ddad16ec-5885-47b1-a7bd-94e9ecc99eae"
+            "uuid": "bb7ef288-f551-4c5f-9430-163d280151d4"
         },
         {
             "@type": "WorkflowRoute",

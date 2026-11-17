@@ -1,7 +1,7 @@
 | [Home](../README.md) |
 |----------------------|
 
-## Updating Configuration Parameters
+## Updating configuration parameters
 
 You can update configuration parameters to use repositories and branch name of your choice. It is especially helpful for setting up a pre-production or a staging environment. To update the configuration parameters *after* the production or development environments have been set up:
 
@@ -29,11 +29,11 @@ You can update configuration parameters to use repositories and branch name of y
 
         2. Click the button **Confirm**, after creating the repositories, for FortiSOAR to check if the specified repositories exist.
 
-    6. Click the button **Push** to push the content from FortiSOAR to the specified branch of the repository mentioned in Development Content.
+    6. Click the button **Push** to push the content from FortiSOAR to the specified branch of the repository for the environment you are updating (Production Content or Development Content).
 
-        Pushing overwrites the contents of the repository mentioned in Development Content. You can click the button **Skip** to push the contents later.
+        Pushing overwrites the contents of that repository. You can click the button **Skip** to push the contents later.
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

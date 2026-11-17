@@ -1,11 +1,11 @@
 | [Home](../README.md) |
 |----------------------|
 
-## Setup Production Environment
+## Setting up the production environment
 
-You can setup source control management through playbooks, automatically, or by pre-creating repositories on your preferred source control platform and linking them to FortiSOAR Continuous Delivery solution pack.
+You can set up source control management through playbooks automatically, or by pre-creating repositories on your preferred source control platform and linking them to the FortiSOAR Continuous Delivery solution pack.
 
-To setup your preferred source control platform and create repositories using playbooks:
+To set up your preferred source control platform and create repositories using playbooks:
 
 1. Select **Continuous Delivery** from the FortiSOAR menu.
 
@@ -41,7 +41,7 @@ To setup your preferred source control platform and create repositories using pl
 
 8. Click the button **Finish** to finish setting up the production environment.
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

@@ -1,7 +1,7 @@
-|[Home](../README.md)|
-|--------------------|
+| [Home](../README.md) |
+|----------------------|
 
-# Creating Pluggable Source Control for Continuous Delivery
+# Creating pluggable source control for Continuous Delivery
 
 *Pluggable* source control uses the playbooks contained within installed source control connectors to perform a myriad of **Git** operations like:
 
@@ -14,7 +14,7 @@
 
 ## Requirements
 
-Following rules serve as a guide for building *Pluggable* source control:
+The following rules serve as a guide for building *Pluggable* source control.
 
 - The source control connector must have a category `Source Code Management` information within `info.json`
 
@@ -24,9 +24,9 @@ Following rules serve as a guide for building *Pluggable* source control:
 
 -  The pluggable playbooks must have the tag in the format `SourceControlName-OperationName`. For example, a pluggable playbook that *creates a repository* within the source control platform *GitLab* must have the tag: _`GitLab-CreateRepository`_ (**no space**).
 
-- The start step of all pluggable source control playbooks must be a *Referenced Step*. For information on creating a *Referenced* playbook step, refer to the section [Referenced Triggers](https://docs.fortinet.com/document/fortisoar/7.4.3/playbooks-guide/784146/triggers-steps#/document/fortisoar/7.4.3/playbooks-guide/784146/triggers-steps#Referenced) in FortiSOAR product documentation.
+- The start step of all pluggable source control playbooks must be a *Referenced Step*. For information on creating a *Referenced* playbook step, refer to the section [Referenced Triggers](https://docs.fortinet.com/document/fortisoar/8.0.0/playbooks-guide/784146/triggers-steps#Referenced) in FortiSOAR product documentation.
 
-- The pluggable source control playbooks must be in an *Active* state. For information on marking a playbook as active, refer to the section [Creating Playbooks](https://docs.fortinet.com/document/fortisoar/7.4.3/playbooks-guide/331279/introduction-to-playbooks#/document/fortisoar/7.4.3/playbooks-guide/331279/introduction-to-playbooks#Creating_Playbooks) in FortiSOAR product documentation.
+- The pluggable source control playbooks must be in an *Active* state. For information on marking a playbook as active, refer to the section [Creating Playbooks](https://docs.fortinet.com/document/fortisoar/7.4.3/playbooks-guide/331279/introduction-to-playbooks#Creating_Playbooks) in FortiSOAR product documentation.
 
 - The pluggable source control playbooks must accept two input parameters: 
 
@@ -34,12 +34,10 @@ Following rules serve as a guide for building *Pluggable* source control:
 
     - `dict_parameter` which contains connector action parameters
     
-    View the **Parameter Name** and **Parameter Values** of `dict_parameter` for various pluggable source control playbooks in the following table:
+    The following table lists the **Parameter Name** and **Parameter Values** of `dict_parameter` for various pluggable source control playbooks.
 
-<table>
-    <th>NOTE</th>
-    <td>Parameters must be correctly mapped. Any additional parsing of values required by the specific source control must be performed in the respective connector's playbooks.</td>
-</table>
+> [!NOTE]
+> Parameters must be correctly mapped. Any additional parsing of values required by the specific source control must be performed in the respective connector's playbooks.
 
 <table>
     <tr>
@@ -71,12 +69,12 @@ Following rules serve as a guide for building *Pluggable* source control:
     "org_name":"",
     "repo_name":"",
     "issue_no":"",
-    "contents":"",
-    "state":""
+    "state":"",
+    "state_reason":""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-UpdateIssue</td>
-        <td>Updates an issue and adds a comment using value specified in <code>contents</code>.</td>
+        <td>Updates an issue and adds a comment using the value specified in the separate <code>issue_contents</code> playbook argument (not part of <code>update_issue_params</code>).</td>
     </tr>
     <tr>
         <td><em>SourceControlName</em> - Create Issue</td>
@@ -85,13 +83,11 @@ Following rules serve as a guide for building *Pluggable* source control:
 <pre>{
     "org_name":"",
     "repo_name":"",
-    "issue_title":"",
-    "issue_content":"",
     "issue_assignee":""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-CreateIssue</td>
-        <td>Creates issue and adds comment specified in <code>issue_content</code>. Add a new key <code>number</code> in response and map it with the <code>iid</code> (GitLab only) field in the response.</td>
+        <td>Creates an issue and adds a comment specified in the separate <code>issue_title</code> and <code>issue_content</code> playbook arguments (not part of <code>create_issue_params</code>). Add a new key <code>number</code> in response and map it with the <code>iid</code> (GitLab only) field in the response.</td>
     </tr>
     <tr>
         <td><em>SourceControlName</em> - List Repository Issue</td>
@@ -101,11 +97,11 @@ Following rules serve as a guide for building *Pluggable* source control:
     "org_name":"",
     "repo_name":"",
     "state":"",
-    "created_after":""
+    "since":""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-ListRepositoryIssue</td>
-        <td>The last step of this playbook must be <em>Set Variable</em> step, where user must map the response of the <strong>List Repository Issue</strong> action with the following keys:
+        <td>The last step of this playbook must be a <em>Set Variable</em> step, where the user must map the response of the <strong>List Repository Issue</strong> action with the following keys:
 <pre>{ 
     "html_url": "", 
     "id": "", 
@@ -115,8 +111,7 @@ Following rules serve as a guide for building *Pluggable* source control:
     "reporterUsername": "", 
     "assigneeUsername": "", 
     "state": "", 
-    "repository_url": "", 
-    "id": ""
+    "repository_url": ""
 }</pre>
         </td>
     </tr>
@@ -154,7 +149,8 @@ Following rules serve as a guide for building *Pluggable* source control:
     "org_name":"",
     "repo_name":"",
     "new_branch":"",
-    "branch_name":""
+    "branch_name":"",
+    "base_branch_or_sha":""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-CreateBranch</td>
@@ -168,18 +164,17 @@ Following rules serve as a guide for building *Pluggable* source control:
     "org_name": "",
     "repo_name": "",
     "state": "",
-    "pull_number": "",
+    "pull_number": ""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-ListPullRequest</td>
-        <td>The last step of this playbook must be <em>Set Variable</em> step, where user must map the response of the <strong>List Pull Request</strong> action with the following keys:
+        <td>The last step of this playbook must be a <em>Set Variable</em> step, where the user must map the response of the <strong>List Pull Request</strong> action with the following keys:
 <pre>{ 
-    "reviewer_names": ""
+    "reviewer_names": "",
     "html_url": "",
-    "body": "", 
-    "reporterUsername": "",
-    "assigneeUsername": "",
-    "repository_url": "",
+    "body": "",
+    "title": "",
+    "state": ""
 }</pre>
         </td>
     </tr>
@@ -222,7 +217,7 @@ Following rules serve as a guide for building *Pluggable* source control:
 }</pre>
         </td>
         <td><em>SourceControlName</em>-FetchRelease</td>
-        <td>The last step of this playbook must be <em>Set Variable</em> step, where user must returns the release matching the <code>release_name</code> key from input.</td>
+        <td>The last step of this playbook must be a <em>Set Variable</em> step, where the user must return the release matching the <code>release_name</code> key from input.</td>
     </tr>
     <tr>
         <td><em>SourceControlName</em> - Add Reviewers for a Pull Request</td>
@@ -274,7 +269,8 @@ Following rules serve as a guide for building *Pluggable* source control:
 <pre>{
     "org_name":"",
     "repo_name":"",
-    "pull_number":""
+    "pull_number":"",
+    "org_type":""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-MergePullRequest</td>
@@ -290,7 +286,7 @@ Following rules serve as a guide for building *Pluggable* source control:
 }</pre>
         </td>
         <td><em>SourceControlName</em>-ListRepositoryCollaborator</td>
-        <td>Return a list of repository collaborators. Username of each collaborator must be in the login key. For example, if action returns list of users in <code>uname</code>, add a new key <code>login</code> in response and map it with the <code>username</code> field from the response.</td>
+        <td>Return a list of repository collaborators. Username of each collaborator must be in the login key. For example, if action returns list of users in <code>uname</code>, add a new key <code>login</code> in response and map it with the <code>username</code> field from the response. Each collaborator must also include a nested <code>permissions</code> object with the boolean keys <code>push</code>, <code>admin</code>, and <code>maintain</code>.</td>
     </tr>
     <tr>
         <td><em>SourceControlName</em> - Add Repository Collaborator</td>
@@ -313,26 +309,27 @@ Following rules serve as a guide for building *Pluggable* source control:
     "org_name":"",
     "repo_name":"",
     "branch_name":"",
-    "clone_as_zip":""
+    "clone_as_zip":"",
+    "repo_type":""
 }</pre>
         </td>
         <td><em>SourceControlName</em>-CloneRepository</td>
-        <td>Clones a repository and returns the path.</td>
+        <td>Clones a repository and returns the path in the <code>path</code> key of the response.</td>
     </tr>
     <tr>
         <td><em>SourceControlName</em> - Get Server URL</td>
         <td>Not Required</td>
         <td>Not Required</td>
         <td><em>SourceControlName</em>-GetServerURL</td>
-        <td>Returns a dictionary with the key <code>html_url</code> and its value.</td>
+        <td>Returns a dictionary with the key <code>server_url</code> and its value.</td>
     </tr>
     <tr>
         <td><em>SourceControlName</em> - Update Remote Repository</td>
         <td><code>update_remote_repo_params</code></td>
         <td>
 <pre>{
-    "file_iri":"",
-    "clone_path":""
+    "fsr_file_iri":"",
+    "clone_repo_path":""
 }</pre></td>
         <td><em>SourceControlName</em>-UpdateRemoteRepository</td>
         <td>Updates the contents to be pushed to remote repository in the <code>/tmp</code> folder.</td>
@@ -342,11 +339,11 @@ Following rules serve as a guide for building *Pluggable* source control:
         <td><code>push_changes_params</code></td>
         <td>
 <pre>{
-    "org": "",
-    "branch": "",
+    "org_name": "",
+    "repo_name": "",
     "repo_type": "",
-    "clone_path": "",
-    "project_name": "",
+    "branch_name": "",
+    "cloned_repo_path": "",
     "commit_message": "",
     "commit_description": ""
 }</pre>
@@ -372,7 +369,7 @@ Following rules serve as a guide for building *Pluggable* source control:
     </tr>
 </table>
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|

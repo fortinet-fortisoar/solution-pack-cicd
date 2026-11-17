@@ -1,7 +1,7 @@
 | [Home](../README.md) |
 |----------------------|
 
-## Including Connector Installation and Configuration in Source Control
+## Including connector installation and configuration in source control
 
 Connectors and their configuration information can be exported to source control to save time lost in configuration and to keep the sensitive data protected while allowing functionality.
 
@@ -27,7 +27,7 @@ Connectors and their configuration information can be exported to source control
 
 8. [Apply Latest Content](./usage.md#applying-latest-changes-in-production-environment) to install connectors and import their configurations in a production environment.
 
-# Next Steps 
- 
+# Next steps
+
 | [Installation](./setup.md#installation) | [Configuration](./setup.md#configuration) | [Usage](./usage.md) | [Contents](./contents.md) |
 |----------------------------------------------|------------------------------------------------|--------------------------|--------------------------------|
